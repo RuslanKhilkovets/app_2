@@ -36,13 +36,20 @@ const PostDetails = styled.View`
   margin-left: 10px;
 `;
 
+const truncateTitle = (str: string) => {
+  if(str.length >= 10){
+    return str.substring(0, 50) + "..."
+  }
+
+  return str;
+}
 
 export const PostItem = ({ image, title = 'Title', data = 'Data' }: Post) => {
   return (
     <PostView>
       <PostImage source={{ uri: image }} resizeMode="cover" />
       <PostDetails>
-        <PostTitle>{title}</PostTitle>
+        <PostTitle>{truncateTitle(title)}</PostTitle>
         <PostData>{new Date(data).toLocaleDateString("uk-UA")}</PostData>
       </PostDetails>
     </PostView>

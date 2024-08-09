@@ -18,8 +18,7 @@ import Post from '../types/Post';
 import { Text } from 'react-native-svg';
 
 
-
-function HomeScreen(): React.JSX.Element {
+function HomeScreen( {navigation} ): React.JSX.Element {
   const [items, setItems] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -29,18 +28,17 @@ function HomeScreen(): React.JSX.Element {
     setIsLoading(true);
 
     await axios.get('https://66b4aaf89f9169621ea3f045.mockapi.io/posts')
-    .then(({data}) => {
-      setItems(data);
-    })
-    .catch((error) => {
-      console.log(error);
-      Alert.alert('Error', 'Something went wrong...');
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+      .then(({data}) => {
+        setItems(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        Alert.alert('Error', 'Something went wrong...');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
-  
 
   useEffect(() => {
     getData();
@@ -48,7 +46,7 @@ function HomeScreen(): React.JSX.Element {
 
   if(isLoading) {
     return (
-      <SafeAreaView style={{
+      <SafeAreaView style={{ 
         height: '100%',
         flex: 1,
         justifyContent: 'center',
@@ -66,12 +64,12 @@ function HomeScreen(): React.JSX.Element {
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getData} />}
         data={items}
         renderItem={({ item }) => 
-          <TouchableOpacity onPress={() => Alert.alert("Pressed")}>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('Post', { id: item.id, title: item.title})}
+          >
             <PostItem id={item.id} image={item.image} title={item.title} data={item.data} />
           </TouchableOpacity>}
-      />
-
-        
+      />        
     </SafeAreaView>
   );
 }

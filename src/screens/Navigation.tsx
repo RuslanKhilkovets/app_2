@@ -10,8 +10,8 @@ const Navigation = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="FullPost" component={FullPostScreen} />
+                <Stack.Screen name="News" component={HomeScreen} />
+                <Stack.Screen name="Post" component={FullPostScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

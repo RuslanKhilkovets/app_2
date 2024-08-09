@@ -20,14 +20,16 @@ const PostText = styled.Text`
 `;
 
 
-const FullPostScreen = () => {
+const FullPostScreen = ( {route, navigation} ) => {
     const [data, setData] = useState<Post>({});
     const [isLoading, setIsLoading] = useState<boolean>(true);
-  
+    const { id, title } = route.params;
+
+
     const getData = async () => {
         setIsLoading(true);
     
-        await axios.get('https://66b4aaf89f9169621ea3f045.mockapi.io/posts/1')
+        await axios.get(`https://66b4aaf89f9169621ea3f045.mockapi.io/posts/${id}`)
         .then(({data}) => {
           setData(data);
         })
@@ -41,6 +43,9 @@ const FullPostScreen = () => {
     }
       
     useEffect(() => {
+        navigation.setOptions({
+          title,
+        })
         getData();
     },[])
 
