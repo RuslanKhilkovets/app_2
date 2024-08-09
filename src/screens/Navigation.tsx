@@ -1,17 +1,19 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from './HomeScreen';
-import FullPostScreen from './FullPost';
+import StartScreen from './StartScreen'; 
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="News" component={HomeScreen} />
-                <Stack.Screen name="Post" component={FullPostScreen} />
+            <Stack.Navigator initialRouteName="Start">
+                <Stack.Screen 
+                    name="Start" 
+                    component={StartScreen} 
+                    options={{ headerShown: false }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

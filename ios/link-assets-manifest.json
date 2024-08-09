@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Raleway/Raleway-Medium.ttf",
+      "sha1": "2e9d4e3f2a0746ec49ed2779992a7b0900fb8302"
+    },
+    {
+      "path": "assets/fonts/Raleway/Raleway-Regular.ttf",
+      "sha1": "2b673d65ef7a66233c1fb1fd0424ef067a787cca"
+    },
+    {
+      "path": "assets/fonts/Raleway/Raleway-SemiBold.ttf",
+      "sha1": "3dd2bfca1944f82e928417d0399b8725b83728aa"
+    }
+  ]
+}
