@@ -1,49 +1,62 @@
-import React, {useState} from 'react';
-import {View, Dimensions} from 'react-native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-
+import React from 'react';
+import { View, Dimensions, StyleSheet } from 'react-native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import IStartSliderProps from '../../types/IStartSliderProps';
+import { slidesLength } from '../slides';
 import Slide1 from '../slides/Slide1';
-import Slide2 from '../slides/Slide2';
 import Slide3 from '../slides/Slide3';
+import Slide2 from '../slides/Slide2';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 const slides = [
-  {component: <Slide1 />},
-  {component: <Slide2 />},
-  {component: <Slide3 />},
+  {component: Slide1},
+  {component: Slide2},
+  {component: Slide3},
 ];
 
-const StartSlider = () => {
-  const [activeSlide, setActiveSlide] = useState(0);
+const StartSlider = ({ activeSlide, setActiveSlide }: IStartSliderProps) => {
+
+  console.log(slides)
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       <Carousel
         data={slides}
-        renderItem={({item}) => item.component}
+        renderItem={({ item }) => <item.component />}
         sliderWidth={screenWidth}
         itemWidth={screenWidth}
-        layout={'tinder'}
+        layout={'default'}
         onSnapToItem={index => setActiveSlide(index)}
       />
-
       <Pagination
-        dotsLength={slides.length}
+        dotsLength={slidesLength}
         activeDotIndex={activeSlide}
-        containerStyle={{position: 'absolute', bottom: 30, alignSelf: 'center'}}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          marginHorizontal: 8,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
-        }}
+        containerStyle={styles.paginationContainer}
+        dotStyle={styles.activeDot}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  paginationContainer: {
+    position: 'absolute',
+    bottom: 100,
+    alignSelf: 'center',
+  },
+  activeDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+  },
+});
 
 export default StartSlider;

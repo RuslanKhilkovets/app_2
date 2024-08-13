@@ -1,19 +1,20 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import StartScreen from './StartScreen'; 
+import routes from '../routes/routes';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Start">
-                <Stack.Screen 
-                    name="Start" 
-                    component={StartScreen} 
-                    options={{ headerShown: false }}
-                />
+            <Stack.Navigator initialRouteName="StartSlider">
+                {routes.map((route, index) => {
+                    return <Stack.Screen
+                        { ...route}
+                        key={route.name + index}
+                    />
+                })}
             </Stack.Navigator>
         </NavigationContainer>
     );
