@@ -1,35 +1,31 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const StartScreen = () => {
   return (
     <View style={styles.slide}>
-        <Text style={styles.title}>Хей! Вітаю в єЗнахідці</Text>
+      <Text style={styles.title}>Хей! Вітаю в єЗнахідці</Text>
 
-        <Text style={styles.description}>
-            Тут ти можеш знайти загублені речі, 
-            а також допомогти іншим знайти їх
-        </Text>
+      <Text style={styles.description}>
+        Тут ти можеш знайти загублені речі, а також допомогти іншим знайти їх
+      </Text>
 
-        <View style={styles.actionsView}>
-            <Text style={styles.actionsTitle}>
-                Ти вже користувався додатком?
-            </Text>
-            <View style={styles.actionsButtons}>
-                <TouchableOpacity>
-                    <Text style={styles.linkText}>Я новий користувач</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.linkText}>Вже маю акаунт</Text>
-                </TouchableOpacity>
-            </View>
+      <View style={styles.actionsView}>
+        <Text style={styles.actionsTitle}>Ти вже користувався додатком?</Text>
+        <View style={styles.actionsButtons}>
+          <TouchableOpacity>
+            <Text style={styles.linkText}>Я новий користувач</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.linkText}>Вже маю акаунт</Text>
+          </TouchableOpacity>
         </View>
+      </View>
 
-        <Image
-            style={styles.characterImage}
-            source={require('../../assets/images/character.png')}
-        />
+      <Image
+        style={styles.characterImage}
+        source={require('../../assets/images/character.png')}
+      />
     </View>
   );
 };
@@ -43,36 +39,36 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: "600",
-    fontFamily: "Raleway",
+    fontWeight: '600',
+    fontFamily: 'Raleway-Medium',
     color: '#000000',
     marginBottom: 10,
   },
   description: {
     marginTop: 16,
     fontSize: 15,
-    fontWeight: "400",
+    fontWeight: '400',
     color: '#000',
     textAlign: 'center',
-    maxWidth: 264
+    maxWidth: 264,
   },
   actionsView: {
     padding: 29,
     marginTop: 30,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   actionsTitle: {
     fontSize: 15,
-    fontWeight: "600",
-    fontFamily: "Raleway",
+    fontWeight: '600',
+    fontFamily: 'Raleway',
     color: '#fff',
     marginBottom: 10,
   },
   actionsButtons: {
-    justifyContent: "center",
+    justifyContent: 'center',
     flexDirection: 'row',
     gap: 27,
     width: '100%',
@@ -80,15 +76,15 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 15,
-    color: '#fff', 
+    color: '#fff',
     textDecorationLine: 'underline',
   },
   characterImage: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
-    height: 471,
-    width: 459
-  }
+    height: 500,
+    width: 459,
+  },
 });
 
 export default StartScreen;
