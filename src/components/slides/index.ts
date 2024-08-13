@@ -5,7 +5,7 @@ import Slide3 from "./Slide3";
 export const slides = [
     {component: Slide1},
     {component: Slide2},
-    {component: Slide3 },
+    {component: Slide3},
 ];
 
 export const slidesLength = slides.length;

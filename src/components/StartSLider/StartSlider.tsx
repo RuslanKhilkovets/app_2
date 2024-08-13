@@ -2,35 +2,25 @@ import React from 'react';
 import { View, Dimensions, StyleSheet } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import IStartSliderProps from '../../types/IStartSliderProps';
-import { slidesLength } from '../slides';
-import Slide1 from '../slides/Slide1';
-import Slide3 from '../slides/Slide3';
-import Slide2 from '../slides/Slide2';
+import { slides } from '../slides';
+
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const slides = [
-  {component: Slide1},
-  {component: Slide2},
-  {component: Slide3},
-];
-
 const StartSlider = ({ activeSlide, setActiveSlide }: IStartSliderProps) => {
-
-  console.log(slides)
 
   return (
     <View style={styles.container}>
       <Carousel
         data={slides}
-        renderItem={({ item }) => <item.component />}
+        renderItem={ ({ item }) => <item.component/> }
         sliderWidth={screenWidth}
         itemWidth={screenWidth}
-        layout={'default'}
         onSnapToItem={index => setActiveSlide(index)}
+        firstItem={activeSlide}
       />
       <Pagination
-        dotsLength={slidesLength}
+        dotsLength={slides.length}
         activeDotIndex={activeSlide}
         containerStyle={styles.paginationContainer}
         dotStyle={styles.activeDot}
@@ -44,11 +34,10 @@ const StartSlider = ({ activeSlide, setActiveSlide }: IStartSliderProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 10,
     alignSelf: 'center',
   },
   activeDot: {

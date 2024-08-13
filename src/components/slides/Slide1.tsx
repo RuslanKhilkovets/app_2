@@ -18,6 +18,9 @@ const Slide1 = () => {
         <Image source={require('../../../assets/images/arrow_1.png')} style={styles.titleAfterElement} />
       </View>
       <Image source={require('../../../assets/images/menu.png')} style={styles.menuImage} />
+      <Text style={styles.slideDescription}>
+        За допомогою цієї кнопки в меню можна опублікувати знахідку або згубу
+      </Text>
     </View>
   );
 };
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "700",
     fontSize: 26,
-    fontFamily: "Raleway",
+    fontFamily: "Raleway-SemiBold",
     lineHeight: 26
   },
   titleContainer: {
@@ -57,6 +60,16 @@ const styles = StyleSheet.create({
   menuImage: {
     marginTop: 40,
     width: "100%"
+  },
+  slideDescription: {
+    marginTop: 20,
+    maxWidth: 314,
+    fontSize: 15,
+    fontFamily: "Raleway-Regular",
+    lineHeight: 17,
+    textAlign: "center",
+    color: "#000",
+    fontWeight: "400"
   }
 });
 

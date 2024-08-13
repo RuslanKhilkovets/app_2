@@ -1,29 +1,29 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import CustomButton from './UI/CustomButton';
+import IStartSliderActionsButtonsProps from '../types/IStartSliderActionsButtonsProps';
 
-const StartSliderActionsButtons = () => {
-    return (
+
+const StartSliderActionsButtons = ({ onNext }: IStartSliderActionsButtonsProps) => {
+  return (
         <View style={styles.buttonsContainer}>
-            <CustomButton type='primary'>
+            <CustomButton type='primary' onPress={onNext}>
                 Далі
             </CustomButton>
-            <CustomButton type='secondary'>
+            <CustomButton type='secondary' onPress={() => {}}>
                 Перейти до реєстрації
             </CustomButton>
         </View>
-    );
-}
+  );
+};
 
 const styles = StyleSheet.create({
     buttonsContainer: {
-        position: 'absolute',
-        bottom: 30,
+        backgroundColor: "#FFEAEA",
         width: '100%',
         alignItems: 'center',
         paddingHorizontal: 20,
     },
-})
-
+});
 
 export default StartSliderActionsButtons;
