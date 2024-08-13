@@ -2,11 +2,15 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import ICustomButtonProps from '../../types/CustomButton';
 
-const CustomButton = ({ children, type = "primary", onPress }: ICustomButtonProps) => {
+const CustomButton = ({ children, type = "primary", onPress, style }: ICustomButtonProps) => {
     const textColor = type === "primary" ? '#fff' : '#000';
 
     return (
-        <TouchableOpacity style={[styles.button, styles[type]]} activeOpacity={.7} onPress={onPress}>
+        <TouchableOpacity 
+            style={[styles.button, styles[type], style]} 
+            activeOpacity={.7} 
+            onPress={onPress}
+        >
             <Text style={[styles.buttonText, { color: textColor }]}>
                 {children}
             </Text>

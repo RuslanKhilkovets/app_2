@@ -18,6 +18,8 @@ const StartSlider = ({ activeSlide, setActiveSlide }: IStartSliderProps) => {
         itemWidth={screenWidth}
         onSnapToItem={index => setActiveSlide(index)}
         firstItem={activeSlide}
+        inactiveSlideScale={1}
+        inactiveSlideOpacity={1}
       />
       <Pagination
         dotsLength={slides.length}
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 120,
     alignSelf: 'center',
   },
   activeDot: {

@@ -20,7 +20,10 @@ const StartSliderScreen = () => {
                 setActiveSlide={setActiveSlide}
             />
 
-            <StartSliderActionsButtons onNext={handleNextSlide} />
+            <StartSliderActionsButtons 
+                onNext={handleNextSlide}
+                activeSlide={activeSlide} 
+            />
         </View>
     );
 };
