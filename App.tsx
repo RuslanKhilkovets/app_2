@@ -4,7 +4,9 @@ import Navigation from './src/screens/Navigation';
 
 
 function App(): React.JSX.Element {
-  return <Navigation />;
+  return (
+    <Navigation />
+  )
 }
 
 export default App;

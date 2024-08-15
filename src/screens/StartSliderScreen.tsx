@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+
 import { View, StyleSheet } from 'react-native';
+
 import StartSlider from '../components/StartSLider/StartSlider';
-import StartSliderActionsButtons from '../components/StartSliderActionsButtons';
+import StartSliderActionsButtons from '../components/StartSLider/StartSliderActionsButtons';
+
 import { slidesLength } from '../components/slides';
+
 
 const StartSliderScreen = () => {
     const [activeSlide, setActiveSlide] = useState(0);
