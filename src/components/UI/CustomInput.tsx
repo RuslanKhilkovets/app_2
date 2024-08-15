@@ -81,9 +81,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={handleTogglePasswordVisibility}>
-            <AppIcon name="seke" />
-
-            {/* <EyeIcon width={24} height={16} fill={'#ff0000'} /> */}
+            <AppIcon name={!showPassword ? 'see' : 'hide'} />
           </TouchableOpacity>
         )}
       </View>
