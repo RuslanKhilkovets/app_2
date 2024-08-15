@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
     fontSize: 22,
+    fontFamily: 'Raleway-SemiBold',
   },
 
   icon: {

@@ -11,6 +11,7 @@ import {TextInputMask} from 'react-native-masked-text';
 import ICustomInputProps from '../../types/ICustomInputProps';
 
 import EyeIcon from '../../../assets/images/see.svg';
+import {AppIcon} from '../base/AppIcon';
 
 const CustomInput: React.FC<ICustomInputProps> = ({
   value,
@@ -80,7 +81,9 @@ const CustomInput: React.FC<ICustomInputProps> = ({
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={handleTogglePasswordVisibility}>
-            <EyeIcon width={24} height={16} />
+            <AppIcon name="seke" />
+
+            {/* <EyeIcon width={24} height={16} fill={'#ff0000'} /> */}
           </TouchableOpacity>
         )}
       </View>
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     color: '#333',
-    fontFamily: 'Releway-Medium',
+    fontFamily: 'Raleway-Medium',
   },
   inputContainer: {
     position: 'relative',
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#fff',
     color: '#757575',
-    fontFamily: 'Releway-Medium',
+    fontFamily: 'Raleway-Medium',
   },
   activeInput: {
     borderColor: '#ccc',

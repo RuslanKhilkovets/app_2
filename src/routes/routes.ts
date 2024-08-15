@@ -1,3 +1,4 @@
+import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
 import EmailConfirmationScreen from '../screens/EmailConfirmationScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
 import SignFormsScreen from '../screens/SignFormsScreen';
@@ -24,6 +25,11 @@ export const routes = [
   {
     name: 'EmailConfirmation',
     component: EmailConfirmationScreen,
+    options: {headerShown: false},
+  },
+  {
+    name: 'ResetPassword',
+    component: ResetPasswordScreen,
     options: {headerShown: false},
   },
 ];

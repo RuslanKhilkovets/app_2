@@ -8,8 +8,10 @@ import CustomButton from '../UI/CustomButton';
 import ISignData from '../../types/ISignData';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import loginSchema from 'validations/loginSchema';
+import {useNavigation} from '@react-navigation/native';
 
 const SignInForm = () => {
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -27,7 +29,7 @@ const SignInForm = () => {
   };
 
   const onForgetPassword = () => {
-    console.log('Forget Password');
+    navigation.navigate('ResetPassword');
   };
 
   return (

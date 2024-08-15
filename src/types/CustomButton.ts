@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { ViewStyle } from "react-native";
+import {ViewStyle} from 'react-native';
 
+type TCustomButtonType = 'primary' | 'secondary' | 'bordered';
 
-type TCustomButtonType = "primary" | "secondary" | "bordered";
-
-export default interface ICustomButtonProps extends React.PropsWithChildren<{}> {
-    type?: TCustomButtonType;
-    onPress: () => void;
-    style?: ViewStyle; 
-    before?: React.JSX.Element;
-    after?: React.JSX.Element;
+export default interface ICustomButtonProps
+  extends React.PropsWithChildren<{}> {
+  type?: TCustomButtonType;
+  onPress: () => void;
+  style?: ViewStyle;
+  before?: React.JSX.Element | null;
+  after?: React.JSX.Element | null;
 }

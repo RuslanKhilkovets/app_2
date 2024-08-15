@@ -16,33 +16,28 @@ const EmailConfirmationScreen = () => {
 
   return (
     <Screen title="Підтвердження e-mai">
-      <View style={styles.screenContainer}>
-        <View style={styles.contentContainer}>
-          <CustomInput
-            value={code}
-            onChangeText={text => setCode(text)}
-            label="Введіть код, що прийшов на e-mail"
-            placeholder="Код"
-          />
+      <View style={styles.contentContainer}>
+        <CustomInput
+          value={code}
+          onChangeText={text => setCode(text)}
+          label="Введіть код, що прийшов на e-mail"
+          placeholder="Код"
+        />
 
-          <CustomButton
-            type="primary"
-            onPress={onRegister}
-            style={{
-              marginTop: 14,
-            }}>
-            Зареєструватися
-          </CustomButton>
-        </View>
+        <CustomButton
+          type="primary"
+          onPress={onRegister}
+          style={{
+            marginTop: 14,
+          }}>
+          Зареєструватися
+        </CustomButton>
       </View>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-  },
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
