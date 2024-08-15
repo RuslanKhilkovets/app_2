@@ -2,13 +2,12 @@ import React from 'react';
 
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import ScreenHeader from '../ScreenHeader/ScreenHeader';
 import PrivacyPolicyBlock from './PrivacyPolicyBlock';
 import CustomButton from '../UI/CustomButton';
 
 import useGoBack from '../../hooks/useGoBack';
 
-import GoBackIcon from '../../../assets/images/back.svg';
+import GoBackIcon from 'images/back.svg';
 import Screen from '../Screen/Screen';
 
 const PrivacyPolicy = () => {
