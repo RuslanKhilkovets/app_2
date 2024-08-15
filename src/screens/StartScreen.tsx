@@ -1,7 +1,10 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const StartScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.slide}>
       <Text style={styles.title}>Хей! Вітаю в єЗнахідці</Text>
@@ -13,10 +16,11 @@ const StartScreen = () => {
       <View style={styles.actionsView}>
         <Text style={styles.actionsTitle}>Ти вже користувався додатком?</Text>
         <View style={styles.actionsButtons}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('StartSlider')}>
             <Text style={styles.linkText}>Я новий користувач</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignForms', {action: 'auth'})}>
             <Text style={styles.linkText}>Вже маю акаунт</Text>
           </TouchableOpacity>
         </View>
