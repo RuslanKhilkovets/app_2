@@ -1,34 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useForm, Controller} from 'react-hook-form';
 
-import IRegisterData from '../../types/IRegisterData';
-
+import IRegisterData from 'src/types/IRegisterData';
 import CustomInput from '../UI/CustomInput';
 import CustomButton from '../UI/CustomButton';
 
 const SignUpForm = () => {
   const navigation = useNavigation();
 
-  const [signData, setSignData] = useState<IRegisterData>({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    passwordRepeat: '',
+  const {control, handleSubmit} = useForm<IRegisterData>({
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      passwordRepeat: '',
+    },
   });
 
-  const onInputChange = (name: string) => (text: string) => {
-    setSignData((prev: IRegisterData) => {
-      return {
-        ...prev,
-        [name]: text,
-      };
-    });
-  };
-
-  const onSignUp = () => {
+  const onSignUp = (data: IRegisterData) => {
+    console.log('Sign Up Data:', data);
     navigation.navigate('EmailConfirmation');
   };
 
@@ -39,57 +32,80 @@ const SignUpForm = () => {
   return (
     <View style={styles.container}>
       <View style={styles.inputs}>
-        <CustomInput
-          placeholder="Ім’я"
-          value={signData.name}
-          onChangeText={onInputChange('name')}
+        <Controller
+          control={control}
+          name="name"
+          render={({field: {onChange, onBlur, value}}) => (
+            <CustomInput
+              placeholder="Ім’я"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
         />
-        <CustomInput
-          placeholder="E-mail"
-          value={signData.email}
-          onChangeText={onInputChange('email')}
+        <Controller
+          control={control}
+          name="email"
+          render={({field: {onChange, onBlur, value}}) => (
+            <CustomInput
+              placeholder="E-mail"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
         />
-        <CustomInput
-          placeholder="Телефон"
-          value={signData.phone}
-          onChangeText={onInputChange('phone')}
+        <Controller
+          control={control}
+          name="phone"
+          render={({field: {onChange, onBlur, value}}) => (
+            <CustomInput
+              placeholder="Телефон"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+            />
+          )}
         />
-        <CustomInput
-          placeholder="Пароль"
-          value={signData.password}
-          onChangeText={onInputChange('password')}
-          secureTextEntry
+        <Controller
+          control={control}
+          name="password"
+          render={({field: {onChange, onBlur, value}}) => (
+            <CustomInput
+              placeholder="Пароль"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              secureTextEntry
+            />
+          )}
         />
-        <CustomInput
-          placeholder="Підтвердженння паролю"
-          value={signData.passwordRepeat}
-          onChangeText={onInputChange('passwordRepeat')}
-          secureTextEntry
+        <Controller
+          control={control}
+          name="passwordRepeat"
+          render={({field: {onChange, onBlur, value}}) => (
+            <CustomInput
+              placeholder="Підтвердження паролю"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              secureTextEntry
+            />
+          )}
         />
       </View>
       <View style={styles.actions}>
-        <CustomButton type="primary" onPress={onSignUp}>
+        <CustomButton type="primary" onPress={handleSubmit(onSignUp)}>
           Далі
         </CustomButton>
 
-        <Text
-          style={[
-            styles.bottomText,
-            {
-              marginTop: 20,
-            },
-          ]}>
+        <Text style={[styles.bottomText, {marginTop: 20}]}>
           Реєструючись, ви погоджуєтесь з
         </Text>
 
         <TouchableOpacity onPress={navToPolicy}>
-          <Text
-            style={[
-              styles.bottomText,
-              {
-                textDecorationLine: 'underline',
-              },
-            ]}>
+          <Text style={[styles.bottomText, {textDecorationLine: 'underline'}]}>
             політикою конфіденційності
           </Text>
         </TouchableOpacity>
