@@ -1,13 +1,21 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 
 import CustomInput from '../UI/CustomInput';
 import CustomButton from '../UI/CustomButton';
 import ISignData from '../../types/ISignData';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import loginSchema from 'validations/loginSchema';
 
 const SignInForm = () => {
-  const {control, handleSubmit} = useForm<ISignData>({
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<ISignData>({
+    resolver: yupResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -23,52 +31,61 @@ const SignInForm = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputs}>
-        <Controller
-          control={control}
-          name="email"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="E-mail"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="Пароль"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry
-            />
-          )}
-        />
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={styles.inputs}>
+          <Controller
+            control={control}
+            name="email"
+            render={({field: {onChange, onBlur, value}}) => (
+              <View>
+                <CustomInput
+                  placeholder="E-mail"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors?.email?.message}
+                />
+              </View>
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({field: {onChange, onBlur, value}}) => (
+              <View>
+                <CustomInput
+                  placeholder="Пароль"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors?.password?.message}
+                  secureTextEntry
+                />
+              </View>
+            )}
+          />
+        </View>
+
+        <CustomButton type="secondary" onPress={onForgetPassword}>
+          Забули пароль?
+        </CustomButton>
+
+        <CustomButton type="primary" onPress={handleSubmit(onSubmit)}>
+          Увійти
+        </CustomButton>
       </View>
-
-      <CustomButton type="secondary" onPress={onForgetPassword}>
-        Забули пароль?
-      </CustomButton>
-
-      <CustomButton type="primary" onPress={handleSubmit(onSubmit)}>
-        Увійти
-      </CustomButton>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   inputs: {
     gap: 14,
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 4,
   },
 });
 

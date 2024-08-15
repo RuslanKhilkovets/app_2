@@ -2,15 +2,23 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 
 import IRegisterData from 'src/types/IRegisterData';
 import CustomInput from '../UI/CustomInput';
 import CustomButton from '../UI/CustomButton';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import registerSchema from 'validations/registerSchema';
 
 const SignUpForm = () => {
   const navigation = useNavigation();
 
-  const {control, handleSubmit} = useForm<IRegisterData>({
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<IRegisterData>({
+    resolver: yupResolver(registerSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -30,87 +38,95 @@ const SignUpForm = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputs}>
-        <Controller
-          control={control}
-          name="name"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="Ім’я"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="email"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="E-mail"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="phone"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="Телефон"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="Пароль"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="passwordRepeat"
-          render={({field: {onChange, onBlur, value}}) => (
-            <CustomInput
-              placeholder="Підтвердження паролю"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry
-            />
-          )}
-        />
-      </View>
-      <View style={styles.actions}>
-        <CustomButton type="primary" onPress={handleSubmit(onSignUp)}>
-          Далі
-        </CustomButton>
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={styles.inputs}>
+          <Controller
+            control={control}
+            name="name"
+            render={({field: {onChange, onBlur, value}}) => (
+              <CustomInput
+                placeholder="Ім’я"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="email"
+            render={({field: {onChange, onBlur, value}}) => (
+              <CustomInput
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.email?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="phone"
+            render={({field: {onChange, onBlur, value}}) => (
+              <CustomInput
+                placeholder="Телефон"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.phone?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({field: {onChange, onBlur, value}}) => (
+              <CustomInput
+                placeholder="Пароль"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry
+                error={errors.password?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="passwordRepeat"
+            render={({field: {onChange, onBlur, value}}) => (
+              <CustomInput
+                placeholder="Підтвердження паролю"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry
+                error={errors.passwordRepeat?.message}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.actions}>
+          <CustomButton type="primary" onPress={handleSubmit(onSignUp)}>
+            Далі
+          </CustomButton>
 
-        <Text style={[styles.bottomText, {marginTop: 20}]}>
-          Реєструючись, ви погоджуєтесь з
-        </Text>
-
-        <TouchableOpacity onPress={navToPolicy}>
-          <Text style={[styles.bottomText, {textDecorationLine: 'underline'}]}>
-            політикою конфіденційності
+          <Text style={[styles.bottomText, {marginTop: 20}]}>
+            Реєструючись, ви погоджуєтесь з
           </Text>
-        </TouchableOpacity>
+
+          <TouchableOpacity onPress={navToPolicy}>
+            <Text
+              style={[styles.bottomText, {textDecorationLine: 'underline'}]}>
+              політикою конфіденційності
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

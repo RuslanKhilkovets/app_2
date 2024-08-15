@@ -30,6 +30,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   const handleTogglePasswordVisibility = () => {
     setShowPassword(prevState => !prevState);
   };
+  console.log(error);
 
   return (
     <View style={[style]}>

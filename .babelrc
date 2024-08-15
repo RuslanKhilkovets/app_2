@@ -7,6 +7,7 @@
         "alias": {
           "icons": "./assets/icons",
           "images": "./assets/images",
+          "validations": "./src/validations",
           "@": "./src/components"
         }
       }
