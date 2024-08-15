@@ -8,6 +8,7 @@
       "@/*": ["src/components/*"],
       "images/*": ["assets/images/*"],
       "icons/*": ["assets/icons/*"],
+      "constants/*": ["src/constants/*"],
       "validations/*": ["src/validations/*"]
     }
   }

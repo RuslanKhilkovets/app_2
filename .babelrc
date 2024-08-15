@@ -8,6 +8,7 @@
           "icons": "./assets/icons",
           "images": "./assets/images",
           "validations": "./src/validations",
+          "constants": "./src/constants",
           "@": "./src/components"
         }
       }

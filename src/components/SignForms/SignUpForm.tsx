@@ -9,27 +9,36 @@ import CustomInput from '../UI/CustomInput';
 import CustomButton from '../UI/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import registerSchema from 'validations/registerSchema';
+import {PHONE_MASK} from 'constants/globals';
 
 const SignUpForm = () => {
   const navigation = useNavigation();
 
+  const initialData = {
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    passwordRepeat: '',
+  };
   const {
     control,
     handleSubmit,
     formState: {errors},
+    reset,
   } = useForm<IRegisterData>({
     resolver: yupResolver(registerSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
-      passwordRepeat: '',
-    },
+    defaultValues: initialData,
   });
 
   const onSignUp = (data: IRegisterData) => {
-    console.log('Sign Up Data:', data);
+    const preparedData = {
+      ...data,
+      phone: parseInt(data.phone.replace(/\D/g, ''), 10),
+    };
+
+    reset();
+
     navigation.navigate('EmailConfirmation');
   };
 
@@ -77,6 +86,7 @@ const SignUpForm = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 error={errors.phone?.message}
+                mask={PHONE_MASK}
               />
             )}
           />

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-
 import {
   StyleSheet,
   View,
@@ -7,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import {TextInputMask} from 'react-native-masked-text';
 
 import ICustomInputProps from '../../types/ICustomInputProps';
 
@@ -23,6 +23,8 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   labelStyle,
   error,
   disabled,
+  mask,
+  maskOptions,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -30,29 +32,51 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   const handleTogglePasswordVisibility = () => {
     setShowPassword(prevState => !prevState);
   };
-  console.log(error);
 
   return (
     <View style={[style]}>
       {!!label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
       <View style={styles.inputContainer}>
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          secureTextEntry={showPassword}
-          editable={!disabled}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          style={[
-            styles.input,
-            inputStyle,
-            isFocused && styles.activeInput,
-            !!error && styles.error,
-            disabled && styles.disabled,
-          ]}
-        />
-        {secureTextEntry && (
+        {mask ? (
+          <TextInputMask
+            type={'custom'}
+            options={{
+              mask,
+              ...maskOptions,
+            }}
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            editable={!disabled}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            style={[
+              styles.input,
+              inputStyle,
+              isFocused && styles.activeInput,
+              !!error && styles.error,
+              disabled && styles.disabled,
+            ]}
+          />
+        ) : (
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            secureTextEntry={showPassword}
+            editable={!disabled}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            style={[
+              styles.input,
+              inputStyle,
+              isFocused && styles.activeInput,
+              !!error && styles.error,
+              disabled && styles.disabled,
+            ]}
+          />
+        )}
+        {secureTextEntry && !mask && (
           <TouchableOpacity
             style={styles.eyeIcon}
             onPress={handleTogglePasswordVisibility}>

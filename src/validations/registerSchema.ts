@@ -1,3 +1,4 @@
+import {PHONE_REGEX} from 'constants/globals';
 import * as yup from 'yup';
 
 const registerSchema = yup.object().shape({
@@ -6,7 +7,10 @@ const registerSchema = yup.object().shape({
     .string()
     .email('Неправильний формат електронної пошти')
     .required('E-mail є обов’язковим'),
-  phone: yup.string().required('Телефон є обов’язковим'),
+  phone: yup
+    .string()
+    .matches(PHONE_REGEX, 'Неправильний формат номера телефону')
+    .required('Телефон є обов’язковим'),
   password: yup
     .string()
     .min(6, 'Пароль повинен бути принаймні 6 символів')
