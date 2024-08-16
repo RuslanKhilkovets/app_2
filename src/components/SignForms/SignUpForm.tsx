@@ -3,24 +3,23 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-
-import IRegisterData from 'src/types/IRegisterData';
-import CustomInput from '../UI/CustomInput';
-import CustomButton from '../UI/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import registerSchema from 'validations/registerSchema';
-import {PHONE_MASK} from 'constants/globals';
+
+import {Input, Button} from '@/components';
+import {IRegisterData} from '@/types';
+import {registerSchema} from '@/validations';
+import {globals} from '@/constants';
+
+const initialData = {
+  name: '',
+  email: '',
+  phone: '',
+  password: '',
+  passwordRepeat: '',
+};
 
 const SignUpForm = () => {
   const navigation = useNavigation();
-
-  const initialData = {
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    passwordRepeat: '',
-  };
   const {
     control,
     handleSubmit,
@@ -54,7 +53,7 @@ const SignUpForm = () => {
             control={control}
             name="name"
             render={({field: {onChange, onBlur, value}}) => (
-              <CustomInput
+              <Input
                 placeholder="Ім’я"
                 value={value}
                 onChangeText={onChange}
@@ -67,7 +66,7 @@ const SignUpForm = () => {
             control={control}
             name="email"
             render={({field: {onChange, onBlur, value}}) => (
-              <CustomInput
+              <Input
                 placeholder="E-mail"
                 value={value}
                 onChangeText={onChange}
@@ -80,13 +79,14 @@ const SignUpForm = () => {
             control={control}
             name="phone"
             render={({field: {onChange, onBlur, value}}) => (
-              <CustomInput
+              <Input
                 placeholder="Телефон"
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
                 error={errors.phone?.message}
-                mask={PHONE_MASK}
+                mask={globals.PHONE_MASK}
+                maxLength={globals.PHONE_MASK.length}
               />
             )}
           />
@@ -94,7 +94,7 @@ const SignUpForm = () => {
             control={control}
             name="password"
             render={({field: {onChange, onBlur, value}}) => (
-              <CustomInput
+              <Input
                 placeholder="Пароль"
                 value={value}
                 onChangeText={onChange}
@@ -108,7 +108,7 @@ const SignUpForm = () => {
             control={control}
             name="passwordRepeat"
             render={({field: {onChange, onBlur, value}}) => (
-              <CustomInput
+              <Input
                 placeholder="Підтвердження паролю"
                 value={value}
                 onChangeText={onChange}
@@ -120,9 +120,9 @@ const SignUpForm = () => {
           />
         </View>
         <View style={styles.actions}>
-          <CustomButton type="primary" onPress={handleSubmit(onSignUp)}>
+          <Button type="primary" onPress={handleSubmit(onSignUp)}>
             Далі
-          </CustomButton>
+          </Button>
 
           <Text style={[styles.bottomText, {marginTop: 20}]}>
             Реєструючись, ви погоджуєтесь з

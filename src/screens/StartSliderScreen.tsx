@@ -2,27 +2,13 @@ import React, {useState} from 'react';
 
 import {View, StyleSheet} from 'react-native';
 
-import StartSlider from '@/components/StartSLider/StartSlider';
-import StartSliderActionsButtons from '@/components/StartSLider/StartSliderActionsButtons';
+import {StartSlider, StartSliderActionsButtons} from '@/components';
 import {slidesLength} from '../components/slides';
 
 const StartSliderScreen = () => {
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  const handleNextSlide = () => {
-    if (activeSlide < slidesLength) {
-      setActiveSlide(activeSlide + 1);
-    }
-  };
-
   return (
     <View style={styles.container}>
-      <StartSlider activeSlide={activeSlide} setActiveSlide={setActiveSlide} />
-
-      <StartSliderActionsButtons
-        onNext={handleNextSlide}
-        activeSlide={activeSlide}
-      />
+      <StartSlider />
     </View>
   );
 };

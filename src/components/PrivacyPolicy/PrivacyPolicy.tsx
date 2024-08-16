@@ -1,14 +1,15 @@
 import React from 'react';
-
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
-import PrivacyPolicyBlock from './PrivacyPolicyBlock';
-import CustomButton from '../UI/CustomButton';
+import {
+  PrivacyPolicyBlock,
+  Button,
+  Screen,
+  AppIcon,
+  GoBack,
+} from '@/components';
 
-import useGoBack from '../../hooks/useGoBack';
-
-import GoBackIcon from 'images/back.svg';
-import Screen from '../Screen/Screen';
+import {useGoBack} from '@/hooks';
 
 const PrivacyPolicy = () => {
   const goBack = useGoBack();
@@ -62,12 +63,9 @@ const PrivacyPolicy = () => {
         </ScrollView>
 
         <View style={styles.btnContainer}>
-          <CustomButton
-            onPress={goBack}
-            type="bordered"
-            before={<GoBackIcon />}>
+          <Button onPress={goBack} type="bordered" before={<GoBack />}>
             Повернутися назад
-          </CustomButton>
+          </Button>
         </View>
       </View>
     </Screen>

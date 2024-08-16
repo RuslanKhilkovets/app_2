@@ -1,14 +1,13 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import CustomInput from '../UI/CustomInput';
-import CustomButton from '../UI/CustomButton';
-import ISignData from '../../types/ISignData';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import loginSchema from '@/validations/loginSchema';
-import {useNavigation} from '@react-navigation/native';
+import {Input, Button} from '@/components';
+import {ISignData} from '@/types';
+import {loginSchema} from '@/validations';
 
 const SignInForm = () => {
   const navigation = useNavigation();
@@ -28,7 +27,7 @@ const SignInForm = () => {
     console.log('Sign in data:', data);
   };
 
-  const onForgetPassword = () => {
+  const onForgotPassword = () => {
     navigation.navigate('ResetPassword');
   };
 
@@ -41,7 +40,7 @@ const SignInForm = () => {
             name="email"
             render={({field: {onChange, onBlur, value}}) => (
               <View>
-                <CustomInput
+                <Input
                   placeholder="E-mail"
                   value={value}
                   onChangeText={onChange}
@@ -56,7 +55,7 @@ const SignInForm = () => {
             name="password"
             render={({field: {onChange, onBlur, value}}) => (
               <View>
-                <CustomInput
+                <Input
                   placeholder="Пароль"
                   value={value}
                   onChangeText={onChange}
@@ -69,13 +68,13 @@ const SignInForm = () => {
           />
         </View>
 
-        <CustomButton type="secondary" onPress={onForgetPassword}>
+        <Button type="secondary" onPress={onForgotPassword}>
           Забули пароль?
-        </CustomButton>
+        </Button>
 
-        <CustomButton type="primary" onPress={handleSubmit(onSubmit)}>
+        <Button type="primary" onPress={handleSubmit(onSubmit)}>
           Увійти
-        </CustomButton>
+        </Button>
       </View>
     </KeyboardAwareScrollView>
   );

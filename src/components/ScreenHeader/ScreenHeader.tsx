@@ -2,18 +2,18 @@ import React from 'react';
 
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import BackIcon from '../../../assets/images/back.svg';
+import {GoBack} from '@/components';
 
-import useGoBack from '../../hooks/useGoBack';
+import {useGoBack} from '@/hooks';
 
 const ScreenHeader = ({children}: React.PropsWithChildren) => {
   const goBack = useGoBack();
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={goBack} style={styles.icon}>
-        <BackIcon />
-      </TouchableOpacity>
+      <View style={styles.icon}>
+        <GoBack />
+      </View>
 
       <Text style={styles.headerTitle}>{children}</Text>
     </View>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
     left: 0,
-    top: 33,
+    top: 30,
   },
 });
 

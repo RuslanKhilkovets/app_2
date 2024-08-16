@@ -1,6 +1,7 @@
 import {createIconSetFromFontello} from 'react-native-vector-icons';
 import fontelloConfig from '@/config/icons-config.json';
 import {IconProps} from 'react-native-vector-icons/Icon';
+
 const Icon = createIconSetFromFontello(fontelloConfig);
 
 export const AppIcon = ({
@@ -9,7 +10,7 @@ export const AppIcon = ({
   size = 20,
   ...props
 }: IconProps) => {
-  return <Icon name={name} {...props} />;
+  return <Icon name={name} size={size} color={color} {...props} />;
 };
 
 export default AppIcon;

@@ -1,6 +1,6 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/components/index.js"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": "./",
@@ -10,7 +10,9 @@
       "@icons/*": ["assets/icons/*"],
       "@constants/*": ["src/constants/*"],
       "@validations/*": ["src/validations/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@types/*": ["src/types/*"],
+      "@screens/*": ["src/screens/*"]
     }
   }
 }

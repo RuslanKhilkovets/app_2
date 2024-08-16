@@ -1,83 +1,71 @@
-import {View, Text, StyleSheet, Animated, Dimensions} from 'react-native';
-import React, {useState, useRef} from 'react';
-import Screen from '@/components/Screen/Screen';
-import CustomInput from '@/components/UI/CustomInput';
-import CustomButton from '@/components/UI/CustomButton';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import Carousel from 'react-native-snap-carousel';
+
+import {Screen, Input, Button} from '@/components';
 
 export default function ResetPasswordScreen() {
   const [code, setCode] = useState('');
-  const [timer, setTimer] = useState(59);
+  const [timer, setTimer] = useState(60);
   const [isTimerActive, setIsTimerActive] = useState(true);
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [activeStep, setActiveStep] = useState(0);
+
+  const carouselRef = useRef<Carousel<any>>(null);
 
   const screenWidth = Dimensions.get('window').width;
 
-  // Анімаційні значення для кожного кроку
-  const step1Anim = useRef(new Animated.Value(0)).current;
-  const step2Anim = useRef(new Animated.Value(screenWidth * 3)).current;
-  const step3Anim = useRef(new Animated.Value(screenWidth * 3)).current;
-
-  const animateStep = (currentStepAnim, nextStepAnim) => {
-    Animated.timing(currentStepAnim, {
-      toValue: -screenWidth,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-
-    Animated.timing(nextStepAnim, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
+  useEffect(() => {
+    let interval: any;
+    if (isTimerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setIsTimerActive(false);
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timer, isTimerActive]);
 
   const getCode = () => {
     if (!isTimerActive) {
       setTimer(59);
       setIsTimerActive(true);
     }
-
-    // Анімація переходу з кроку 1 на крок 2
-    animateStep(step1Anim, step2Anim);
   };
 
   const goToNextStep = () => {
-    // Анімація переходу з кроку 2 на крок 3
-    animateStep(step2Anim, step3Anim);
+    carouselRef.current?.snapToNext();
   };
 
-  return (
-    <Screen title="Відновлення пароля">
-      <View style={styles.screenContainer}>
-        <Animated.View
-          style={[
-            styles.stepContainer,
-            {transform: [{translateX: step1Anim}]},
-          ]}>
-          <CustomInput
+  const steps = [
+    {
+      component: (
+        <View style={styles.content}>
+          <Input
             value={code}
             onChangeText={text => setCode(text)}
             label="Крок 1. Введіть свій e-mail"
             placeholder="E-mail"
           />
 
-          <CustomButton
+          <Button
             type="primary"
-            onPress={getCode}
+            onPress={goToNextStep}
             style={{
               marginTop: 14,
             }}>
             Отримати код
-          </CustomButton>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.stepContainer,
-            {transform: [{translateX: step2Anim}]},
-          ]}>
-          <CustomInput
+          </Button>
+        </View>
+      ),
+    },
+    {
+      component: (
+        <View style={styles.content}>
+          <Input
             value={code}
             onChangeText={text => setCode(text)}
             label="Крок 2. Введіть код"
@@ -88,33 +76,31 @@ export default function ResetPasswordScreen() {
               Код можна знову надіслати через: {timer}с
             </Text>
           ) : (
-            <CustomButton
+            <Button
               type="secondary"
               onPress={getCode}
               style={{
                 marginTop: 14,
               }}>
               Надіслати знову код
-            </CustomButton>
+            </Button>
           )}
 
-          <CustomButton
+          <Button
             type="primary"
             onPress={goToNextStep}
             style={{
               marginTop: 14,
             }}>
             Далі
-          </CustomButton>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.stepContainer,
-            styles.inputs,
-            {transform: [{translateX: step3Anim}]},
-          ]}>
-          <CustomInput
+          </Button>
+        </View>
+      ),
+    },
+    {
+      component: (
+        <View style={[styles.content, styles.inputs]}>
+          <Input
             value={password}
             onChangeText={text => setPassword(text)}
             label="Крок 3. Введіть новий пароль"
@@ -122,7 +108,7 @@ export default function ResetPasswordScreen() {
             secureTextEntry
           />
 
-          <CustomInput
+          <Input
             value={passwordRepeat}
             onChangeText={text => setPasswordRepeat(text)}
             placeholder="Підтвердження паролю"
@@ -135,15 +121,34 @@ export default function ResetPasswordScreen() {
             secureTextEntry
           />
 
-          <CustomButton
+          <Button
             type="primary"
             onPress={() => console.log('Reset password')}
             style={{
               marginTop: 14,
             }}>
             Скинути пароль
-          </CustomButton>
-        </Animated.View>
+          </Button>
+        </View>
+      ),
+    },
+  ];
+
+  return (
+    <Screen title="Відновлення пароля">
+      <View style={styles.screenContainer}>
+        <Carousel
+          ref={carouselRef}
+          data={steps}
+          renderItem={({item}) => item.component}
+          sliderWidth={screenWidth - 32}
+          itemWidth={screenWidth - 32}
+          onSnapToItem={index => setActiveStep(index)}
+          firstItem={activeStep}
+          inactiveSlideScale={1}
+          inactiveSlideOpacity={1}
+          scrollEnabled={false}
+        />
       </View>
     </Screen>
   );
@@ -152,18 +157,18 @@ export default function ResetPasswordScreen() {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    justifyContent: 'center',
-  },
-  stepContainer: {
-    position: 'absolute',
-    width: '100%',
   },
   text: {
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
     fontFamily: 'Raleway-Regular',
     textAlign: 'center',
     fontSize: 13,
     color: '#000',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
   },
   inputs: {
     gap: 20,

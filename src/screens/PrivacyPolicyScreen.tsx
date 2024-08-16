@@ -1,10 +1,9 @@
 import React from 'react';
 
-import PrivacyPolicy from '../components/PrivacyPolicy/PrivacyPolicy';
+import {PrivacyPolicy} from '@/components';
 
 
 const PrivacyPolicyScreen = () => {
-
   return (
     <PrivacyPolicy/>
   );

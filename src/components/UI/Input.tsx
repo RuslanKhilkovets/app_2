@@ -5,15 +5,31 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 import {TextInputMask} from 'react-native-masked-text';
 
-import ICustomInputProps from '../../types/ICustomInputProps';
+import {AppIcon} from '@/components';
 
-import EyeIcon from '../../../assets/images/see.svg';
-import {AppIcon} from '../base/AppIcon';
+interface IInputProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  secureTextEntry?: boolean;
+  style?: ViewStyle;
+  inputStyle?: TextStyle;
+  label?: string;
+  labelStyle?: TextStyle;
+  error?: string;
+  errorStyle?: TextStyle;
+  disabled?: boolean;
+  mask?: string;
+  maskOptions?: Record<string, any>;
+  maxLength?: number;
+}
 
-const CustomInput: React.FC<ICustomInputProps> = ({
+const Input: React.FC<IInputProps> = ({
   value,
   onChangeText,
   placeholder,
@@ -26,6 +42,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
   disabled,
   mask,
   maskOptions,
+  maxLength,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -49,6 +66,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
             onChangeText={onChangeText}
             placeholder={placeholder}
             editable={!disabled}
+            maxLength={maxLength}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             style={[
@@ -66,6 +84,7 @@ const CustomInput: React.FC<ICustomInputProps> = ({
             placeholder={placeholder}
             secureTextEntry={showPassword}
             editable={!disabled}
+            maxLength={maxLength}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             style={[
@@ -133,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomInput;
+export default Input;

@@ -1,5 +1,5 @@
-import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
-import EmailConfirmationScreen from '../screens/EmailConfirmationScreen';
+import {ResetPasswordScreen} from '@/screens';
+import EmailConfirmationScreen from '@/screens/EmailConfirmationScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
 import SignFormsScreen from '../screens/SignFormsScreen';
 import StartScreen from '../screens/StartScreen';

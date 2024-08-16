@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-import IStartSliderProps from '../../types/IStartSliderProps';
+
+import {StartSliderActionsButtons} from '@/components';
 import {slides} from '../slides';
 
-const {width: screenWidth} = Dimensions.get('window');
+const StartSlider = () => {
+  const {width: screenWidth} = Dimensions.get('window');
 
-const StartSlider = ({activeSlide, setActiveSlide}: IStartSliderProps) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const carouselRef = useRef<Carousel<any>>(null);
+
+  const onNext = () => {
+    carouselRef.current?.snapToNext();
+  };
+
   return (
     <View style={styles.container}>
       <Carousel
@@ -18,7 +26,7 @@ const StartSlider = ({activeSlide, setActiveSlide}: IStartSliderProps) => {
         firstItem={activeSlide}
         inactiveSlideScale={1}
         inactiveSlideOpacity={1}
-        scrollEnabled={false}
+        ref={carouselRef}
       />
       <Pagination
         dotsLength={slides.length}
@@ -28,6 +36,7 @@ const StartSlider = ({activeSlide, setActiveSlide}: IStartSliderProps) => {
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
       />
+      <StartSliderActionsButtons activeSlide={activeSlide} onNext={onNext} />
     </View>
   );
 };
@@ -38,7 +47,7 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 120,
+    bottom: 140,
     alignSelf: 'center',
   },
   activeDot: {

@@ -1,17 +1,24 @@
 import React from 'react';
+import {StyleSheet, TouchableOpacity, Text, ViewStyle} from 'react-native';
 
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+type TButtonType = 'primary' | 'secondary' | 'bordered';
 
-import ICustomButtonProps from '../../types/CustomButton';
+interface IButtonProps extends React.PropsWithChildren<{}> {
+  type?: TButtonType;
+  onPress: () => void;
+  style?: ViewStyle;
+  before?: React.JSX.Element | null;
+  after?: React.JSX.Element | null;
+}
 
-const CustomButton = ({
+const Button = ({
   children,
   type = 'primary',
   onPress,
   style,
   after = null,
   before = null,
-}: ICustomButtonProps) => {
+}: IButtonProps) => {
   const textColor = type === 'primary' ? '#fff' : '#000';
 
   return (
@@ -68,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomButton;
+export default Button;
