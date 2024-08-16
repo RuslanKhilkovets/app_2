@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import ScreenHeader from '@/ScreenHeader/ScreenHeader';
+import ScreenHeader from '../ScreenHeader/ScreenHeader';
 
 interface IScreen extends React.PropsWithChildren {
   title?: string;

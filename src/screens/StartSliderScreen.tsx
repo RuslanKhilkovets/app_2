@@ -1,41 +1,36 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
-import StartSlider from '../components/StartSLider/StartSlider';
-import StartSliderActionsButtons from '../components/StartSLider/StartSliderActionsButtons';
-
-import { slidesLength } from '../components/slides';
-
+import StartSlider from '@/components/StartSLider/StartSlider';
+import StartSliderActionsButtons from '@/components/StartSLider/StartSliderActionsButtons';
+import {slidesLength} from '../components/slides';
 
 const StartSliderScreen = () => {
-    const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
 
-    const handleNextSlide = () => {
-        if (activeSlide < slidesLength) {
-            setActiveSlide(activeSlide + 1);
-        }
-    };
+  const handleNextSlide = () => {
+    if (activeSlide < slidesLength) {
+      setActiveSlide(activeSlide + 1);
+    }
+  };
 
-    return (
-        <View style={styles.container}>
-            <StartSlider  
-                activeSlide={activeSlide} 
-                setActiveSlide={setActiveSlide}
-            />
+  return (
+    <View style={styles.container}>
+      <StartSlider activeSlide={activeSlide} setActiveSlide={setActiveSlide} />
 
-            <StartSliderActionsButtons 
-                onNext={handleNextSlide}
-                activeSlide={activeSlide} 
-            />
-        </View>
-    );
+      <StartSliderActionsButtons
+        onNext={handleNextSlide}
+        activeSlide={activeSlide}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
 });
 
 export default StartSliderScreen;

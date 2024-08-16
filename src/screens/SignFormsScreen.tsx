@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SignForm from '../components/SignForms/SignForm';
+import {SignForm} from '@/components';
 
 const SignFormsScreen = () => {
   return <SignForm />;

@@ -7,7 +7,7 @@ import CustomInput from '../UI/CustomInput';
 import CustomButton from '../UI/CustomButton';
 import ISignData from '../../types/ISignData';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import loginSchema from 'validations/loginSchema';
+import loginSchema from '@/validations/loginSchema';
 import {useNavigation} from '@react-navigation/native';
 
 const SignInForm = () => {

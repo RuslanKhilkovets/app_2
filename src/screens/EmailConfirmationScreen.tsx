@@ -2,10 +2,9 @@ import React, {useState} from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
-import ScreenHeader from '../components/ScreenHeader/ScreenHeader';
-import CustomInput from '../components/UI/CustomInput';
-import CustomButton from '../components/UI/CustomButton';
-import Screen from '../components/Screen/Screen';
+import CustomInput from '@/components/UI/CustomInput';
+import CustomButton from '@/components/UI/CustomButton';
+import Screen from '@/components/Screen/Screen';
 
 const EmailConfirmationScreen = () => {
   const [code, setCode] = useState('');
