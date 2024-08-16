@@ -17,3 +17,7 @@ export {default as Button} from './UI/Button';
 export {default as Input} from './UI/Input';
 export {default as GoBack} from './UI/GoBack';
 export {default as Screen} from './UI/Screen';
+
+export {default as Menu} from './Menu/Menu';
+export {default as MenuItem} from './Menu/MenuItem';
+export {default as MenuAddItem} from './Menu/MenuAddItem';

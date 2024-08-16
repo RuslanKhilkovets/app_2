@@ -1,9 +1,12 @@
-import {ResetPasswordScreen} from '@/screens';
-import EmailConfirmationScreen from '@/screens/EmailConfirmationScreen';
-import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
-import SignFormsScreen from '../screens/SignFormsScreen';
-import StartScreen from '../screens/StartScreen';
-import StartSliderScreen from '../screens/StartSliderScreen';
+import {
+  MainScreen,
+  ResetPasswordScreen,
+  EmailConfirmationScreen,
+  PrivacyPolicyScreen,
+  SignFormsScreen,
+  StartScreen,
+  StartSliderScreen,
+} from '@/screens';
 
 export const routes = [
   {
@@ -30,6 +33,11 @@ export const routes = [
   {
     name: 'ResetPassword',
     component: ResetPasswordScreen,
+    options: {headerShown: false},
+  },
+  {
+    name: 'Main',
+    component: MainScreen,
     options: {headerShown: false},
   },
 ];

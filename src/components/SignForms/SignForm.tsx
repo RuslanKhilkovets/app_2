@@ -1,17 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useRoute} from '@react-navigation/native';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 
-import {
-  SignInForm,
-  SignUpForm,
-  SignWithServices,
-  AppIcon,
-  GoBack,
-} from '@/components';
+import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
 
 import {useGoBack} from '@/hooks';
-
 import {SignTypes} from '@/constants';
 
 const SignForm = () => {
@@ -19,10 +12,20 @@ const SignForm = () => {
   const goBack = useGoBack();
 
   const {action: initialAction} = route.params || {};
-
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [action, fadeAnim]);
+
   const handleFormSwitch = (newAction: string) => {
+    fadeAnim.setValue(0);
     setAction(newAction);
   };
 
@@ -54,13 +57,14 @@ const SignForm = () => {
         </View>
       </View>
 
-      <SignWithServices
-        type={
-          action === SignTypes.SIGN_UP ? SignTypes.SIGN_UP : SignTypes.SIGN_IN
-        }
-      />
-
-      {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
+      <Animated.View style={[styles.formContainer, {opacity: fadeAnim}]}>
+        <SignWithServices
+          type={
+            action === SignTypes.SIGN_UP ? SignTypes.SIGN_UP : SignTypes.SIGN_IN
+          }
+        />
+        {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
+      </Animated.View>
     </View>
   );
 };
@@ -90,6 +94,10 @@ const styles = StyleSheet.create({
   formTypeLabel_active: {
     fontFamily: 'Raleway-SemiBold',
     textDecorationLine: 'none',
+  },
+  formContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
