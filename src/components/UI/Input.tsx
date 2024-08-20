@@ -28,6 +28,7 @@ interface IInputProps {
   maskOptions?: Record<string, any>;
   maxLength?: number;
   searchMode?: boolean;
+  endAdornment?: React.JSX.Element | null;
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -45,6 +46,7 @@ const Input: React.FC<IInputProps> = ({
   maskOptions,
   maxLength,
   searchMode,
+  endAdornment,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -56,7 +58,7 @@ const Input: React.FC<IInputProps> = ({
   return (
     <View style={[style]}>
       {!!label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, !!error && styles.error]}>
         {mask ? (
           <TextInputMask
             type={'custom'}
@@ -75,7 +77,6 @@ const Input: React.FC<IInputProps> = ({
               styles.input,
               inputStyle,
               isFocused && styles.activeInput,
-              !!error && styles.error,
               disabled && styles.disabled,
             ]}
           />
@@ -93,20 +94,26 @@ const Input: React.FC<IInputProps> = ({
               styles.input,
               inputStyle,
               isFocused && styles.activeInput,
-              !!error && styles.error,
               disabled && styles.disabled,
             ]}
           />
         )}
+        {endAdornment && (
+          <View style={styles.endAdornment}>{endAdornment}</View>
+        )}
         {secureTextEntry && !mask && (
           <TouchableOpacity
-            style={styles.inputIcon}
+            style={styles.endAdornment}
             onPress={handleTogglePasswordVisibility}>
             <AppIcon name={!showPassword ? 'see' : 'hide'} />
           </TouchableOpacity>
         )}
         {searchMode && (
-          <AppIcon style={styles.inputIcon} name="search" color={'#757575'} />
+          <AppIcon
+            style={styles.endAdornment}
+            name="search"
+            color={'#757575'}
+          />
         )}
       </View>
       {!!error && <Text style={[styles.errorText]}>{error}</Text>}
@@ -123,15 +130,16 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    height: 60,
   },
   input: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: 'transparent',
-    paddingHorizontal: 15,
-    paddingVertical: 21,
+    flex: 1,
     fontSize: 16,
-    backgroundColor: '#fff',
     color: '#757575',
     fontFamily: 'Raleway-Medium',
   },
@@ -149,11 +157,8 @@ const styles = StyleSheet.create({
     color: '#757575',
     userSelect: 'none',
   },
-  inputIcon: {
-    position: 'absolute',
-    right: 15,
-    top: '50%',
-    transform: [{translateY: -10}],
+  endAdornment: {
+    marginLeft: 5,
   },
 });
 

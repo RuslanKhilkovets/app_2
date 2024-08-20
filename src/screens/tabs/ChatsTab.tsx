@@ -1,14 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import {Input} from '@/components';
 
 const ChatsTab = () => {
-  return (
-    <View>
-      <Text>ChatsTab</Text>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 };
 
 export default ChatsTab;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {},
+});

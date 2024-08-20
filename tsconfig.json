@@ -13,6 +13,7 @@
       "@components/*": ["src/components/*"],
       "@types/*": ["src/types/*"],
       "@screens/*": ["src/screens/*"],
+      "@helpers/*": ["src/helpers/*"],
       "@contexts/*": ["src/contexts/*"]
     }
   }

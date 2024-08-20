@@ -17,7 +17,8 @@ export {default as Button} from './UI/Button';
 export {default as Input} from './UI/Input';
 export {default as GoBack} from './UI/GoBack';
 export {default as Screen} from './UI/Screen';
-export {default as Tabs} from './UI/Tabs';
+export {default as SelectedFilterItem} from './UI/SelectedFilterItem';
+export {default as Item} from './UI/Item';
 
 export {default as MenuAddItem} from './Menu/MenuAddItem';
 
