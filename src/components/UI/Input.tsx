@@ -27,6 +27,7 @@ interface IInputProps {
   mask?: string;
   maskOptions?: Record<string, any>;
   maxLength?: number;
+  searchMode?: boolean;
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -43,6 +44,7 @@ const Input: React.FC<IInputProps> = ({
   mask,
   maskOptions,
   maxLength,
+  searchMode,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -98,10 +100,13 @@ const Input: React.FC<IInputProps> = ({
         )}
         {secureTextEntry && !mask && (
           <TouchableOpacity
-            style={styles.eyeIcon}
+            style={styles.inputIcon}
             onPress={handleTogglePasswordVisibility}>
             <AppIcon name={!showPassword ? 'see' : 'hide'} />
           </TouchableOpacity>
+        )}
+        {searchMode && (
+          <AppIcon style={styles.inputIcon} name="search" color={'#757575'} />
         )}
       </View>
       {!!error && <Text style={[styles.errorText]}>{error}</Text>}
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
     color: '#757575',
     userSelect: 'none',
   },
-  eyeIcon: {
+  inputIcon: {
     position: 'absolute',
     right: 15,
     top: '50%',

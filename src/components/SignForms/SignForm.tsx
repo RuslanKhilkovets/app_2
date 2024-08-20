@@ -4,12 +4,10 @@ import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 
 import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
 
-import {useGoBack} from '@/hooks';
 import {SignTypes} from '@/constants';
 
 const SignForm = () => {
   const route = useRoute();
-  const goBack = useGoBack();
 
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);

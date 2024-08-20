@@ -1,4 +1,4 @@
-import {PHONE_REGEX} from 'constants/globals';
+import {PHONE_REGEX} from '@/constants/globals';
 import * as yup from 'yup';
 
 const registerSchema = yup.object().shape({

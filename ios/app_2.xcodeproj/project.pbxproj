@@ -13,12 +13,12 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		35CFF6430F7A4DC098C93AB8 /* Raleway-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64BAF6E7361644B685B00FA9 /* Raleway-Medium.ttf */; };
+		5F5C0893F531495FA9B76023 /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01C6D21D8BCA462B92187372 /* fontello.ttf */; };
 		6132EF182BDFF13200BBE14D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6132EF172BDFF13200BBE14D /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-app_2-app_2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-app_2-app_2Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8FCEBD4E8C2D4C96B349A2A2 /* Raleway-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DEBF2BF5C9FA4AB69991BB8E /* Raleway-SemiBold.ttf */; };
 		ED7EF7A4DA974255ABC0BAA8 /* Raleway-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B844FD0C86148828F222DC5 /* Raleway-Regular.ttf */; };
-		5F5C0893F531495FA9B76023 /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01C6D21D8BCA462B92187372 /* fontello.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +35,7 @@
 		00E356EE1AD99517003FC87E /* app_2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = app_2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* app_2Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = app_2Tests.m; sourceTree = "<group>"; };
+		01C6D21D8BCA462B92187372 /* fontello.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = fontello.ttf; path = ../assets/fonts/fontello.ttf; sourceTree = "<group>"; };
 		0B844FD0C86148828F222DC5 /* Raleway-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Raleway-Regular.ttf"; path = "../assets/fonts/Raleway-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* app_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = app_2/AppDelegate.h; sourceTree = "<group>"; };
@@ -53,7 +54,6 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-app_2-app_2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app_2-app_2Tests.release.xcconfig"; path = "Target Support Files/Pods-app_2-app_2Tests/Pods-app_2-app_2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DEBF2BF5C9FA4AB69991BB8E /* Raleway-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Raleway-SemiBold.ttf"; path = "../assets/fonts/Raleway-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		01C6D21D8BCA462B92187372 /* fontello.ttf */ = {isa = PBXFileReference; name = "fontello.ttf"; path = "../assets/fonts/fontello.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

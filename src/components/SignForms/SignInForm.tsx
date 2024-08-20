@@ -24,7 +24,7 @@ const SignInForm = () => {
   });
 
   const onSubmit = (data: ISignData) => {
-    console.log('Sign in data:', data);
+    navigation.navigate('Main');
   };
 
   const onForgotPassword = () => {

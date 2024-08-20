@@ -6,6 +6,7 @@ import {
   SignFormsScreen,
   StartScreen,
   StartSliderScreen,
+  TabsNavigation,
 } from '@/screens';
 
 export const routes = [
@@ -38,6 +39,11 @@ export const routes = [
   {
     name: 'Main',
     component: MainScreen,
+    options: {headerShown: false},
+  },
+  {
+    name: 'Tabs',
+    component: TabsNavigation,
     options: {headerShown: false},
   },
 ];

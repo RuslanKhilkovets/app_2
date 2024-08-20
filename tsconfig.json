@@ -12,7 +12,8 @@
       "@validations/*": ["src/validations/*"],
       "@components/*": ["src/components/*"],
       "@types/*": ["src/types/*"],
-      "@screens/*": ["src/screens/*"]
+      "@screens/*": ["src/screens/*"],
+      "@contexts/*": ["src/contexts/*"]
     }
   }
 }

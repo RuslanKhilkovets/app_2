@@ -17,7 +17,10 @@ export {default as Button} from './UI/Button';
 export {default as Input} from './UI/Input';
 export {default as GoBack} from './UI/GoBack';
 export {default as Screen} from './UI/Screen';
+export {default as Tabs} from './UI/Tabs';
 
-export {default as Menu} from './Menu/Menu';
-export {default as MenuItem} from './Menu/MenuItem';
 export {default as MenuAddItem} from './Menu/MenuAddItem';
+
+export {default as Categories} from './Categories/Categories';
+export {default as CategoriesItem} from './Categories/CategoriesItem';
+export {default as CategoriesHeader} from './Categories/CategoriesHeader';

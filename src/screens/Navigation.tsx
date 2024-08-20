@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Start">
+      <Stack.Navigator initialRouteName="Tabs">
         {routes.map((route, index) => {
           return <Stack.Screen {...route} key={route.name + index} />;
         })}

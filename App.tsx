@@ -1,9 +1,14 @@
 import React from 'react';
 
-import Navigation from './src/screens/Navigation';
+import {Navigation} from '@/screens';
+import {ThemeContextProvider} from '@/contexts/Theme/ThemeContext';
 
 function App(): React.JSX.Element {
-  return <Navigation />;
+  return (
+    <ThemeContextProvider>
+      <Navigation />
+    </ThemeContextProvider>
+  );
 }
 
 export default App;
