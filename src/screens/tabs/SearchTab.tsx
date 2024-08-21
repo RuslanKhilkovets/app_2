@@ -187,6 +187,11 @@ const SearchTab = () => {
           </ScrollView>
         )}
       </Animated.View>
+
+      <FilterModal
+        visible={isFilterModalVisible}
+        onClose={() => setIsFilterModalVisible(false)}
+      />
     </SafeAreaView>
   );
 };
@@ -194,9 +199,6 @@ const SearchTab = () => {
 export default SearchTab;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 40,
-  },
   header: {
     padding: 16,
   },

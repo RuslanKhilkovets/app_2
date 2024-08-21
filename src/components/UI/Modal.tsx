@@ -69,29 +69,31 @@ const Modal = ({
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: headerBgColor}}>
-      <NativeModal
-        animationType="none"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={onClose}>
-        <View style={styles.modalOverlay}>
-          <Animated.View style={[styles.modalContainer, transformStyle]}>
-            <View
-              style={[styles.modalHeader, {backgroundColor: headerBgColor}]}>
-              <View></View>
+    visible && (
+      <SafeAreaView style={{flex: 1, backgroundColor: headerBgColor}}>
+        <NativeModal
+          animationType="none"
+          transparent={true}
+          visible={isVisible}
+          onRequestClose={onClose}>
+          <View style={styles.modalOverlay}>
+            <Animated.View style={[styles.modalContainer, transformStyle]}>
+              <View
+                style={[styles.modalHeader, {backgroundColor: headerBgColor}]}>
+                <View></View>
 
-              <Text style={styles.modalTitle}>{title}</Text>
+                <Text style={styles.modalTitle}>{title}</Text>
 
-              <TouchableOpacity onPress={onClose}>
-                <AppIcon name="delete_filter" />
-              </TouchableOpacity>
-            </View>
-            {children}
-          </Animated.View>
-        </View>
-      </NativeModal>
-    </SafeAreaView>
+                <TouchableOpacity onPress={onClose}>
+                  <AppIcon name="delete_filter" />
+                </TouchableOpacity>
+              </View>
+              {children}
+            </Animated.View>
+          </View>
+        </NativeModal>
+      </SafeAreaView>
+    )
   );
 };
 
