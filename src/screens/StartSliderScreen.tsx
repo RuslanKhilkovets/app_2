@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-
 import {View, StyleSheet} from 'react-native';
 
-import {StartSlider, StartSliderActionsButtons} from '@/components';
-import {slidesLength} from '../components/slides';
+import {StartSlider} from '@/components';
 
 const StartSliderScreen = () => {
   return (
