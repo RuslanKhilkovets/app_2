@@ -6,11 +6,6 @@ export {default as StartScreen} from './StartScreen';
 export {default as StartSliderScreen} from './StartSliderScreen';
 export {default as MainScreen} from './MainScreen';
 
-// navigation
-
-export {default as TabsNavigation} from './TabsNavigation';
-export {default as Navigation} from './Navigation';
-
 // tabs
 
 export {default as AddItemTab} from './tabs/AddItemTab';

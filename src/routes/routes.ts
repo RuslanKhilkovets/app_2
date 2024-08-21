@@ -6,45 +6,43 @@ import {
   SignFormsScreen,
   StartScreen,
   StartSliderScreen,
-  TabsNavigation,
 } from '@/screens';
+import {TabsNavigation} from '@/navigation';
 
-export const routes = [
+interface IRoutes {
+  name: string;
+  component: React.ComponentType;
+}
+
+export const routes: IRoutes[] = [
   {
     name: 'StartSlider',
     component: StartSliderScreen,
-    options: {headerShown: false},
   },
-  {name: 'Start', component: StartScreen, options: {headerShown: false}},
+  {name: 'Start', component: StartScreen},
   {
     name: 'SignForms',
     component: SignFormsScreen,
-    options: {headerShown: false},
   },
   {
     name: 'PrivacyPolicy',
     component: PrivacyPolicyScreen,
-    options: {headerShown: false},
   },
   {
     name: 'EmailConfirmation',
     component: EmailConfirmationScreen,
-    options: {headerShown: false},
   },
   {
     name: 'ResetPassword',
     component: ResetPasswordScreen,
-    options: {headerShown: false},
   },
   {
     name: 'Main',
     component: MainScreen,
-    options: {headerShown: false},
   },
   {
     name: 'Tabs',
     component: TabsNavigation,
-    options: {headerShown: false},
   },
 ];
 

@@ -19,9 +19,14 @@ export {default as GoBack} from './UI/GoBack';
 export {default as Screen} from './UI/Screen';
 export {default as SelectedFilterItem} from './UI/SelectedFilterItem';
 export {default as Item} from './UI/Item';
+export {default as Modal} from './UI/Modal';
+
+export {default as FilterModal} from './modals/FilterModal/FilterModal';
 
 export {default as MenuAddItem} from './Menu/MenuAddItem';
 
 export {default as Categories} from './Categories/Categories';
 export {default as CategoriesItem} from './Categories/CategoriesItem';
 export {default as CategoriesHeader} from './Categories/CategoriesHeader';
+
+export {default as FilterItem} from './FilterItem/FilterItem';

@@ -6,9 +6,16 @@ import {
   ScrollView,
   Animated,
   FlatList,
+  SafeAreaView,
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
-import {AppIcon, Input, Item, SelectedFilterItem} from '@/components';
+import {
+  AppIcon,
+  FilterModal,
+  Input,
+  Item,
+  SelectedFilterItem,
+} from '@/components';
 
 enum TABS {
   I_LOOKING_FOR = 1,
@@ -18,6 +25,7 @@ enum TABS {
 const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -29,7 +37,6 @@ const SearchTab = () => {
       useNativeDriver: false,
     }).start();
 
-    // Fade out the content first, then fade in the new content after a delay
     Animated.sequence([
       Animated.timing(contentOpacity, {
         toValue: 0,
@@ -53,7 +60,10 @@ const SearchTab = () => {
     <View style={styles.endAdornments}>
       <AppIcon name="favorite_menu" size={20} />
 
-      <TouchableOpacity style={styles.filterBtn} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.filterBtn}
+        activeOpacity={0.7}
+        onPress={() => setIsFilterModalVisible(true)}>
         <Text>Фільтр</Text>
 
         <AppIcon size={10} name="filter" />
@@ -91,7 +101,7 @@ const SearchTab = () => {
   ];
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
       <Animated.View
         style={[styles.container, {backgroundColor: backgroundColor}]}>
         <View style={[styles.header]}>
@@ -177,7 +187,7 @@ const SearchTab = () => {
           </ScrollView>
         )}
       </Animated.View>
-    </>
+    </SafeAreaView>
   );
 };
 

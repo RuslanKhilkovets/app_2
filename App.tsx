@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Navigation} from '@/screens';
+import {Navigation} from '@/navigation';
 import {ThemeContextProvider} from '@/contexts/Theme/ThemeContext';
 
 function App(): React.JSX.Element {

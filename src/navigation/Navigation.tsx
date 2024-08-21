@@ -11,7 +11,13 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Tabs">
         {routes.map((route, index) => {
-          return <Stack.Screen {...route} key={route.name + index} />;
+          return (
+            <Stack.Screen
+              {...route}
+              key={route.name}
+              options={{headerShown: false}}
+            />
+          );
         })}
       </Stack.Navigator>
     </NavigationContainer>

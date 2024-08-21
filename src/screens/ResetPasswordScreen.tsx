@@ -1,39 +1,23 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import Carousel from 'react-native-snap-carousel';
 
 import {Screen, Input, Button} from '@/components';
+import useTimer from '@/hooks/useTimer';
 
 export default function ResetPasswordScreen() {
   const [code, setCode] = useState('');
-  const [timer, setTimer] = useState(60);
-  const [isTimerActive, setIsTimerActive] = useState(true);
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
-  const carouselRef = useRef<Carousel<any>>(null);
+  const {timer, isTimerActive, startTimer} = useTimer(59);
+  const carouselRef = useRef<any>();
 
   const screenWidth = Dimensions.get('window').width;
 
-  useEffect(() => {
-    let interval: any;
-    if (isTimerActive && timer > 0) {
-      interval = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setIsTimerActive(false);
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [timer, isTimerActive]);
-
   const getCode = () => {
-    if (!isTimerActive) {
-      setTimer(59);
-      setIsTimerActive(true);
-    }
+    startTimer();
   };
 
   const goToNextStep = () => {
@@ -135,7 +119,7 @@ export default function ResetPasswordScreen() {
   ];
 
   return (
-    <Screen title="Відновлення пароля">
+    <Screen title="Відновлення пароля" bgColor="#FFEAEA">
       <View style={styles.screenContainer}>
         <Carousel
           ref={carouselRef}

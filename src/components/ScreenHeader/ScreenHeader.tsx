@@ -1,14 +1,10 @@
 import React from 'react';
 
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import {GoBack} from '@/components';
 
-import {useGoBack} from '@/hooks';
-
 const ScreenHeader = ({children}: React.PropsWithChildren) => {
-  const goBack = useGoBack();
-
   return (
     <View style={styles.header}>
       <View style={styles.icon}>
@@ -22,7 +18,6 @@ const ScreenHeader = ({children}: React.PropsWithChildren) => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: 30,
     flexDirection: 'row',
     position: 'relative',
     justifyContent: 'center',
@@ -38,7 +33,6 @@ const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
     left: 0,
-    top: 30,
   },
 });
 
