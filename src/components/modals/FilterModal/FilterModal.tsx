@@ -1,7 +1,7 @@
 import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 
-import {FilterItem, Modal} from '@/components';
+import {FilterItem, Modal, EditButton, Button} from '@/components';
 import {IModalProps} from '@/types';
 
 enum TABS {
@@ -49,7 +49,25 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
   const tabContent = {
     [TABS.TAB_ONE]: (
       <View style={styles.tabContent}>
-        <FilterItem title="Категорія"></FilterItem>
+        <FilterItem title="Категорія">
+          <EditButton title="Вибрати категорію" onPress={() => {}} />
+        </FilterItem>
+        <FilterItem title="Дата публікації">
+          <View style={{flexDirection: 'row', gap: 10}}>
+            <TouchableOpacity activeOpacity={0.7} style={styles.dateButton}>
+              <Text style={styles.dateButtonText}>За останній тиждень</Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.7} style={styles.dateButton}>
+              <Text style={styles.dateButtonText}>Останній місяць</Text>
+            </TouchableOpacity>
+          </View>
+        </FilterItem>
+        <FilterItem title="Локація">
+          <EditButton title="Луцьк" onPress={() => {}} />
+        </FilterItem>
+        <Button onPress={() => {}} style={{marginTop: 30}}>
+          Застосувати
+        </Button>
       </View>
     ),
     [TABS.TAB_TWO]: (
@@ -147,5 +165,17 @@ const styles = StyleSheet.create({
   tabContent: {
     padding: 16,
     backgroundColor: '#fff',
+  },
+  dateButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#e4e4e4',
+    flexShrink: 1,
+  },
+  dateButtonText: {
+    fontFamily: 'Raleway-Regular',
+    color: '#595959',
   },
 });

@@ -10,14 +10,29 @@ interface IEditButtonProps {
 
 const EditButton = ({title, onPress}: IEditButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Text>{title}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.container}
+      activeOpacity={0.7}>
+      <Text style={styles.text}>{title}</Text>
 
-      <AppIcon name="arrow" />
+      <AppIcon name="arrow" size={10} />
     </TouchableOpacity>
   );
 };
 
 export default EditButton;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    padding: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#F8F6F6',
+    borderRadius: 10,
+  },
+  text: {
+    fontFamily: 'Raleway-Regular',
+  },
+});

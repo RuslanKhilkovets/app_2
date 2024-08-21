@@ -20,6 +20,7 @@ export {default as Screen} from './UI/Screen';
 export {default as SelectedFilterItem} from './UI/SelectedFilterItem';
 export {default as Item} from './UI/Item';
 export {default as Modal} from './UI/Modal';
+export {default as EditButton} from './UI/EditButton';
 
 export {default as FilterModal} from './modals/FilterModal/FilterModal';
 

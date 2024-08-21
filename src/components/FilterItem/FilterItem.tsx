@@ -18,7 +18,9 @@ const FilterItem = ({title, children}: IFilterItemProps) => {
 export default FilterItem;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginVertical: 5,
+  },
   text: {
     marginVertical: 14,
     color: '#AFAFAF',
