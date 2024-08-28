@@ -16,11 +16,7 @@ import {
   Item,
   SelectedFilterItem,
 } from '@/components';
-
-enum TABS {
-  I_LOOKING_FOR = 1,
-  I_FIND = 2,
-}
+import TABS from '@/constants/Tabs';
 
 const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,7 +36,7 @@ const SearchTab = () => {
     Animated.sequence([
       Animated.timing(contentOpacity, {
         toValue: 0,
-        duration: 200,
+        duration: 0,
         useNativeDriver: true,
       }),
       Animated.timing(contentOpacity, {
@@ -102,8 +98,7 @@ const SearchTab = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Animated.View
-        style={[styles.container, {backgroundColor: backgroundColor}]}>
+      <Animated.View style={[styles.container, {backgroundColor}]}>
         <View style={[styles.header]}>
           <Input
             value={searchQuery}

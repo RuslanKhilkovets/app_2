@@ -3,7 +3,6 @@ import React from 'react';
 import Phone from '../../../assets/images/item_example.png';
 
 import {AppIcon} from '@/components';
-import {textTrimmer} from '@/helpers';
 
 interface IItemProps {
   title: string;
@@ -26,7 +25,12 @@ const Item = ({title, date, city, image, isSaved}: IItemProps) => {
 
       <View style={styles.content}>
         <View style={styles.contentHeader}>
-          <Text style={styles.contentTitle}>{textTrimmer(title, 30)}</Text>
+          <Text
+            style={styles.contentTitle}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {title}
+          </Text>
 
           <TouchableOpacity activeOpacity={0.7}>
             <AppIcon name="favorite_menu" size={15} />

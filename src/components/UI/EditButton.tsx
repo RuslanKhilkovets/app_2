@@ -25,7 +25,7 @@ export default EditButton;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 25,
+    padding: 22,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -34,5 +34,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Raleway-Regular',
+    fontSize: 15,
   },
 });

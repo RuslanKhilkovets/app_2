@@ -44,7 +44,6 @@ const SignInForm = () => {
                   placeholder="E-mail"
                   value={value}
                   onChangeText={onChange}
-                  onBlur={onBlur}
                   error={errors?.email?.message}
                 />
               </View>
@@ -59,7 +58,6 @@ const SignInForm = () => {
                   placeholder="Пароль"
                   value={value}
                   onChangeText={onChange}
-                  onBlur={onBlur}
                   error={errors?.password?.message}
                   secureTextEntry
                 />

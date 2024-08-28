@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, ViewStyle} from 'react-native';
 
-type TButtonType = 'primary' | 'secondary' | 'bordered';
+type TButtonType = 'primary' | 'secondary' | 'bordered' | 'light';
 
 interface IButtonProps extends React.PropsWithChildren<{}> {
   type?: TButtonType;
@@ -23,16 +23,7 @@ const Button = ({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        styles[type],
-        style,
-        type === 'bordered' && {
-          borderWidth: 1,
-          borderColor: '#000',
-          borderStyle: 'solid',
-        },
-      ]}
+      style={[styles.button, styles[type], style]}
       activeOpacity={0.7}
       onPress={onPress}>
       {before}
@@ -55,7 +46,6 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    width: '100%',
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -66,8 +56,16 @@ const styles = StyleSheet.create({
   primary: {
     backgroundColor: '#000',
   },
+  bordered: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderStyle: 'solid',
+  },
   secondary: {
     backgroundColor: 'transparent',
+  },
+  light: {
+    backgroundColor: '#F8F6F6',
   },
   buttonText: {
     fontSize: 16,

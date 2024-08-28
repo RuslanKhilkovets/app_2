@@ -1,1 +1,2 @@
-export {default as textTrimmer} from './textTrimmer';
+export {default as nullToDash} from './nullToDash';
+export {default as formatDate} from './formatDate';

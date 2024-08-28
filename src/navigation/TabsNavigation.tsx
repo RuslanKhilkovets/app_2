@@ -37,6 +37,7 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
           height: insets.bottom + 60,
           paddingHorizontal: 16,
           paddingBottom: insets.bottom,
+          backgroundColor: '#fff',
           // backgroundColor:
           //   colorScheme === 'light' ? theme.accent : theme.bgPrimary,
           // borderTopColor: theme.borderTertiary,
@@ -53,9 +54,9 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
           </Text>
         ),
       })}
-      initialRouteName="home-tab">
+      initialRouteName="profile-tab">
       <Tab.Screen
-        name="home-tab"
+        name="search-tab"
         component={SearchTab}
         options={{
           title: 'Пошук',

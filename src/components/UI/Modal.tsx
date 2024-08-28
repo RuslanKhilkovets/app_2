@@ -17,7 +17,7 @@ interface IModalProps extends React.PropsWithChildren {
   onClose: () => void;
   title?: string;
   openFrom?: 'left' | 'right' | 'top' | 'bottom';
-  headerBgColor?: string;
+  headerBgColor?: string | Animated.AnimatedInterpolation<string | number>;
 }
 
 const Modal = ({
@@ -26,7 +26,7 @@ const Modal = ({
   title,
   openFrom = 'right',
   children,
-  headerBgColor = '#fff',
+  headerBgColor,
 }: IModalProps) => {
   const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
   const [isVisible, setIsVisible] = useState(visible);
@@ -58,7 +58,7 @@ const Modal = ({
         onClose();
       });
     }
-  }, [visible, initialTranslate]);
+  }, [visible]);
 
   const transformStyle = {
     transform: [
@@ -69,31 +69,26 @@ const Modal = ({
   };
 
   return (
-    visible && (
-      <SafeAreaView style={{flex: 1, backgroundColor: headerBgColor}}>
-        <NativeModal
-          animationType="none"
-          transparent={true}
-          visible={isVisible}
-          onRequestClose={onClose}>
-          <View style={styles.modalOverlay}>
-            <Animated.View style={[styles.modalContainer, transformStyle]}>
-              <View
-                style={[styles.modalHeader, {backgroundColor: headerBgColor}]}>
-                <View></View>
-
-                <Text style={styles.modalTitle}>{title}</Text>
-
-                <TouchableOpacity onPress={onClose}>
-                  <AppIcon name="delete_filter" />
-                </TouchableOpacity>
-              </View>
-              {children}
+    <NativeModal
+      animationType="none"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={onClose}>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.modalOverlay}>
+          <Animated.View style={[styles.modalContainer, transformStyle]}>
+            <Animated.View
+              style={[styles.modalHeader, {backgroundColor: headerBgColor}]}>
+              <Text style={styles.modalTitle}>{title}</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+                <AppIcon name="delete_filter" />
+              </TouchableOpacity>
             </Animated.View>
-          </View>
-        </NativeModal>
+            {children}
+          </Animated.View>
+        </View>
       </SafeAreaView>
-    )
+    </NativeModal>
   );
 };
 
@@ -115,12 +110,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 10,
     paddingBottom: 20,
     paddingHorizontal: 25,
   },
   modalTitle: {
+    width: '100%',
     fontSize: 22,
     fontFamily: 'Raleway-Semibold',
+    textAlign: 'center',
+  },
+  closeIcon: {
+    position: 'absolute',
+    right: 20,
+    top: '50%',
   },
 });

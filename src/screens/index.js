@@ -5,6 +5,8 @@ export {default as SignFormsScreen} from './SignFormsScreen';
 export {default as StartScreen} from './StartScreen';
 export {default as StartSliderScreen} from './StartSliderScreen';
 export {default as MainScreen} from './MainScreen';
+export {default as ChangePersonDataScreen} from './ChangePersonDataScreen';
+export {default as About} from './About';
 
 // tabs
 

@@ -58,7 +58,13 @@ const Input: React.FC<IInputProps> = ({
   return (
     <View style={[style]}>
       {!!label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-      <View style={[styles.inputContainer, !!error && styles.error]}>
+      <View
+        style={[
+          styles.inputContainer,
+          !!error && styles.error,
+          isFocused && styles.activeInput,
+          disabled && styles.disabled,
+        ]}>
         {mask ? (
           <TextInputMask
             type={'custom'}
@@ -90,12 +96,7 @@ const Input: React.FC<IInputProps> = ({
             maxLength={maxLength}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            style={[
-              styles.input,
-              inputStyle,
-              isFocused && styles.activeInput,
-              disabled && styles.disabled,
-            ]}
+            style={[styles.input, inputStyle]}
           />
         )}
         {endAdornment && (
@@ -136,15 +137,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#fff',
     height: 60,
+    borderColor: '#e7e7e7',
+    borderWidth: 1,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#757575',
-    fontFamily: 'Raleway-Medium',
+    color: '#000',
+    fontFamily: 'Raleway-Regular',
   },
   activeInput: {
-    borderColor: '#ccc',
+    borderColor: '#000',
   },
   error: {
     borderColor: '#FF0000',

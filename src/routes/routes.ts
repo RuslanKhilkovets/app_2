@@ -6,6 +6,8 @@ import {
   SignFormsScreen,
   StartScreen,
   StartSliderScreen,
+  ChangePersonDataScreen,
+  About,
 } from '@/screens';
 import {TabsNavigation} from '@/navigation';
 
@@ -35,6 +37,14 @@ export const routes: IRoutes[] = [
   {
     name: 'ResetPassword',
     component: ResetPasswordScreen,
+  },
+  {
+    name: 'ChangePersonalData',
+    component: ChangePersonDataScreen,
+  },
+  {
+    name: 'About',
+    component: About,
   },
   {
     name: 'Main',
