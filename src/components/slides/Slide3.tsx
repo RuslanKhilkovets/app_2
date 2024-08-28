@@ -1,21 +1,18 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 
+import Character from '@images/character_4.png';
+import Menu from '@images/menu.png';
+
 const Slide3 = () => {
   return (
     <View style={styles.slide}>
-      <Image
-        style={styles.characterImage}
-        source={require('../../../assets/images/character_4.png')}
-      />
+      <Image style={styles.characterImage} source={Character} />
       <View style={styles.mainContent}></View>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Знайшов згубу?</Text>
       </View>
-      <Image
-        source={require('../../../assets/images/menu_3.png')}
-        style={styles.menuImage}
-      />
+      <Image source={Menu} style={styles.menuImage} />
       <Text style={styles.slideDescription}>
         За допомогою фільтру ти швидше найдеш загублену річ, або зможеш віддати
         знахідку
@@ -38,9 +35,8 @@ const styles = StyleSheet.create({
     width: 210,
     height: 350,
     position: 'absolute',
-    zIndex: -1,
-    bottom: 30,
     left: 0,
+    bottom: 30,
   },
   title: {
     width: 300,

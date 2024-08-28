@@ -2,6 +2,8 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
+import Character from '@images/character.png';
+
 const StartScreen = () => {
   const navigation = useNavigation();
 
@@ -30,10 +32,7 @@ const StartScreen = () => {
         </View>
       </View>
 
-      <Image
-        style={styles.characterImage}
-        source={require('../../assets/images/character.png')}
-      />
+      <Image style={styles.characterImage} source={Character} />
     </View>
   );
 };

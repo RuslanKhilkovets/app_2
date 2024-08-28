@@ -54,7 +54,7 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
           </Text>
         ),
       })}
-      initialRouteName="profile-tab">
+      initialRouteName="favorite-items-tab">
       <Tab.Screen
         name="search-tab"
         component={SearchTab}

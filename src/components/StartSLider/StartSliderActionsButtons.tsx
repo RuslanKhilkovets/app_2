@@ -24,7 +24,7 @@ const StartSliderActionsButtons = ({
   return (
     <View style={styles.buttonsContainer}>
       {!lastSlide && (
-        <Button type="primary" onPress={onNext}>
+        <Button type="primary" onPress={onNext} fullWidth>
           Далі
         </Button>
       )}
@@ -32,7 +32,8 @@ const StartSliderActionsButtons = ({
       <Button
         style={lastSlide ? styles.lastSlide : undefined}
         type={lastSlide ? 'primary' : 'secondary'}
-        onPress={onNavigateToRegister}>
+        onPress={onNavigateToRegister}
+        fullWidth>
         Перейти до реєстрації
       </Button>
     </View>

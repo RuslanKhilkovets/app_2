@@ -10,8 +10,7 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import HatIcon from '@icons/hat.svg';
-
-import NoProfilePic from '../../../assets/images/no_profile_pic.png';
+import NoProfilePic from '@images/no_profile_pic.png';
 import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
 
 const ProfileTab = () => {
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   profilePicContainer: {
     position: 'relative',
     alignItems: 'center',
-    paddingTop: 100,
+    paddingTop: 60,
   },
   profilePicText: {
     fontFamily: 'Raleway-SemiBold',
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
   },
   topFigure: {
     position: 'absolute',
-    top: -500,
+    top: -550,
     left: -150,
     width: 700,
     height: 700,

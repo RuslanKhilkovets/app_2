@@ -7,7 +7,10 @@ import {
   Pressable,
 } from 'react-native';
 import React, {useState} from 'react';
+
 import {AppIcon} from '@/components';
+import ActiveItem from '@images/item_active.png';
+import InactiveItem from '@images/item_inactive.png';
 
 interface IPostItemProps {
   id: number;
@@ -44,15 +47,9 @@ const PostItem = ({id, img, title, status, city, date}: IPostItemProps) => {
             {img ? (
               <Image source={{uri: img}} style={styles.img} />
             ) : !img && status === 0 ? (
-              <Image
-                source={require('../../../assets/images/item_inactive.png')}
-                style={styles.img}
-              />
+              <Image source={InactiveItem} style={styles.img} />
             ) : (
-              <Image
-                source={require('../../../assets/images/item_active.png')}
-                style={styles.img}
-              />
+              <Image source={ActiveItem} style={styles.img} />
             )}
           </View>
 

@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFEAEA',
   },
   header: {
-    paddingVertical: 30,
+    paddingVertical: 20,
     flexDirection: 'row',
     gap: 70,
   },

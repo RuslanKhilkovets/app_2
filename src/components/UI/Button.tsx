@@ -9,6 +9,7 @@ interface IButtonProps extends React.PropsWithChildren<{}> {
   style?: ViewStyle;
   before?: React.JSX.Element | null;
   after?: React.JSX.Element | null;
+  fullWidth?: boolean;
 }
 
 const Button = ({
@@ -16,6 +17,7 @@ const Button = ({
   type = 'primary',
   onPress,
   style,
+  fullWidth,
   after = null,
   before = null,
 }: IButtonProps) => {
@@ -23,7 +25,7 @@ const Button = ({
 
   return (
     <TouchableOpacity
-      style={[styles.button, styles[type], style]}
+      style={[styles.button, styles[type], style, fullWidth && {width: '100%'}]}
       activeOpacity={0.7}
       onPress={onPress}>
       {before}

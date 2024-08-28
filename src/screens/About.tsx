@@ -9,6 +9,7 @@ import {
 import React from 'react';
 
 import {Logo, Screen} from '@/components';
+import Character from '@images/character.png';
 
 const About = () => {
   const handlePress = () => {
@@ -30,10 +31,7 @@ const About = () => {
           </TouchableOpacity>
         </View>
 
-        <Image
-          source={require('../../assets/images/character.png')}
-          style={styles.img}
-        />
+        <Image source={Character} style={styles.img} />
       </View>
 
       <View style={{alignItems: 'center'}}>
