@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import HatIcon from '@icons/hat.svg';
+import EditIcon from '@icons/edit.svg';
 import NoProfilePic from '@images/no_profile_pic.png';
 import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
 
@@ -24,7 +25,11 @@ const ProfileTab = () => {
         <View style={{height: 138, width: 138, position: 'relative'}}>
           <Image source={NoProfilePic} />
 
-          <View style={styles.hatIcon}>{HatIcon()}</View>
+          <View style={styles.hatIcon}>{<HatIcon />}</View>
+
+          <TouchableOpacity activeOpacity={0.7} style={styles.editBtn}>
+            <EditIcon />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.profilePicText}>Діана</Text>
@@ -169,5 +174,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Raleway-Regular',
     textDecorationLine: 'underline',
     fontSize: 15,
+  },
+  editBtn: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000',
+    height: 27,
+    width: 27,
+    borderRadius: 13.5,
   },
 });
