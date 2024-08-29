@@ -5,8 +5,11 @@ export {default as SignWithServices} from './SignForms/SignWithServices';
 
 export {default as PrivacyPolicy} from './PrivacyPolicy/PrivacyPolicy';
 export {default as PrivacyPolicyBlock} from './PrivacyPolicy/PrivacyPolicyBlock';
+export {default as FavoriteBlock} from './FavoriteBlock/FavoriteBlock';
 
 export {default as ScreenHeader} from './ScreenHeader/ScreenHeader';
+
+export {default as SearchItem} from './SearchItem/SearchItem';
 
 export {default as AppIcon} from './base/AppIcon';
 

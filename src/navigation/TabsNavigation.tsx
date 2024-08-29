@@ -9,7 +9,7 @@ import {
   ChatsTab,
   ProfileTab,
   SearchTab,
-  FavouritesItemsTab,
+  FavoritesItemsTab,
 } from '@/screens';
 import {useThemeContext} from '@/contexts/Theme/ThemeContext';
 
@@ -71,7 +71,7 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
       />
       <Tab.Screen
         name="favorite-items-tab"
-        component={FavouritesItemsTab}
+        component={FavoritesItemsTab}
         options={{
           title: 'Вибране',
           tabBarIcon: ({focused}) => (

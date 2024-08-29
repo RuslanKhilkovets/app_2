@@ -13,5 +13,5 @@ export {default as About} from './About';
 export {default as AddItemTab} from './tabs/AddItemTab';
 export {default as ChatsTab} from './tabs/ChatsTab';
 export {default as ProfileTab} from './tabs/ProfileTab';
-export {default as FavouritesItemsTab} from './tabs/FavouritesItemsTab';
+export {default as FavoritesItemsTab} from './tabs/FavoritesItemsTab';
 export {default as SearchTab} from './tabs/SearchTab';
