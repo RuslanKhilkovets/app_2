@@ -2,7 +2,7 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 
-import {routes} from '@/routes';
+import {routes} from '@/navigation';
 
 const Stack = createNativeStackNavigator();
 
@@ -10,7 +10,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Tabs">
-        {routes.map((route, index) => {
+        {routes.map(route => {
           return (
             <Stack.Screen
               {...route}

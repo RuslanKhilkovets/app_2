@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View} from 'react-native';
 
 import {Button} from '@/components';
-import {slidesLength} from '../slides';
+import {slidesLength} from './slides/slides';
 
 interface IStartSliderActionsButtonsProps {
   onNext: () => void;

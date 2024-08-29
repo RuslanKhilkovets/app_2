@@ -11,7 +11,7 @@ import {
   SearchTab,
   FavoritesItemsTab,
 } from '@/screens';
-import {useThemeContext} from '@/contexts/Theme/ThemeContext';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -24,7 +24,7 @@ interface ITabBarIcon {
 export interface ITabNavigatorProps {}
 
 const TabNavigator = ({}: ITabNavigatorProps) => {
-  const {colorScheme} = useThemeContext();
+  const {colorScheme} = useTheme();
   const insets = useSafeAreaInsets();
 
   return (

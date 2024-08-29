@@ -4,7 +4,7 @@ const ThemeContext = createContext({
   setColorScheme: (value: 'string') => {},
 });
 
-export const useThemeContext = () => useContext(ThemeContext);
+export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeContextProvider = ({children}: React.PropsWithChildren) => {
   const [colorScheme, setColorScheme] = useState('light');
@@ -21,6 +21,6 @@ export const ThemeContextProvider = ({children}: React.PropsWithChildren) => {
 };
 
 export default {
-  useThemeContext,
+  useTheme,
   ThemeContextProvider,
 };

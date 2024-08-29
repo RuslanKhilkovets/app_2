@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import AppIcon from '@/components/base/AppIcon';
+import AppIcon from '@/components/UI/AppIcon';
 
 interface ISelectedFilterItemProps {
   text: string;
