@@ -16,6 +16,8 @@ export {default as CategoriesList} from './containers/CategoriesList';
 export {default as TabsSwitch} from './containers/TabsSwitch';
 export {default as ItemsContainer} from './containers/ItemsContainer';
 
+export {default as ItemForm} from './ItemForm/ItemForm';
+
 export {default as SearchItem} from './items/SearchItem';
 export {default as PostItem} from './items/PostItem';
 export {default as Item} from './items/Item';
@@ -36,9 +38,11 @@ export {default as Logo} from './UI/Logo';
 export {default as Dialog} from './UI/Dialog';
 export {default as AppIcon} from './UI/AppIcon';
 export {default as MenuAddItem} from './UI/MenuAddItem';
+export {default as PhoneInput} from './UI/PhoneInput';
 
 export {default as FilterModal} from './modals/FilterModal';
 export {default as ExitDialog} from './modals/ExitDialog';
+export {default as AddItemModal} from './modals/AddItemModal';
 
 export {default as Categories} from './Categories/Categories';
 export {default as CategoriesHeader} from './Categories/CategoriesHeader';

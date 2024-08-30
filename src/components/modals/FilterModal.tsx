@@ -137,15 +137,8 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
               }}>
               <Text style={styles.selectDateText}>З</Text>
 
-              <Button
-                onPress={() => setOpenStartDatePicker(true)}
-                type="light"
-                style={styles.selectDateButton}
-                after={<AppIcon name="arrow_down" size={6} />}>
-                {nullToDash(formatDate(startDate))}
-              </Button>
-
               <DatePicker
+                setOpen={() => setOpenStartDatePicker(true)}
                 maxDate={endDate || new Date()}
                 date={startDate}
                 isOpen={openStartDatePicker}
@@ -155,15 +148,8 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
 
               <Text style={styles.selectDateText}>до</Text>
 
-              <Button
-                onPress={() => setOpenEndDatePicker(true)}
-                type="light"
-                style={styles.selectDateButton}
-                after={<AppIcon name="arrow_down" size={6} />}>
-                {nullToDash(formatDate(endDate))}
-              </Button>
-
               <DatePicker
+                setOpen={() => setOpenEndDatePicker(true)}
                 date={endDate}
                 maxDate={new Date()}
                 minDate={startDate || null}

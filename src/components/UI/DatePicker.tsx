@@ -1,17 +1,21 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Modal, Text} from 'react-native';
+import {StyleSheet, View, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {AppIcon, Button} from '@/components';
+import {formatDate, nullToDash} from '@/helpers';
 
 interface IDatePickerProps {
   isOpen: boolean;
   date?: Date;
   onChange: (date: Date | undefined) => void;
   onClose: () => void;
+  setOpen: () => void;
   maxDate?: Date | null;
   minDate?: Date | null;
 }
 
 const DatePicker = ({
+  setOpen,
   isOpen,
   date,
   onChange,
@@ -22,24 +26,34 @@ const DatePicker = ({
   const currentDate = date || new Date();
 
   return (
-    <Modal
-      visible={isOpen}
-      transparent={true}
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.dialogContainer}>
-          <DateTimePicker
-            maximumDate={maxDate}
-            minimumDate={minDate}
-            value={currentDate}
-            mode="date"
-            display="inline"
-            onChange={(e, selectedDate) => onChange(selectedDate)}
-          />
+    <View style={{flexDirection: 'row'}}>
+      <Button
+        onPress={setOpen}
+        type="light"
+        style={styles.selectDateButton}
+        after={<AppIcon name="arrow_down" size={6} />}>
+        {nullToDash(formatDate(currentDate))}
+      </Button>
+
+      <Modal
+        visible={isOpen}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={onClose}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.dialogContainer}>
+            <DateTimePicker
+              maximumDate={maxDate}
+              minimumDate={minDate}
+              value={currentDate}
+              mode="date"
+              display="inline"
+              onChange={(e, selectedDate) => onChange(selectedDate)}
+            />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </View>
   );
 };
 
@@ -74,5 +88,9 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  selectDateButton: {
+    flexShrink: 1,
+    borderRadius: 10,
   },
 });

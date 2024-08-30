@@ -5,10 +5,9 @@ import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {Input, Button} from '@/components';
+import {Input, Button, PhoneInput} from '@/components';
 import {IRegisterData} from '@/types';
 import {registerSchema} from '@/validations';
-import {globals} from '@/constants';
 
 const initialData = {
   name: '',
@@ -78,15 +77,12 @@ const SignUpForm = () => {
           <Controller
             control={control}
             name="phone"
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
+            render={({field: {onChange, value}}) => (
+              <PhoneInput
                 placeholder="Телефон"
                 value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
+                onChange={onChange}
                 error={errors.phone?.message}
-                mask={globals.PHONE_MASK}
-                maxLength={globals.PHONE_MASK.length}
               />
             )}
           />
@@ -98,7 +94,6 @@ const SignUpForm = () => {
                 placeholder="Пароль"
                 value={value}
                 onChangeText={onChange}
-                onBlur={onBlur}
                 secureTextEntry
                 error={errors.password?.message}
               />

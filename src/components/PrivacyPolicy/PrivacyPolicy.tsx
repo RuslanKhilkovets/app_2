@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   btnContainer: {
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 10,
   },
 });
 

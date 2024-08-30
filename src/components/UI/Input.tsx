@@ -29,6 +29,8 @@ interface IInputProps {
   maxLength?: number;
   searchMode?: boolean;
   endAdornment?: React.JSX.Element | null;
+  numberOfLines?: number; // Add this prop
+  multiline?: boolean; // Add this prop to enable multiline input
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -47,6 +49,8 @@ const Input: React.FC<IInputProps> = ({
   maxLength,
   searchMode,
   endAdornment,
+  numberOfLines = 1, // Default to 1 line
+  multiline = false, // Default to single-line input
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -63,7 +67,8 @@ const Input: React.FC<IInputProps> = ({
           styles.inputContainer,
           !!error && styles.error,
           isFocused && styles.activeInput,
-          disabled && styles.disabled,
+          disabled && styles['disabled'],
+          multiline && {height: numberOfLines * 25}, // Adjust height based on number of lines
         ]}>
         {mask ? (
           <TextInputMask
@@ -77,6 +82,8 @@ const Input: React.FC<IInputProps> = ({
             placeholder={placeholder}
             editable={!disabled}
             maxLength={maxLength}
+            numberOfLines={numberOfLines} // Apply numberOfLines
+            multiline={multiline} // Apply multiline
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             style={[
@@ -94,9 +101,15 @@ const Input: React.FC<IInputProps> = ({
             secureTextEntry={showPassword}
             editable={!disabled}
             maxLength={maxLength}
+            numberOfLines={numberOfLines} // Apply numberOfLines
+            multiline={multiline} // Apply multiline
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            style={[styles.input, inputStyle]}
+            style={[
+              styles.input,
+              inputStyle,
+              multiline && {height: numberOfLines * 20}, // Adjust height based on number of lines
+            ]}
           />
         )}
         {endAdornment && (

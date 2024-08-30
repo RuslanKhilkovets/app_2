@@ -1,4 +1,11 @@
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 
 import TABS from '@/constants/Tabs';
@@ -7,6 +14,7 @@ interface ITabSwitchProps extends React.PropsWithChildren {
   activeTab: TABS;
   setActiveTab: (tab: TABS) => void;
   header?: React.ReactNode;
+  headerStyle?: ViewStyle;
 }
 
 const TabsSwitch = ({
@@ -14,6 +22,7 @@ const TabsSwitch = ({
   setActiveTab,
   children,
   header,
+  headerStyle,
 }: ITabSwitchProps) => {
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -57,7 +66,7 @@ const TabsSwitch = ({
 
   return (
     <View>
-      <Animated.View style={[styles.header, {backgroundColor}]}>
+      <Animated.View style={[{backgroundColor}, {padding: 16}, headerStyle]}>
         {header}
       </Animated.View>
 
@@ -109,9 +118,9 @@ const TabsSwitch = ({
         />
       </Animated.View>
 
-      <Animated.View style={{opacity: contentOpacity}}>
+      <Animated.ScrollView style={{opacity: contentOpacity, height: '100%'}}>
         {children}
-      </Animated.View>
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -119,9 +128,6 @@ const TabsSwitch = ({
 export default TabsSwitch;
 
 const styles = StyleSheet.create({
-  header: {
-    padding: 16,
-  },
   tabsSwitchersContainer: {
     position: 'relative',
     flexDirection: 'row',
