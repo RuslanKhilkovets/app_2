@@ -13,6 +13,8 @@ export {default as FavoriteBlock} from './containers/FavoriteBlock';
 export {default as Screen} from './containers/Screen';
 export {default as FilterItem} from './containers/FilterItem';
 export {default as CategoriesList} from './containers/CategoriesList';
+export {default as TabsSwitch} from './containers/TabsSwitch';
+export {default as ItemsContainer} from './containers/ItemsContainer';
 
 export {default as SearchItem} from './items/SearchItem';
 export {default as PostItem} from './items/PostItem';

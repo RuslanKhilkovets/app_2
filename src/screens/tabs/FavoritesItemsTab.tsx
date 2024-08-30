@@ -1,7 +1,14 @@
 import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
+
 import TABS from '@/constants/Tabs';
-import {FavoriteBlock, Item, SearchItem} from '@/components';
+import {
+  FavoriteBlock,
+  ItemsContainer,
+  SearchItem,
+  TabsSwitch,
+} from '@/components';
+import {IItem} from '@/types';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_FIND);
@@ -29,7 +36,7 @@ const FavoritesItemsTab = () => {
     },
   ];
 
-  const pubs = [
+  const pubs: IItem[] = [
     {
       id: 1,
       title: 'Iphone 12',
@@ -48,19 +55,13 @@ const FavoritesItemsTab = () => {
       city: 'Луцьк',
       date: '9 серпня',
     },
-    {
-      id: 4,
-      title: 'Iphone 12',
-      city: 'Луцьк',
-      date: '9 серпня',
-    },
   ];
 
   const getContent = () => {
     switch (activeTab) {
-      case TABS.I_FIND: {
+      case TABS.I_LOOKING_FOR: {
         return (
-          <View style={styles.blocks}>
+          <>
             <FavoriteBlock title="Пошуки">
               <FlatList
                 data={items}
@@ -70,15 +71,9 @@ const FavoritesItemsTab = () => {
             </FavoriteBlock>
 
             <FavoriteBlock title="Публікації">
-              <FlatList
-                data={pubs}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({item}) => (
-                  <Item date={item.date} city={item.city} title={item.title} />
-                )}
-              />
+              <ItemsContainer items={pubs} style={{marginTop: 20}} />
             </FavoriteBlock>
-          </View>
+          </>
         );
       }
     }
@@ -86,10 +81,12 @@ const FavoritesItemsTab = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Вибране</Text>
-      </View>
-      <ScrollView style={styles.content}>{getContent()}</ScrollView>
+      <TabsSwitch
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        header={<Text style={styles.title}>Вибране</Text>}>
+        <ScrollView style={styles.content}>{getContent()}</ScrollView>
+      </TabsSwitch>
     </View>
   );
 };
@@ -110,5 +107,6 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
+    height: 570,
   },
 });

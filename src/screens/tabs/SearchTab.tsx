@@ -4,49 +4,25 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Animated,
-  FlatList,
   SafeAreaView,
 } from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
+
 import {
   AppIcon,
   FilterModal,
   Input,
-  Item,
+  ItemsContainer,
   SelectedFilterItem,
+  TabsSwitch,
 } from '@/components';
 import TABS from '@/constants/Tabs';
+import {IItem} from '@/types';
 
 const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-
-  const underlinePosition = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(underlinePosition, {
-      toValue: activeTab === TABS.I_LOOKING_FOR ? 0 : 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-
-    Animated.sequence([
-      Animated.timing(contentOpacity, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 300,
-        delay: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [activeTab]);
 
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
@@ -67,24 +43,9 @@ const SearchTab = () => {
     </View>
   );
 
-  const underlineLeft = underlinePosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '50%'],
-  });
-
-  const underlineColor = underlinePosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['#FF4A4A', '#9847FF'],
-  });
-
-  const backgroundColor = underlinePosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['#FFEAEA', '#EDE7FF'],
-  });
-
-  const items = [
-    {id: '1', title: 'Iphone 12', city: 'Луцьк', date: '8 серпня 2022'},
-    {id: '2', title: 'Iphone 123', city: 'Луцьк', date: '8 серпня 2022'},
+  const items: IItem[] = [
+    {id: '4', title: 'Ipho', city: 'Луцьк', date: '8 fdddd 2022'},
+    {id: '5', title: 'Iphone 1', city: 'Луцьк', date: '8 серпняffff 2022'},
     {
       id: '3',
       title:
@@ -97,97 +58,42 @@ const SearchTab = () => {
   ];
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Animated.View style={[styles.container, {backgroundColor}]}>
-        <View style={[styles.header]}>
-          <Input
-            value={searchQuery}
-            onChangeText={onSearchChange}
-            placeholder="Пошук..."
-            endAdornment={searchInputEndAdornment}
-          />
+    <>
+      <TabsSwitch
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        header={
+          <>
+            <Input
+              value={searchQuery}
+              onChangeText={onSearchChange}
+              placeholder="Пошук..."
+              endAdornment={searchInputEndAdornment}
+            />
 
-          <View style={styles.categories}>
-            <SelectedFilterItem text="Луцьк" />
-            <SelectedFilterItem filterMode text="Виберіть категорію" />
-          </View>
-        </View>
-
-        <View style={styles.tabsSwitchersContainer}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.tabsSwitcher}
-            onPress={() => setActiveTab(TABS.I_LOOKING_FOR)}>
-            <Text
-              style={[
-                styles.tabsSwitcherText,
-                {
-                  fontFamily:
-                    activeTab === TABS.I_LOOKING_FOR
-                      ? 'Raleway-SemiBold'
-                      : 'Raleway-Regular',
-                },
-              ]}>
-              Я шукаю
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.tabsSwitcher}
-            onPress={() => setActiveTab(TABS.I_FIND)}>
-            <Text
-              style={[
-                styles.tabsSwitcherText,
-                {
-                  fontFamily:
-                    activeTab === TABS.I_FIND
-                      ? 'Raleway-SemiBold'
-                      : 'Raleway-Regular',
-                },
-              ]}>
-              Я знайшов
-            </Text>
-          </TouchableOpacity>
-
-          <Animated.View
-            style={[
-              styles.tabSwitcherLine,
-              {
-                left: underlineLeft,
-                backgroundColor: underlineColor,
-              },
-            ]}
-          />
-        </View>
-      </Animated.View>
-
-      <Animated.View style={{opacity: contentOpacity, flex: 1}}>
-        {activeTab === TABS.I_FIND && (
-          <FlatList
-            data={items}
-            renderItem={({item}) => (
-              <Item title={item.title} city={item.city} date={item.date} />
-            )}
-            keyExtractor={item => item.id}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
-            contentContainerStyle={styles.tabContent}
-          />
-        )}
-
+            <View style={styles.categories}>
+              <SelectedFilterItem text="Луцьк" />
+              <SelectedFilterItem filterMode text="Виберіть категорію" />
+            </View>
+          </>
+        }>
         {activeTab === TABS.I_LOOKING_FOR && (
-          <ScrollView style={styles.tabContent}>
-            <Text>i looking for</Text>
+          <ScrollView style={{backgroundColor: '#fff', height: 520}}>
+            <ItemsContainer items={items} style={{padding: 20}} />
           </ScrollView>
         )}
-      </Animated.View>
+        {activeTab === TABS.I_FIND && (
+          <ScrollView style={{backgroundColor: '#fff', height: 520}}>
+            <ItemsContainer items={items} style={{padding: 20}} />
+          </ScrollView>
+        )}
+      </TabsSwitch>
 
       <FilterModal
         visible={isFilterModalVisible}
         onClose={() => setIsFilterModalVisible(false)}
       />
-    </SafeAreaView>
+    </>
   );
 };
 
@@ -231,6 +137,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     padding: 16,
+    flex: 1,
   },
   columnWrapper: {
     justifyContent: 'space-between',

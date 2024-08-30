@@ -50,7 +50,7 @@ export default Item;
 
 const styles = StyleSheet.create({
   container: {
-    width: 170,
+    width: 165,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#e7e3e3',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   image: {
-    width: 170,
+    width: 165,
     height: 170,
     justifyContent: 'center',
     alignItems: 'center',
