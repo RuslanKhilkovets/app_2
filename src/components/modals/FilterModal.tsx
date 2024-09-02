@@ -170,13 +170,13 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
               label="З описом"
               value={FILTER_TYPE.WITH_DESCRIPTION}
               onValueChange={handleValueChange}
-              selectedValues={selectedValues}
+              checked={selectedValues.includes(FILTER_TYPE.WITH_DESCRIPTION)}
             />
             <Checkbox
               label="З фото"
               value={FILTER_TYPE.WITH_PIC}
               onValueChange={handleValueChange}
-              selectedValues={selectedValues}
+              checked={selectedValues.includes(FILTER_TYPE.WITH_PIC)}
             />
           </View>
         </ScrollView>

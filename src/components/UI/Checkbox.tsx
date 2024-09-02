@@ -2,20 +2,19 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 interface ICheckBoxProps {
+  checked: boolean;
   label: string;
-  value: string | number;
-  selectedValues: string[] | number[];
+  value: any;
   onValueChange: (value: string | number) => void;
 }
 
 const CheckBox: React.FC<ICheckBoxProps> = ({
   label,
   value,
-  selectedValues,
   onValueChange,
+  checked,
 }) => {
-  const isSelected = selectedValues.includes(value);
-
+  
   const handlePress = () => {
     onValueChange(value);
   };
@@ -26,8 +25,8 @@ const CheckBox: React.FC<ICheckBoxProps> = ({
       onPress={handlePress}
       activeOpacity={0.7}>
       <View style={[styles.checkbox]}>
-        {isSelected && (
-          <View style={[styles.checkboxInner, isSelected && styles.selected]} />
+        {checked && (
+          <View style={[styles.checkboxInner, checked && styles.selected]} />
         )}
       </View>
       <Text style={styles.checkboxLabel}>{label}</Text>

@@ -11,21 +11,8 @@ import {
 import {IModalProps} from '@/types';
 import TABS from '@/constants/Tabs';
 
-enum FILTER_TYPE {
-  WITH_DESCRIPTION = 1,
-  WITH_PIC = 2,
-}
-
-enum STATIC_DATE_TYPE {
-  WEEK = 1,
-  MONTH = 2,
-}
-
 const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
-  const [selectedValues, setSelectedValues] = useState<FILTER_TYPE[]>([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
 

@@ -1,5 +1,5 @@
 import React, {useState, memo} from 'react';
-import {Text, Modal, View, StyleSheet} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -25,6 +25,8 @@ export interface ITabNavigatorProps {}
 
 const TabNavigator = ({}: ITabNavigatorProps) => {
   const {colorScheme} = useTheme();
+  console.log(colorScheme);
+
   const insets = useSafeAreaInsets();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -55,7 +57,7 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
             </Text>
           ),
         })}
-        initialRouteName="favorite-items-tab">
+        initialRouteName="add-item-tab">
         <Tab.Screen
           name="search-tab"
           component={SearchTab}

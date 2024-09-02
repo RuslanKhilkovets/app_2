@@ -39,10 +39,12 @@ export {default as Dialog} from './UI/Dialog';
 export {default as AppIcon} from './UI/AppIcon';
 export {default as MenuAddItem} from './UI/MenuAddItem';
 export {default as PhoneInput} from './UI/PhoneInput';
+export {default as Thumbnail} from './UI/Thumbnail';
 
 export {default as FilterModal} from './modals/FilterModal';
 export {default as ExitDialog} from './modals/ExitDialog';
 export {default as AddItemModal} from './modals/AddItemModal';
+export {default as PicImageDialog} from './modals/PicImageDialog';
 
 export {default as Categories} from './Categories/Categories';
 export {default as CategoriesHeader} from './Categories/CategoriesHeader';
