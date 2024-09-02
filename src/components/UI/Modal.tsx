@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   View,
   Modal as NativeModal,
-  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {AppIcon} from '@/components';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface IModalProps extends React.PropsWithChildren {
   visible: boolean;
@@ -30,6 +30,8 @@ const Modal = ({
 }: IModalProps) => {
   const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
   const [isVisible, setIsVisible] = useState(visible);
+
+  const insets = useSafeAreaInsets();
 
   const initialTranslate = {
     left: -screenWidth,
@@ -74,20 +76,21 @@ const Modal = ({
       transparent={true}
       visible={isVisible}
       onRequestClose={onClose}>
-      <SafeAreaView style={{flex: 1}}>
-        <View style={styles.modalOverlay}>
-          <Animated.View style={[styles.modalContainer, transformStyle]}>
-            <Animated.View
-              style={[styles.modalHeader, {backgroundColor: headerBgColor}]}>
-              <Text style={styles.modalTitle}>{title}</Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
-                <AppIcon name="delete_filter" />
-              </TouchableOpacity>
-            </Animated.View>
-            {children}
+      <View style={styles.modalOverlay}>
+        <Animated.View style={[styles.modalContainer, transformStyle]}>
+          <Animated.View
+            style={[
+              styles.modalHeader,
+              {backgroundColor: headerBgColor, paddingTop: insets.top},
+            ]}>
+            <Text style={styles.modalTitle}>{title}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+              <AppIcon name="delete_filter" />
+            </TouchableOpacity>
           </Animated.View>
-        </View>
-      </SafeAreaView>
+          {children}
+        </Animated.View>
+      </View>
     </NativeModal>
   );
 };
@@ -123,6 +126,6 @@ const styles = StyleSheet.create({
   closeIcon: {
     position: 'absolute',
     right: 20,
-    top: '50%',
+    top: 50,
   },
 });

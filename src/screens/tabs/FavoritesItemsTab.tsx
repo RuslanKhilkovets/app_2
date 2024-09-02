@@ -9,9 +9,12 @@ import {
   TabsSwitch,
 } from '@/components';
 import {IItem} from '@/types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_FIND);
+
+  const insets = useSafeAreaInsets();
 
   const items = [
     {
@@ -84,7 +87,9 @@ const FavoritesItemsTab = () => {
       <TabsSwitch
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        header={<Text style={styles.title}>Вибране</Text>}>
+        header={
+          <Text style={[styles.title, {paddingTop: insets.top}]}>Вибране</Text>
+        }>
         <ScrollView style={styles.content}>{getContent()}</ScrollView>
       </TabsSwitch>
     </View>

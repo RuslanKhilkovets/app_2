@@ -13,13 +13,16 @@ import HatIcon from '@icons/hat.svg';
 import EditIcon from '@icons/edit.svg';
 import NoProfilePic from '@images/no_profile_pic.png';
 import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const ProfileTab = () => {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const navigation = useNavigation();
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, {paddingTop: insets.top}]}>
       <View style={styles.topFigure}></View>
       <View style={styles.profilePicContainer}>
         <View style={{height: 138, width: 138, position: 'relative'}}>

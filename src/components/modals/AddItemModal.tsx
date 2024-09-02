@@ -1,21 +1,12 @@
 import {Animated, StyleSheet, View} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 
-import {
-  Modal,
-  CategoriesList,
-  SelectLocationList,
-  TabsSwitch,
-  ItemForm,
-} from '@/components';
+import {Modal, TabsSwitch, ItemForm} from '@/components';
 import {IModalProps} from '@/types';
 import TABS from '@/constants/Tabs';
 
 const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
-  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-  const [locationModalOpen, setLocationModalOpen] = useState(false);
-
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
 
@@ -23,6 +14,10 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
     inputRange: [0, 1],
     outputRange: ['#FFEAEA', '#EDE7FF'],
   });
+
+  const handleFormSubmit = (data: any) => {
+    console.log('Form Data:', data);
+  };
 
   const tabContent = {
     [TABS.I_LOOKING_FOR]: <ItemForm type="i_looking_for" />,
@@ -66,20 +61,6 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
           {tabContent[activeTab]}
         </TabsSwitch>
       </View>
-      <Modal
-        openFrom="right"
-        visible={categoryModalOpen}
-        onClose={() => setCategoryModalOpen(false)}
-        title="Категорії">
-        <CategoriesList />
-      </Modal>
-      <Modal
-        openFrom="right"
-        visible={locationModalOpen}
-        onClose={() => setLocationModalOpen(false)}
-        title="Локація">
-        <SelectLocationList style={{padding: 20}} />
-      </Modal>
     </Modal>
   );
 };
@@ -89,38 +70,5 @@ export default AddItemModal;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  tabsSwitcherText: {
-    fontSize: 15,
-  },
-  tabSwitcherLine: {
-    position: 'absolute',
-    bottom: 0,
-    width: '50%',
-    height: 3,
-  },
-  tabContent: {
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  dateButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 12,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#e4e4e4',
-    flexShrink: 1,
-  },
-  dateButtonText: {
-    fontFamily: 'Raleway-Regular',
-    color: '#595959',
-  },
-  selectDateButton: {
-    flexShrink: 1,
-    borderRadius: 10,
-  },
-  selectDateText: {
-    fontSize: 15,
-    fontFamily: 'Raleway-Regular',
   },
 });

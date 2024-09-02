@@ -45,6 +45,7 @@ export {default as FilterModal} from './modals/FilterModal';
 export {default as ExitDialog} from './modals/ExitDialog';
 export {default as AddItemModal} from './modals/AddItemModal';
 export {default as PicImageDialog} from './modals/PicImageDialog';
+export {default as ImageModal} from './modals/ImageModal';
 
 export {default as Categories} from './Categories/Categories';
 export {default as CategoriesHeader} from './Categories/CategoriesHeader';

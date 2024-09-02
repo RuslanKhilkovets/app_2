@@ -1,5 +1,12 @@
 import React, {useRef, useState} from 'react';
-import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useRoute} from '@react-navigation/native';
@@ -17,6 +24,8 @@ import {getSchemeByScreenType} from '@/validations';
 
 const ChangePersonDataScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
   const carouselRef = useRef<any>();
   const route = useRoute();
   const {screenType} = route.params || {};
@@ -24,6 +33,13 @@ const ChangePersonDataScreen = () => {
   const screenWidth = Dimensions.get('window').width;
 
   const validationSchema = getSchemeByScreenType(screenType);
+
+  const handleMenuToggle = (id: number | null) => {
+    setOpenMenuId(prevId => (prevId === id ? null : id));
+  };
+  const handleMenuClose = () => {
+    setOpenMenuId(null);
+  };
 
   const {
     control,
@@ -201,23 +217,29 @@ const ChangePersonDataScreen = () => {
       }
       case 'posts': {
         return (
-          <ScrollView style={{marginTop: 25}}>
-            <FlatList
-              data={posts}
-              renderItem={({item}) => (
-                <PostItem
-                  id={item.id}
-                  img={item.img}
-                  title={item.title}
-                  status={item.status}
-                  city={item.city}
-                  date={item.date}
-                />
-              )}
-              keyExtractor={item => item.id.toString()}
-              contentContainerStyle={{gap: 15}}
-            />
-          </ScrollView>
+          <Pressable style={{flex: 1}} onPress={handleMenuClose}>
+            <ScrollView style={{marginTop: 25}}>
+              <FlatList
+                data={posts}
+                renderItem={({item}) => (
+                  <PostItem
+                    id={item.id}
+                    img={item.img}
+                    title={item.title}
+                    status={item.status}
+                    city={item.city}
+                    date={item.date}
+                    isOpen={openMenuId === item.id}
+                    onMenuToggle={() => handleMenuToggle(item.id)}
+                    resetMenu={handleMenuClose}
+                  />
+                )}
+                style={{overflow: 'visible'}}
+                keyExtractor={item => item.id.toString()}
+                contentContainerStyle={{gap: 15, overflow: 'visible'}}
+              />
+            </ScrollView>
+          </Pressable>
         );
       }
       case 'location': {

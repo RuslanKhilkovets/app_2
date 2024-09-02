@@ -5,7 +5,7 @@ type TButtonType = 'primary' | 'secondary' | 'bordered' | 'light';
 
 interface IButtonProps extends React.PropsWithChildren<{}> {
   type?: TButtonType;
-  onPress: () => void;
+  onPress: (...params: any) => void;
   style?: ViewStyle;
   before?: React.JSX.Element | null;
   after?: React.JSX.Element | null;

@@ -18,11 +18,14 @@ import {
 } from '@/components';
 import TABS from '@/constants/Tabs';
 import {IItem} from '@/types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+
+  const insets = useSafeAreaInsets();
 
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
@@ -63,7 +66,7 @@ const SearchTab = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         header={
-          <>
+          <View style={{paddingTop: insets.top}}>
             <Input
               value={searchQuery}
               onChangeText={onSearchChange}
@@ -75,7 +78,7 @@ const SearchTab = () => {
               <SelectedFilterItem text="Луцьк" />
               <SelectedFilterItem filterMode text="Виберіть категорію" />
             </View>
-          </>
+          </View>
         }>
         {activeTab === TABS.I_LOOKING_FOR && (
           <ScrollView style={{backgroundColor: '#fff', height: 520}}>

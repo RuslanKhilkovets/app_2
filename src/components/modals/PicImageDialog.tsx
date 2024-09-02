@@ -52,10 +52,13 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
       } else {
         console.log('Image selected: ', response?.assets);
         setUris(prev => {
-          return [
+          return {
             ...prev,
-            {uri: response?.assets[0].uri, active: prev.length === 0},
-          ];
+            imgUris: [
+              ...prev.imgUris,
+              {uri: response?.assets[0].uri, active: prev.imgUris.length === 0},
+            ],
+          };
         });
 
         onClose();

@@ -5,7 +5,7 @@ export default interface IAddItemFormData {
     uri: string;
     active: boolean;
   }[];
-  date: string;
+  date: string | Date;
   phone: string;
   forRemuneration: boolean;
   category: string;

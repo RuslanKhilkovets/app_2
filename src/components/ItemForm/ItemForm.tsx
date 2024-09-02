@@ -1,9 +1,6 @@
-import {FlatList, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Controller, useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
 
-import {createPostSchema} from '@/validations';
 import {
   AppIcon,
   Button,
@@ -19,77 +16,85 @@ import {
   SelectLocationList,
   Thumbnail,
 } from '@/components';
+import {IAddItemFormData} from '@/types';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type TFormType = 'i_find' | 'i_looking_for';
 
-interface IItemForm {
+interface IItemFormProps {
   type: TFormType;
 }
 
-const ItemForm = ({type}: IItemForm) => {
-  const [forRemuneration, setForRemuneration] = useState(false);
+const ItemForm = ({type}: IItemFormProps) => {
+  const [formData, setFormData] = useState<IAddItemFormData>({
+    name: '',
+    description: '',
+    date: '',
+    imgUris: [],
+    forRemuneration: false,
+    phone: '',
+    category: '',
+    location: '',
+  });
+
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
-  const [date, setDate] = useState();
-  const [imgUris, setImgUris] = useState([]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({
-    resolver: yupResolver(createPostSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-    },
-  });
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     setDateOpen(false);
-  }, [date]);
+  }, [formData.date]);
 
-  useEffect(() => {
-    return () => {
-      setDate(undefined);
-      setImgUris([]);
-      setForRemuneration(false);
-    };
-  }, []);
+  const handleInputChange = (field: keyof typeof formData, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const setActiveImage = (uri: string) => {
+    setFormData(prev => ({
+      ...prev,
+      imgUris: prev.imgUris.map(image => ({
+        ...image,
+        active: image.uri === uri,
+      })),
+    }));
+  };
+
+  const onDeleteImage = (uri: string) => {
+    setFormData((prev: IAddItemFormData) => {
+      return {
+        ...prev,
+        imgUris: prev.imgUris.filter(item => item.uri !== uri),
+      };
+    });
+  };
+
+  const handleFormSubmit = () => {
+    console.log('Form Data:', formData);
+  };
 
   return (
-    <View style={styles.form}>
+    <View style={[styles.form, {paddingBottom: insets.bottom + 60}]}>
       <ScrollView>
-        <Controller
-          control={control}
-          name="name"
-          render={({field: {onChange, value}}) => (
-            <Input
-              placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
-              value={value}
-              onChangeText={onChange}
-              error={errors.name?.message}
-              style={{marginBottom: 20}}
-            />
-          )}
+        <Input
+          placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
+          value={formData.name}
+          onChangeText={value => handleInputChange('name', value)}
+          style={{marginBottom: 20}}
         />
-        <Controller
-          control={control}
-          name="description"
-          render={({field: {onChange, value}}) => (
-            <Input
-              multiline
-              numberOfLines={5}
-              placeholder={
-                type === 'i_find' ? 'Де знайдено, опис знахідки' : 'Опис'
-              }
-              value={value}
-              onChangeText={onChange}
-              error={errors.description?.message}
-            />
-          )}
+        <Input
+          multiline
+          numberOfLines={5}
+          placeholder={
+            type === 'i_find' ? 'Де знайдено, опис знахідки' : 'Опис'
+          }
+          value={formData.description}
+          onChangeText={value => handleInputChange('description', value)}
         />
 
         <Button
@@ -103,13 +108,18 @@ const ItemForm = ({type}: IItemForm) => {
         <PicImageDialog
           visible={picImgOpen}
           onClose={() => setPicImgOpen(false)}
-          setUris={setImgUris}
+          setUris={setFormData}
         />
 
         <FlatList
-          data={imgUris}
+          data={formData.imgUris}
           renderItem={({item}) => (
-            <Thumbnail active={item.active} uri={item.uri} />
+            <Thumbnail
+              uri={item.uri}
+              active={item.active}
+              setActiveImage={setActiveImage}
+              onDelete={onDeleteImage}
+            />
           )}
           keyExtractor={item => item.uri}
           contentContainerStyle={{
@@ -122,38 +132,31 @@ const ItemForm = ({type}: IItemForm) => {
 
         <FilterItem title="Категорія">
           <EditButton
-            title="Вибрати категорію"
+            title={formData.category || 'Вибрати категорію'}
             onPress={() => setCategoryModalOpen(true)}
           />
         </FilterItem>
         <FilterItem title="Локація">
           <EditButton
-            title="Луцьк"
+            title={formData.location || 'Локація'}
             onPress={() => setLocationModalOpen(true)}
           />
         </FilterItem>
         <FilterItem title={type === 'i_find' ? 'Дата знахідки' : 'Дата згуби'}>
           <DatePicker
             setOpen={() => setDateOpen(true)}
-            date={date}
+            date={formData.date}
             maxDate={new Date()}
             isOpen={dateOpen}
             onClose={() => setDateOpen(false)}
-            onChange={date => setDate(date)}
+            onChange={date => handleInputChange('date', date)}
           />
         </FilterItem>
         <FilterItem title="Телефон для зв’язку">
-          <Controller
-            control={control}
-            name="name"
-            render={({field: {onChange, value}}) => (
-              <PhoneInput
-                placeholder="___ ___ __ __"
-                value={value}
-                onChange={onChange}
-                error={errors.description?.message}
-              />
-            )}
+          <PhoneInput
+            placeholder="___ ___ __ __"
+            value={formData.phone}
+            onChange={value => handleInputChange('phone', value)}
           />
         </FilterItem>
 
@@ -161,14 +164,15 @@ const ItemForm = ({type}: IItemForm) => {
           <Checkbox
             label="За винагороду"
             value={true}
-            onValueChange={() => setForRemuneration(!forRemuneration)}
-            checked={forRemuneration}
+            onValueChange={() =>
+              handleInputChange('forRemuneration', !formData.forRemuneration)
+            }
+            checked={formData.forRemuneration}
           />
         </View>
       </ScrollView>
 
-      <Button onPress={() => handleSubmit()}>Опублікувати</Button>
-
+      <Button onPress={handleFormSubmit}>Опублікувати</Button>
       <Modal
         openFrom="right"
         visible={categoryModalOpen}

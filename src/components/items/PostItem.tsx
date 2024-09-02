@@ -6,7 +6,7 @@ import {
   View,
   Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 
 import {AppIcon} from '@/components';
 import ActiveItem from '@images/item_active.png';
@@ -19,23 +19,30 @@ interface IPostItemProps {
   status: 1 | 0;
   city: string;
   date: string;
+  isOpen: boolean;
+  onMenuToggle: () => void;
+  resetMenu: () => void;
 }
 
-const PostItem = ({id, img, title, status, city, date}: IPostItemProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const PostItem = ({
+  id,
+  img,
+  title,
+  status,
+  city,
+  date,
+  isOpen,
+  onMenuToggle,
+  resetMenu,
+}: IPostItemProps) => {
   const statusText = status === 1 ? 'Знайдено' : 'В пошуку';
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
 
   return (
     <>
-      <TouchableOpacity style={styles.container} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.container}
+        activeOpacity={0.7}
+        onPress={resetMenu}>
         <View style={{flexDirection: 'row', gap: 15}}>
           <View
             style={[
@@ -71,27 +78,37 @@ const PostItem = ({id, img, title, status, city, date}: IPostItemProps) => {
         </View>
 
         <View style={{justifyContent: 'center'}}>
-          <TouchableOpacity activeOpacity={0.7} onPress={toggleMenu}>
+          <TouchableOpacity activeOpacity={0.7} onPress={onMenuToggle}>
             <AppIcon name="edit" size={27} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-      {isMenuOpen && (
-        <Pressable style={styles.menuOverlay} onPress={closeMenu}>
-          <View style={styles.menuContent}>
-            <TouchableOpacity style={styles.menuBtn} onPress={() => {}}>
-              <Text style={styles.menuBtnText}>Редагувати</Text>
-            </TouchableOpacity>
+      {isOpen && (
+        <View style={styles.menuContent}>
+          <TouchableOpacity
+            style={styles.menuBtn}
+            onPress={() => {
+              /* Edit action */
+            }}>
+            <Text style={styles.menuBtnText}>Редагувати</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuBtn} onPress={() => {}}>
-              <Text style={styles.menuBtnText}>В архів</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuBtn}
+            onPress={() => {
+              /* Archive action */
+            }}>
+            <Text style={styles.menuBtnText}>В архів</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuBtn} onPress={() => {}}>
-              <Text style={styles.menuBtnText}>Видалити</Text>
-            </TouchableOpacity>
-          </View>
-        </Pressable>
+          <TouchableOpacity
+            style={styles.menuBtn}
+            onPress={() => {
+              /* Delete action */
+            }}>
+            <Text style={styles.menuBtnText}>Видалити</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </>
   );
@@ -143,20 +160,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#757575',
   },
-  menuOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
   menuContent: {
     position: 'absolute',
-    right: 20,
-    bottom: -20,
+    right: 30,
+    bottom: -30,
     backgroundColor: '#ffffff',
-    padding: 20,
-    gap: 18,
+    paddingVertical: 20,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 0},
@@ -165,7 +174,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   menuBtn: {
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 20,
   },
   menuBtnText: {
     fontFamily: 'Raleway-Medium',
