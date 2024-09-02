@@ -5,6 +5,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
 
 import {SignTypes} from '@/constants';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const SignForm = () => {
   const route = useRoute();
@@ -12,6 +13,7 @@ const SignForm = () => {
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
+  const insets = useSafeAreaInsets();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const SignForm = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, {paddingTop: insets.top}]}>
         <GoBack />
 
         <View style={styles.headerActions}>

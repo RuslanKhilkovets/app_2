@@ -2,6 +2,8 @@ import React, {useRef, useState} from 'react';
 import {
   Dimensions,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -110,7 +112,7 @@ const ChangePersonDataScreen = () => {
     switch (screenType) {
       case 'name': {
         return (
-          <View style={styles.container}>
+          <>
             <View></View>
 
             <Controller
@@ -126,8 +128,9 @@ const ChangePersonDataScreen = () => {
                 />
               )}
             />
+
             <Button onPress={handleSubmit(onSubmit)}>Зберегти</Button>
-          </View>
+          </>
         );
       }
       case 'phone': {
@@ -418,7 +421,13 @@ const ChangePersonDataScreen = () => {
 
   return (
     <Screen title={getPageTitle(screenType)} backColor="#fff">
-      {getContent(screenType)}
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+          {getContent(screenType)}
+        </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };

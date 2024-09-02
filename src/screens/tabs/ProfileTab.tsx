@@ -22,7 +22,11 @@ const ProfileTab = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <ScrollView style={[styles.container, {paddingTop: insets.top}]}>
+    <ScrollView
+      style={[
+        styles.container,
+        {paddingTop: insets.top, paddingBottom: insets.bottom},
+      ]}>
       <View style={styles.topFigure}></View>
       <View style={styles.profilePicContainer}>
         <View style={{height: 138, width: 138, position: 'relative'}}>
@@ -114,6 +118,7 @@ const ProfileTab = () => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
+            paddingBottom: insets.bottom + 30,
             flex: 1,
           }}>
           <TouchableOpacity
