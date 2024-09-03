@@ -10,12 +10,12 @@ interface IItemsContainerProps {
 }
 
 const ItemsContainer = ({items, style}: IItemsContainerProps) => {
-  console.log(items);
   return (
     <FlatList
       data={items}
       renderItem={({item}) => (
         <Item
+          id={item.id}
           title={item.title}
           city={item.city}
           date={item.date}

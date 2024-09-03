@@ -8,6 +8,7 @@ import {
   StartSliderScreen,
   ChangePersonDataScreen,
   About,
+  ItemScreen,
 } from '@/screens';
 import {TabsNavigation} from '@/navigation';
 
@@ -20,6 +21,10 @@ export const routes: IRoutes[] = [
   {
     name: 'StartSlider',
     component: StartSliderScreen,
+  },
+  {
+    name: 'Item',
+    component: ItemScreen,
   },
   {name: 'Start', component: StartScreen},
   {

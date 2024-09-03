@@ -3,8 +3,10 @@ import React from 'react';
 import Phone from '../../../assets/images/item_example.png';
 
 import {AppIcon} from '@/components';
+import {useNavigation} from '@react-navigation/native';
 
 interface IItemProps {
+  id: number | string;
   title: string;
   date: any;
   city: string;
@@ -12,9 +14,14 @@ interface IItemProps {
   isSaved?: boolean;
 }
 
-const Item = ({title, date, city, image, isSaved}: IItemProps) => {
+const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={() => navigation.navigate('Item', {id})}>
       {image ? (
         <Image source={Phone} style={styles.image} />
       ) : (
@@ -42,7 +49,7 @@ const Item = ({title, date, city, image, isSaved}: IItemProps) => {
           <Text style={styles.contentFooterText}>{date}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

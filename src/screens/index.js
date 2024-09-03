@@ -7,6 +7,7 @@ export {default as StartSliderScreen} from './StartSliderScreen';
 export {default as MainScreen} from './MainScreen';
 export {default as ChangePersonDataScreen} from './ChangePersonDataScreen';
 export {default as About} from './About';
+export {default as ItemScreen} from './ItemScreen';
 
 // tabs
 

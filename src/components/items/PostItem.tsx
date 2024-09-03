@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import {AppIcon} from '@/components';
+import {AppIcon, ItemStatus} from '@/components';
 import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
 
@@ -35,8 +35,6 @@ const PostItem = ({
   onMenuToggle,
   resetMenu,
 }: IPostItemProps) => {
-  const statusText = status === 1 ? 'Знайдено' : 'В пошуку';
-
   return (
     <>
       <TouchableOpacity
@@ -63,13 +61,7 @@ const PostItem = ({
           <View style={{gap: 6}}>
             <Text style={styles.title}>{title}</Text>
 
-            <Text
-              style={[
-                styles.status,
-                status === 0 ? styles.inactive : styles.active,
-              ]}>
-              {statusText}
-            </Text>
+            <ItemStatus status={status} />
 
             <Text style={styles.bottomText}>{city}</Text>
 

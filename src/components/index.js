@@ -40,6 +40,7 @@ export {default as AppIcon} from './UI/AppIcon';
 export {default as MenuAddItem} from './UI/MenuAddItem';
 export {default as PhoneInput} from './UI/PhoneInput';
 export {default as Thumbnail} from './UI/Thumbnail';
+export {default as ItemStatus} from './UI/ItemStatus';
 
 export {default as FilterModal} from './modals/FilterModal';
 export {default as ExitDialog} from './modals/ExitDialog';
