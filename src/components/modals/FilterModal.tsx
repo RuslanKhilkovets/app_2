@@ -20,7 +20,6 @@ import {
   AppIcon,
 } from '@/components';
 import {IModalProps} from '@/types';
-import {formatDate, nullToDash} from '@/helpers';
 import TABS from '@/constants/Tabs';
 
 enum FILTER_TYPE {
@@ -36,17 +35,19 @@ enum STATIC_DATE_TYPE {
 const FilterModal = ({visible, onClose}: IModalProps) => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [selectedValues, setSelectedValues] = useState<FILTER_TYPE[]>([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [staticDateType, setStaticDateType] = useState(null);
+  const [startDate, setStartDate] = useState<Date | string>('');
+  const [endDate, setEndDate] = useState<Date | string>('');
+  const [staticDateType, setStaticDateType] = useState<STATIC_DATE_TYPE | null>(
+    null,
+  );
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
   const handleChooseStaticDate = (type: STATIC_DATE_TYPE | null) => {
-    setStartDate(null);
-    setEndDate(null);
+    setStartDate('');
+    setEndDate('');
 
     setStaticDateType(type);
   };
@@ -75,6 +76,13 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
     inputRange: [0, 1],
     outputRange: ['#FFEAEA', '#EDE7FF'],
   });
+
+  useEffect(() => {
+    if (staticDateType !== null) {
+      setEndDate('');
+      setEndDate('');
+    }
+  }, [staticDateType]);
 
   const tabContent = {
     [TABS.I_LOOKING_FOR]: (
@@ -143,7 +151,7 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
                 date={startDate}
                 isOpen={openStartDatePicker}
                 onClose={() => setOpenStartDatePicker(false)}
-                onChange={date => setStartDate(date)}
+                onChange={date => setStartDate(date || '')}
               />
 
               <Text style={styles.selectDateText}>до</Text>
@@ -155,7 +163,7 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
                 minDate={startDate || null}
                 isOpen={openEndDatePicker}
                 onClose={() => setOpenEndDatePicker(false)}
-                onChange={date => setEndDate(date)}
+                onChange={date => setEndDate(date || '')}
               />
             </View>
           </FilterItem>

@@ -2,16 +2,16 @@ import React from 'react';
 import {StyleSheet, View, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {AppIcon, Button} from '@/components';
-import {formatDate, nullToDash} from '@/helpers';
+import {formatDate} from '@/helpers';
 
 interface IDatePickerProps {
   isOpen: boolean;
-  date?: Date;
+  date: Date | string;
   onChange: (date: Date | undefined) => void;
   onClose: () => void;
   setOpen: () => void;
-  maxDate?: Date | null;
-  minDate?: Date | null;
+  maxDate?: Date | null | string;
+  minDate?: Date | null | string;
 }
 
 const DatePicker = ({
@@ -32,7 +32,7 @@ const DatePicker = ({
         type="light"
         style={styles.selectDateButton}
         after={<AppIcon name="arrow_down" size={6} />}>
-        {nullToDash(formatDate(currentDate))}
+        {date && formatDate(currentDate)}
       </Button>
 
       <Modal
@@ -77,17 +77,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 20,
     elevation: 5,
-  },
-  closeButton: {
-    marginTop: 20,
-    backgroundColor: '#007AFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   selectDateButton: {
     flexShrink: 1,
