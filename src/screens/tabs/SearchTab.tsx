@@ -81,15 +81,11 @@ const SearchTab = () => {
           </View>
         }>
         {activeTab === TABS.I_LOOKING_FOR && (
-          <ScrollView style={{backgroundColor: '#fff', height: 520}}>
-            <ItemsContainer items={items} style={{padding: 20}} />
-          </ScrollView>
+            <ItemsContainer items={items} style={{padding: 20}} containerStyle={{paddingBottom: insets.bottom + 200}}/>
         )}
         {activeTab === TABS.I_FIND && (
-          <ScrollView style={{backgroundColor: '#fff', height: 520}}>
-            <ItemsContainer items={items} style={{padding: 20}} />
-          </ScrollView>
-        )}
+            <ItemsContainer items={items} style={{padding: 20}} containerStyle={{paddingBottom: insets.bottom + 200}}/>
+          )}
       </TabsSwitch>
 
       <FilterModal
