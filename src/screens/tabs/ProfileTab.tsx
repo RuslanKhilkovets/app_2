@@ -1,6 +1,7 @@
 import {
   Image,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -29,6 +30,7 @@ const ProfileTab = () => {
         styles.container,
         {paddingTop: insets.top, paddingBottom: insets.bottom},
       ]}>
+      <StatusBar backgroundColor={'#FF879D'} />
       <View style={styles.topFigure}></View>
       <View style={styles.profilePicContainer}>
         <View style={{height: 138, width: 138, position: 'relative'}}>
@@ -53,9 +55,7 @@ const ProfileTab = () => {
 
         <EditButton
           onPress={() => {
-            navigation.navigate('ChangePersonalData', {
-              screenType: 'posts',
-            });
+            navigation.navigate('ActivePublications');
           }}
           title="Активні"
         />
@@ -67,7 +67,7 @@ const ProfileTab = () => {
         <FilterItem title="Ім`я">
           <EditButton
             onPress={() => {
-              navigation.navigate('ChangePersonalData', {screenType: 'name'});
+              navigation.navigate('ChangeName');
             }}
             title="Діана"
           />
@@ -77,33 +77,25 @@ const ProfileTab = () => {
           <EditButton
             title="Луцьк"
             onPress={() => {
-              navigation.navigate('ChangePersonalData', {
-                screenType: 'location',
-              });
+              navigation.navigate('ChangeLocation');
             }}
           />
         </FilterItem>
 
         <FilterItem title="Телефон">
           <EditButton
-            onPress={() => {}}
             title="095 888 77 66"
             onPress={() => {
-              navigation.navigate('ChangePersonalData', {
-                screenType: 'phone',
-              });
+              navigation.navigate('ChangePhone');
             }}
           />
         </FilterItem>
 
         <FilterItem title="E-mail">
           <EditButton
-            onPress={() => {}}
             title="mymail@gmail.com"
             onPress={() => {
-              navigation.navigate('ChangePersonalData', {
-                screenType: 'email',
-              });
+              navigation.navigate('ChangeEmail');
             }}
           />
         </FilterItem>
@@ -112,9 +104,7 @@ const ProfileTab = () => {
           <Button
             type="bordered"
             onPress={() => {
-              navigation.navigate('ChangePersonalData', {
-                screenType: 'password',
-              });
+              navigation.navigate('ChangePassword');
             }}>
             Змінити пароль
           </Button>

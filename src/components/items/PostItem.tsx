@@ -13,24 +13,21 @@ import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
 
 interface IPostItemProps {
-  id: number;
-  img: string;
-  title: string;
-  status: 1 | 0;
-  city: string;
-  date: string;
+  item: {
+    id: number;
+    img: string;
+    title: string;
+    status: number;
+    city: string;
+    date: string;
+  }
   isOpen: boolean;
   onMenuToggle: () => void;
   resetMenu: () => void;
 }
 
 const PostItem = ({
-  id,
-  img,
-  title,
-  status,
-  city,
-  date,
+  item,
   isOpen,
   onMenuToggle,
   resetMenu,
@@ -45,13 +42,13 @@ const PostItem = ({
           <View
             style={[
               styles.imgContainer,
-              status === 0
+              item.status === 0
                 ? styles.imgContainer_inactive
                 : styles.imgContainer_active,
             ]}>
-            {img ? (
-              <Image source={{uri: img}} style={styles.img} />
-            ) : !img && status === 0 ? (
+            {item.img ? (
+              <Image source={{uri: item.img}} style={styles.img} />
+            ) : !item.img && item.status === 0 ? (
               <Image source={InactiveItem} style={styles.img} />
             ) : (
               <Image source={ActiveItem} style={styles.img} />
@@ -59,13 +56,13 @@ const PostItem = ({
           </View>
 
           <View style={{gap: 6}}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>{item.title}</Text>
 
-            <ItemStatus status={status} />
+            <ItemStatus status={item.status} />
 
-            <Text style={styles.bottomText}>{city}</Text>
+            <Text style={styles.bottomText}>{item.city}</Text>
 
-            <Text style={styles.bottomText}>{date}</Text>
+            <Text style={styles.bottomText}>{item.date}</Text>
           </View>
         </View>
 

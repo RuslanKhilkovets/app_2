@@ -7,24 +7,27 @@ import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IItemProps {
-  id: number | string;
-  title: string;
-  date: any;
-  city: string;
-  image?: string;
-  isSaved?: boolean;
+  item: {
+    id: number | string;
+    title: string;
+    date: any;
+    city: string;
+    image?: string;
+    isSaved?: boolean;
+  }
 }
 
-const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
+const Item = ({item}: IItemProps) => {
   const navigation = useNavigation();
 
   const {themes, colorScheme} = useTheme();
+
   return (
     <TouchableOpacity
       style={[styles.container, {borderColor: themes[colorScheme].bgTertiary}]}
       activeOpacity={0.7}
-      onPress={() => navigation.navigate('Item', {id})}>
-      {image ? (
+      onPress={() => navigation.navigate('Item', {id: item.id})}>
+      {item.image ? (
         <Image source={Phone} style={styles.image} />
       ) : (
         <View
@@ -42,7 +45,7 @@ const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
             style={[styles.contentTitle, {color: themes[colorScheme].dark}]}
             ellipsizeMode="tail"
             numberOfLines={1}>
-            {title}
+            {item.title}
           </Text>
 
           <TouchableOpacity activeOpacity={0.7}>
@@ -55,7 +58,7 @@ const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {city}
+            {item.city}
           </Text>
 
           <Text
@@ -63,7 +66,7 @@ const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {date}
+            {item.date}
           </Text>
         </View>
       </View>

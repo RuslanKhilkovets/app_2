@@ -3,7 +3,7 @@ import React from 'react';
 
 import {IItem} from '@/types';
 import {Item} from '@/components';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface IItemsContainerProps {
   items: IItem[];
@@ -11,28 +11,25 @@ interface IItemsContainerProps {
   containerStyle?: ViewStyle;
 }
 
-const ItemsContainer = ({items, style, containerStyle}: IItemsContainerProps) => {
-  const insets = useSafeAreaInsets();
-
+const ItemsContainer = ({
+  items,
+  style,
+  containerStyle,
+}: IItemsContainerProps) => {
   return (
     <ScrollView style={[containerStyle, {backgroundColor: '#fff'}]}>
-
-    <FlatList
-      data={items}
-      renderItem={({item}) => (
-        <Item
-          id={item.id}
-          title={item.title}
-          city={item.city}
-          date={item.date}
-          image={item.image}
-        />
-      )}
-      keyExtractor={item => String(item.id)}
-      numColumns={2}
-      columnWrapperStyle={styles.columnWrapper}
-      contentContainerStyle={[style]}
-    />
+      <FlatList
+        data={items}
+        renderItem={({item}) => (
+          <Item
+            item={item}
+          />
+        )}
+        keyExtractor={item => String(item.id)}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+        contentContainerStyle={[style]}
+      />
     </ScrollView>
   );
 };

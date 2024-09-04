@@ -1,19 +1,21 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Platform, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {
   PrivacyPolicyBlock,
   Button,
   Screen,
-  AppIcon,
   GoBack,
 } from '@/components';
 
 import {useGoBack} from '@/hooks';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PrivacyPolicy = () => {
   const goBack = useGoBack();
 
+  const insets = useSafeAreaInsets();
+  
   return (
     <Screen title="Політика конфіндейційності" backColor="#fff">
       <View style={styles.container}>
@@ -62,7 +64,7 @@ const PrivacyPolicy = () => {
           </PrivacyPolicyBlock>
         </ScrollView>
 
-        <View style={styles.btnContainer}>
+        <View style={[styles.btnContainer, {marginBottom: Platform.OS === "android"? insets.bottom + 30 : insets.bottom}]}>
           <Button onPress={goBack} type="bordered" before={<GoBack />}>
             Повернутися назад
           </Button>

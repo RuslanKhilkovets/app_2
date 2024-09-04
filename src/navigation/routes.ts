@@ -6,9 +6,14 @@ import {
   SignFormsScreen,
   StartScreen,
   StartSliderScreen,
-  ChangePersonDataScreen,
   About,
   ItemScreen,
+  ActivePublicationsScreen,
+  ChangeNameScreen,
+  ChangeLocationScreen,
+  ChangePhoneScreen,
+  ChangeEmailScreen,
+  ChangePasswordScreen,
 } from '@/screens';
 import {TabsNavigation} from '@/navigation';
 
@@ -21,6 +26,30 @@ export const routes: IRoutes[] = [
   {
     name: 'StartSlider',
     component: StartSliderScreen,
+  },
+  {
+    name: 'ActivePublications',
+    component: ActivePublicationsScreen,
+  },
+  {
+    name: 'ChangeName',
+    component: ChangeNameScreen,
+  },
+  {
+    name: 'ChangePassword',
+    component: ChangePasswordScreen,
+  },
+  {
+    name: 'ChangeLocation',
+    component: ChangeLocationScreen,
+  },
+  {
+    name: 'ChangePhone',
+    component: ChangePhoneScreen,
+  },
+  {
+    name: 'ChangeEmail',
+    component: ChangeEmailScreen,
   },
   {
     name: 'Item',
@@ -42,10 +71,6 @@ export const routes: IRoutes[] = [
   {
     name: 'ResetPassword',
     component: ResetPasswordScreen,
-  },
-  {
-    name: 'ChangePersonalData',
-    component: ChangePersonDataScreen,
   },
   {
     name: 'About',
