@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Modal} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {AppIcon, Button} from '@/components';
-import {formatDate} from '@/helpers';
+import {formatDate, nullToDash} from '@/helpers';
 
 interface IDatePickerProps {
   isOpen: boolean;
@@ -32,7 +32,7 @@ const DatePicker = ({
         type="light"
         style={styles.selectDateButton}
         after={<AppIcon name="arrow_down" size={6} />}>
-        {date && formatDate(currentDate)}
+        {nullToDash(formatDate(date))}
       </Button>
 
       <Modal

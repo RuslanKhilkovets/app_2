@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import {ScreenHeader} from '@/components';
@@ -26,7 +26,7 @@ const Screen = ({
         styles.container,
         {
           backgroundColor: backColor,
-          paddingTop: insets.top,
+          paddingTop: Platform.OS === 'ios' ? insets.top : insets.top + 20,
           paddingBottom: insets.bottom,
         },
       ]}>
