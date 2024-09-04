@@ -1,5 +1,6 @@
 import {
   Animated,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -26,6 +27,7 @@ const TabsSwitch = ({
 }: ITabSwitchProps) => {
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
+  console.log(activeTab);
 
   useEffect(() => {
     Animated.timing(underlinePosition, {
@@ -47,6 +49,10 @@ const TabsSwitch = ({
         useNativeDriver: true,
       }),
     ]).start();
+
+    StatusBar.setBackgroundColor(
+      activeTab === TABS.I_LOOKING_FOR ? '#FFEAEA' : '#EDE7FF',
+    );
   }, [activeTab]);
 
   const underlineLeft = underlinePosition.interpolate({
@@ -65,7 +71,14 @@ const TabsSwitch = ({
   });
 
   return (
-    <View>
+    <>
+      <StatusBar
+        animated
+        backgroundColor={
+          activeTab === TABS.I_LOOKING_FOR ? '#FFEAEA' : '#EDE7FF'
+        }
+      />
+
       <Animated.View style={[{backgroundColor}, {padding: 16}, headerStyle]}>
         {header}
       </Animated.View>
@@ -121,7 +134,7 @@ const TabsSwitch = ({
       <Animated.ScrollView style={{opacity: contentOpacity, height: '100%'}}>
         {children}
       </Animated.ScrollView>
-    </View>
+    </>
   );
 };
 

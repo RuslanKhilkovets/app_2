@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Modal as NativeModal,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -84,7 +85,9 @@ const Modal = ({
               {backgroundColor: headerBgColor, paddingTop: insets.top},
             ]}>
             <Text style={styles.modalTitle}>{title}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+            <TouchableOpacity
+              onPress={onClose}
+              style={[styles.closeIcon, {top: Platform.OS === 'ios' ? 50 : 8}]}>
               <AppIcon name="delete_filter" />
             </TouchableOpacity>
           </Animated.View>
@@ -126,6 +129,5 @@ const styles = StyleSheet.create({
   closeIcon: {
     position: 'absolute',
     right: 20,
-    top: 50,
   },
 });

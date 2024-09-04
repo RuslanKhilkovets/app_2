@@ -4,7 +4,6 @@ import React from 'react';
 const AddItemTab = () => {
   return (
     <View>
-      <Text>AddItemTab</Text>
     </View>
   );
 };
