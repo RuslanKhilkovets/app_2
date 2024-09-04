@@ -14,12 +14,14 @@ import EditIcon from '@icons/edit.svg';
 import NoProfilePic from '@images/no_profile_pic.png';
 import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 const ProfileTab = () => {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const navigation = useNavigation();
 
   const insets = useSafeAreaInsets();
+  const {themes, colorScheme} = useTheme();
 
   return (
     <ScrollView
@@ -39,10 +41,15 @@ const ProfileTab = () => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.profilePicText}>Діана</Text>
+        <Text
+          style={[styles.profilePicText, {color: themes[colorScheme].dark}]}>
+          Діана
+        </Text>
       </View>
       <View style={{padding: 16}}>
-        <Text style={styles.itemTitle}>Мої публікації</Text>
+        <Text style={[styles.itemTitle, {color: themes[colorScheme].dark}]}>
+          Мої публікації
+        </Text>
 
         <EditButton
           onPress={() => {
@@ -53,7 +60,9 @@ const ProfileTab = () => {
           title="Активні"
         />
 
-        <Text style={styles.itemTitle}>Мої дані</Text>
+        <Text style={[styles.itemTitle, {color: themes[colorScheme].dark}]}>
+          Мої дані
+        </Text>
 
         <FilterItem title="Ім`я">
           <EditButton

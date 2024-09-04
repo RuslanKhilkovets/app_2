@@ -11,6 +11,7 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {AppIcon} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IModalProps extends React.PropsWithChildren {
   visible: boolean;
@@ -32,6 +33,7 @@ const Modal = ({
   const [isVisible, setIsVisible] = useState(visible);
 
   const insets = useSafeAreaInsets();
+  const {themes, colorScheme} = useTheme();
 
   const initialTranslate = {
     left: -screenWidth,
@@ -83,7 +85,10 @@ const Modal = ({
               styles.modalHeader,
               {backgroundColor: headerBgColor, paddingTop: insets.top},
             ]}>
-            <Text style={styles.modalTitle}>{title}</Text>
+            <Text
+              style={[styles.modalTitle, {color: themes[colorScheme].dark}]}>
+              {title}
+            </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
               <AppIcon name="delete_filter" />
             </TouchableOpacity>

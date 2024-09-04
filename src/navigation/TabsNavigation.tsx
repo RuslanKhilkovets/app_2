@@ -24,8 +24,7 @@ interface ITabBarIcon {
 export interface ITabNavigatorProps {}
 
 const TabNavigator = ({}: ITabNavigatorProps) => {
-  const {colorScheme} = useTheme();
-  console.log(colorScheme);
+  const {colorScheme, themes} = useTheme();
 
   const insets = useSafeAreaInsets();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,7 +50,10 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
           tabBarLabel: ({focused, children}) => (
             <Text
               style={[
-                {fontFamily: focused ? 'Raleway-SemiBold' : 'Raleway-Regular'},
+                {
+                  fontFamily: focused ? 'Raleway-SemiBold' : 'Raleway-Regular',
+                  color: themes[colorScheme].dark,
+                },
               ]}>
               {children}
             </Text>

@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 
 import {
@@ -19,6 +12,7 @@ import {
 import TABS from '@/constants/Tabs';
 import {IItem} from '@/types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,6 +20,7 @@ const SearchTab = () => {
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
   const insets = useSafeAreaInsets();
+  const {themes, colorScheme} = useTheme();
 
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
@@ -36,10 +31,10 @@ const SearchTab = () => {
       <AppIcon name="favorite_menu" size={20} />
 
       <TouchableOpacity
-        style={styles.filterBtn}
+        style={[styles.filterBtn, {borderColor: themes[colorScheme].dark}]}
         activeOpacity={0.7}
         onPress={() => setIsFilterModalVisible(true)}>
-        <Text>Фільтр</Text>
+        <Text style={{color: themes[colorScheme].dark}}>Фільтр</Text>
 
         <AppIcon size={10} name="filter" />
       </TouchableOpacity>
@@ -81,11 +76,19 @@ const SearchTab = () => {
           </View>
         }>
         {activeTab === TABS.I_LOOKING_FOR && (
-            <ItemsContainer items={items} style={{padding: 20}} containerStyle={{paddingBottom: insets.bottom + 200}}/>
+          <ItemsContainer
+            items={items}
+            style={{padding: 20}}
+            containerStyle={{paddingBottom: insets.bottom + 200}}
+          />
         )}
         {activeTab === TABS.I_FIND && (
-            <ItemsContainer items={items} style={{padding: 20}} containerStyle={{paddingBottom: insets.bottom + 200}}/>
-          )}
+          <ItemsContainer
+            items={items}
+            style={{padding: 20}}
+            containerStyle={{paddingBottom: insets.bottom + 200}}
+          />
+        )}
       </TabsSwitch>
 
       <FilterModal
@@ -112,7 +115,6 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#000',
     borderStyle: 'solid',
     flexDirection: 'row',
     alignItems: 'center',

@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useRef} from 'react';
 
 import TABS from '@/constants/Tabs';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface ITabSwitchProps extends React.PropsWithChildren {
   activeTab: TABS;
@@ -26,6 +27,8 @@ const TabsSwitch = ({
 }: ITabSwitchProps) => {
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
+
+  const {themes, colorScheme} = useTheme();
 
   useEffect(() => {
     Animated.timing(underlinePosition, {
@@ -56,12 +59,15 @@ const TabsSwitch = ({
 
   const underlineColor = underlinePosition.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#FF4A4A', '#9847FF'],
+    outputRange: [themes[colorScheme].primary, themes[colorScheme].purple],
   });
 
   const backgroundColor = underlinePosition.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#FFEAEA', '#EDE7FF'],
+    outputRange: [
+      themes[colorScheme].pinkLight,
+      themes[colorScheme].purpleLight,
+    ],
   });
 
   return (
@@ -83,6 +89,7 @@ const TabsSwitch = ({
                   activeTab === TABS.I_LOOKING_FOR
                     ? 'Raleway-SemiBold'
                     : 'Raleway-Regular',
+                color: themes[colorScheme].dark,
               },
             ]}>
             Я шукаю
@@ -101,6 +108,7 @@ const TabsSwitch = ({
                   activeTab === TABS.I_FIND
                     ? 'Raleway-SemiBold'
                     : 'Raleway-Regular',
+                color: themes[colorScheme].dark,
               },
             ]}>
             Я знайшов

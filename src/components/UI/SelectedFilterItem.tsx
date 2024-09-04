@@ -1,6 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import AppIcon from '@/components/UI/AppIcon';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface ISelectedFilterItemProps {
   text: string;
@@ -13,14 +14,18 @@ const SelectedFilterItem = ({
   filterMode,
   icon,
 }: ISelectedFilterItemProps) => {
-  return (
-    <View>
-      <TouchableOpacity style={styles.container} activeOpacity={0.7}>
-        <Text style={styles.text}>{text}</Text>
+  const {themes, colorScheme} = useTheme();
 
-        <AppIcon size={12} name={filterMode ? 'arrow' : 'delete_filter'} />
-      </TouchableOpacity>
-    </View>
+  return (
+    <TouchableOpacity
+      style={[styles.container, {backgroundColor: themes[colorScheme].light}]}
+      activeOpacity={0.7}>
+      <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+        {text}
+      </Text>
+
+      <AppIcon size={12} name={filterMode ? 'arrow' : 'delete_filter'} />
+    </TouchableOpacity>
   );
 };
 
