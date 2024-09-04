@@ -2,6 +2,7 @@ import {SafeAreaView, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import {ScreenHeader} from '@/components';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface IScreen extends React.PropsWithChildren {
   title?: string;
@@ -17,20 +18,22 @@ const Screen = ({
   backColor = '#FFEAEA',
   bgColor,
 }: IScreen) => {
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: bgColor}}>
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: backColor,
-          },
-        ]}>
-        {headerShown && <ScreenHeader>{title}</ScreenHeader>}
+  const insets = useSafeAreaInsets();
 
-        {children}
-      </View>
-    </SafeAreaView>
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: backColor,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}>
+      {headerShown && <ScreenHeader>{title}</ScreenHeader>}
+
+      {children}
+    </View>
   );
 };
 
