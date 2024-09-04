@@ -1,5 +1,6 @@
 import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import TABS from '@/constants/Tabs';
 import {
@@ -9,7 +10,6 @@ import {
   TabsSwitch,
 } from '@/components';
 import {IItem} from '@/types';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_FIND);
@@ -74,7 +74,7 @@ const FavoritesItemsTab = () => {
             </FavoriteBlock>
 
             <FavoriteBlock title="Публікації">
-              <ItemsContainer items={pubs} style={{marginTop: 20}} />
+              <ItemsContainer items={pubs} style={{paddingTop: 20}} containerStyle={{paddingBottom: insets.bottom + 150}}/>
             </FavoriteBlock>
           </>
         );
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  header: {},
   title: {
     fontFamily: 'Raleway-SemiBold',
     color: '#000',
@@ -112,6 +111,5 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    height: 570,
   },
 });
