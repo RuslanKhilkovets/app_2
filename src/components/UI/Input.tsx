@@ -11,6 +11,7 @@ import {
 import {TextInputMask} from 'react-native-masked-text';
 
 import {AppIcon} from '@/components';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IInputProps {
   value: string;
@@ -29,8 +30,8 @@ interface IInputProps {
   maxLength?: number;
   searchMode?: boolean;
   endAdornment?: React.JSX.Element | null;
-  numberOfLines?: number; // Add this prop
-  multiline?: boolean; // Add this prop to enable multiline input
+  numberOfLines?: number;
+  multiline?: boolean;
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -49,11 +50,13 @@ const Input: React.FC<IInputProps> = ({
   maxLength,
   searchMode,
   endAdornment,
-  numberOfLines = 1, // Default to 1 line
-  multiline = false, // Default to single-line input
+  numberOfLines = 1,
+  multiline = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
+
+  const {themes, colorScheme} = useTheme();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(prevState => !prevState);
@@ -68,7 +71,7 @@ const Input: React.FC<IInputProps> = ({
           !!error && styles.error,
           isFocused && styles.activeInput,
           disabled && styles['disabled'],
-          multiline && {height: numberOfLines * 25}, // Adjust height based on number of lines
+          multiline && {height: numberOfLines * 25},
         ]}>
         {mask ? (
           <TextInputMask
@@ -82,8 +85,8 @@ const Input: React.FC<IInputProps> = ({
             placeholder={placeholder}
             editable={!disabled}
             maxLength={maxLength}
-            numberOfLines={numberOfLines} // Apply numberOfLines
-            multiline={multiline} // Apply multiline
+            numberOfLines={numberOfLines}
+            multiline={multiline}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             style={[
@@ -91,6 +94,7 @@ const Input: React.FC<IInputProps> = ({
               inputStyle,
               isFocused && styles.activeInput,
               disabled && styles.disabled,
+              {color: themes[colorScheme].dark},
             ]}
           />
         ) : (
@@ -101,14 +105,15 @@ const Input: React.FC<IInputProps> = ({
             secureTextEntry={showPassword}
             editable={!disabled}
             maxLength={maxLength}
-            numberOfLines={numberOfLines} // Apply numberOfLines
-            multiline={multiline} // Apply multiline
+            numberOfLines={numberOfLines}
+            multiline={multiline}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             style={[
               styles.input,
               inputStyle,
-              multiline && {height: numberOfLines * 20}, // Adjust height based on number of lines
+              multiline && {height: numberOfLines * 20},
+              {color: themes[colorScheme].dark},
             ]}
           />
         )}
@@ -156,7 +161,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#000',
     fontFamily: 'Raleway-Regular',
   },
   activeInput: {

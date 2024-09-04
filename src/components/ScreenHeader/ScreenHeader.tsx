@@ -1,13 +1,12 @@
 import React from 'react';
-
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import {GoBack} from '@/components';
 
 const ScreenHeader = ({children}: React.PropsWithChildren) => {
   return (
     <View style={styles.header}>
-      <View style={styles.icon}>
+      <View style={[styles.icon, {top: Platform.OS === 'android' ? 3 : 0}]}>
         <GoBack />
       </View>
 

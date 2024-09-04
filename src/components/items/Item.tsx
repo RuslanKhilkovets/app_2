@@ -4,6 +4,7 @@ import Phone from '../../../assets/images/item_example.png';
 
 import {AppIcon} from '@/components';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IItemProps {
   id: number | string;
@@ -17,15 +18,20 @@ interface IItemProps {
 const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
   const navigation = useNavigation();
 
+  const {themes, colorScheme} = useTheme();
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.container, {borderColor: themes[colorScheme].bgTertiary}]}
       activeOpacity={0.7}
       onPress={() => navigation.navigate('Item', {id})}>
       {image ? (
         <Image source={Phone} style={styles.image} />
       ) : (
-        <View style={styles.image}>
+        <View
+          style={[
+            styles.image,
+            {backgroundColor: themes[colorScheme].bgTertiary},
+          ]}>
           <Text style={styles.noPhotoText}>немає фото</Text>
         </View>
       )}
@@ -33,7 +39,7 @@ const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
       <View style={styles.content}>
         <View style={styles.contentHeader}>
           <Text
-            style={styles.contentTitle}
+            style={[styles.contentTitle, {color: themes[colorScheme].dark}]}
             ellipsizeMode="tail"
             numberOfLines={1}>
             {title}
@@ -44,9 +50,21 @@ const Item = ({id, title, date, city, image, isSaved}: IItemProps) => {
           </TouchableOpacity>
         </View>
         <View style={styles.contentFooter}>
-          <Text style={styles.contentFooterText}>{city}</Text>
+          <Text
+            style={[
+              styles.contentFooterText,
+              {color: themes[colorScheme].textSecondary},
+            ]}>
+            {city}
+          </Text>
 
-          <Text style={styles.contentFooterText}>{date}</Text>
+          <Text
+            style={[
+              styles.contentFooterText,
+              {color: themes[colorScheme].textSecondary},
+            ]}>
+            {date}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -60,7 +78,6 @@ const styles = StyleSheet.create({
     width: '48%',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#e7e3e3',
     marginBottom: 16,
   },
   content: {
@@ -72,7 +89,6 @@ const styles = StyleSheet.create({
     height: 170,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E7E3E3',
   },
   noPhotoText: {
     color: '#757575',
@@ -96,6 +112,5 @@ const styles = StyleSheet.create({
   },
   contentFooterText: {
     fontFamily: 'Raleway-Regular',
-    color: '#757575',
   },
 });

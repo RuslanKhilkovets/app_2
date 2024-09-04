@@ -1,3 +1,4 @@
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, ViewStyle} from 'react-native';
 
@@ -21,7 +22,9 @@ const Button = ({
   after = null,
   before = null,
 }: IButtonProps) => {
-  const textColor = type === 'primary' ? '#fff' : '#000';
+  const {themes, colorScheme} = useTheme();
+  const textColor =
+    type === 'primary' ? themes[colorScheme].light : themes[colorScheme].dark;
 
   return (
     <TouchableOpacity

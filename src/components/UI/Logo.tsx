@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, Animated, Easing} from 'react-native';
 import React, {useEffect, useRef} from 'react';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface ILogoProps {
   animated?: boolean;
@@ -7,6 +8,8 @@ interface ILogoProps {
 
 const Logo = ({animated}: ILogoProps) => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  const {themes, colorScheme} = useTheme();
 
   useEffect(() => {
     if (animated) {
@@ -31,7 +34,9 @@ const Logo = ({animated}: ILogoProps) => {
 
   return (
     <Animated.View style={[styles.container, {opacity: fadeAnim}]}>
-      <Text style={styles.text}>єЗнахідка!</Text>
+      <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+        єЗнахідка!
+      </Text>
       <View style={styles.circle}></View>
     </Animated.View>
   );

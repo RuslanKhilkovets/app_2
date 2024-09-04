@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 import {AppIcon} from '@/components';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IEditButtonProps {
   title: string;
@@ -9,12 +10,19 @@ interface IEditButtonProps {
 }
 
 const EditButton = ({title, onPress}: IEditButtonProps) => {
+  const {themes, colorScheme} = useTheme();
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.container}
+      style={[
+        styles.container,
+        {backgroundColor: themes[colorScheme].bgSecondary},
+      ]}
       activeOpacity={0.7}>
-      <Text style={styles.text}>{title}</Text>
+      <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+        {title}
+      </Text>
 
       <AppIcon name="arrow" size={10} />
     </TouchableOpacity>

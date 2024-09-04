@@ -16,6 +16,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {AppIcon, Button, GoBack, ItemStatus} from '@/components';
 import NoProfile from '@images/no_profile_pic.png';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 const ItemScreen = () => {
   const [phoneActive, setPhoneActive] = useState(false);
@@ -24,6 +25,8 @@ const ItemScreen = () => {
 
   const {id} = route.params || {};
   const {width: screenWidth} = Dimensions.get('window');
+
+  const {themes, colorScheme} = useTheme();
 
   const images = [
     {
@@ -85,7 +88,7 @@ const ItemScreen = () => {
         />
       </View>
       <View style={styles.block}>
-        <Text style={styles.item_title}>Опубліковано 8 серпня 2022</Text>
+        <Text style={styles.item_title}>Опубліковано 88 серпня 2022</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -93,7 +96,9 @@ const ItemScreen = () => {
             marginTop: 10,
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-            <Text style={styles.title}>Iphone 15</Text>
+            <Text style={[styles.title, {color: themes[colorScheme].dark}]}>
+              Iphone 15
+            </Text>
             <ItemStatus status={1} />
           </View>
 
@@ -102,12 +107,18 @@ const ItemScreen = () => {
       </View>
       <View style={styles.block}>
         <Text style={[styles.item_title, {fontSize: 15}]}>Опис:</Text>
-        <Text style={styles.text}>Був знайдений під сидінням в таксі</Text>
+        <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+          Був знайдений під сидінням в таксі
+        </Text>
       </View>
       <View style={styles.block}>
         <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
           <AppIcon name="location" color="#757575" />
-          <Text style={[styles.text, {marginTop: 0}]}>
+          <Text
+            style={[
+              styles.text,
+              {marginTop: 0, color: themes[colorScheme].dark},
+            ]}>
             Знайдено 8 серпня 2022
           </Text>
         </View>
@@ -119,7 +130,11 @@ const ItemScreen = () => {
             marginTop: 10,
           }}>
           <AppIcon name="calendar" color="#757575" />
-          <Text style={[styles.text, {marginTop: 0}]}>
+          <Text
+            style={[
+              styles.text,
+              {marginTop: 0, color: themes[colorScheme].dark},
+            ]}>
             м. Луцьк, Волинська область
           </Text>
         </View>
@@ -141,7 +156,9 @@ const ItemScreen = () => {
           <View style={styles.profileImage}>
             <Image style={styles.img} source={NoProfile} />
           </View>
-          <Text style={styles.profileName}>Діана</Text>
+          <Text style={[styles.profileName, {color: themes[colorScheme].dark}]}>
+            Діана
+          </Text>
         </View>
 
         <TouchableOpacity>

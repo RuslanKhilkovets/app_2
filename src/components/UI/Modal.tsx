@@ -12,6 +12,7 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import {AppIcon} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IModalProps extends React.PropsWithChildren {
   visible: boolean;
@@ -33,6 +34,7 @@ const Modal = ({
   const [isVisible, setIsVisible] = useState(visible);
 
   const insets = useSafeAreaInsets();
+  const {themes, colorScheme} = useTheme();
 
   const initialTranslate = {
     left: -screenWidth,
@@ -82,12 +84,22 @@ const Modal = ({
           <Animated.View
             style={[
               styles.modalHeader,
-              {backgroundColor: headerBgColor, paddingTop: insets.top},
+              {
+                backgroundColor: headerBgColor,
+                paddingTop:
+                  Platform.OS === 'android' ? insets.top + 30 : insets.top,
+              },
             ]}>
-            <Text style={styles.modalTitle}>{title}</Text>
+            <Text
+              style={[styles.modalTitle, {color: themes[colorScheme].dark}]}>
+              {title}
+            </Text>
             <TouchableOpacity
               onPress={onClose}
-              style={[styles.closeIcon, {top: Platform.OS === 'ios' ? 50 : 8}]}>
+              style={[
+                styles.closeIcon,
+                {top: Platform.OS === 'ios' ? 50 : 35},
+              ]}>
               <AppIcon name="delete_filter" />
             </TouchableOpacity>
           </Animated.View>
@@ -116,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 25,
   },
