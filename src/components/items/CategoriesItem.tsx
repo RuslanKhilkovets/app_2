@@ -1,4 +1,10 @@
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import React from 'react';
 
 import Phone from '../../../assets/images/phones.png';
@@ -7,14 +13,21 @@ interface ICategoriesItemProps {
   text: string;
   img: string;
   borderColor: string;
+  style?: ViewStyle;
 }
 
-const CategoriesItem = ({text, img, borderColor}: ICategoriesItemProps) => {
+const CategoriesItem = ({
+  text,
+  img,
+  borderColor,
+  style,
+}: ICategoriesItemProps) => {
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.7}>
       <Image
         source={Phone}
         style={[
+          style,
           styles.image,
           {
             borderWidth: 1,
@@ -33,7 +46,6 @@ export default CategoriesItem;
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
@@ -43,8 +55,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Raleway-Medium',
   },
   image: {
-    height: 100,
-    width: 100,
+    aspectRatio: 1,
     borderRadius: 50,
   },
 });

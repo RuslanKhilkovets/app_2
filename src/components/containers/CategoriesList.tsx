@@ -11,6 +11,7 @@ const CategoriesList = () => {
       data={categories}
       renderItem={({item}) => (
         <CategoriesItem
+          style={{width: '100%'}}
           img={item.image}
           text={item.text}
           borderColor={item.borderColor}
