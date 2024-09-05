@@ -208,7 +208,123 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
     ),
     [TABS.I_FIND]: (
       <View style={styles.tabContent}>
-        <Text>Tab Two Content</Text>
+        <ScrollView>
+          <FilterItem title="Категорія">
+            <EditButton
+              title="Вибрати категорію"
+              onPress={() => setCategoryModalOpen(true)}
+            />
+          </FilterItem>
+          <FilterItem title="Дата публікації">
+            <View style={{flexDirection: 'row', gap: 10}}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  styles.dateButton,
+                  staticDateType === STATIC_DATE_TYPE.WEEK && {
+                    borderColor: '#000',
+                  },
+                ]}
+                onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.WEEK)}>
+                <Text
+                  style={[
+                    styles.dateButtonText,
+                    staticDateType === STATIC_DATE_TYPE.WEEK && {
+                      fontFamily: 'Raleway-SemiBold',
+                    },
+                  ]}>
+                  За останній тиждень
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={[
+                  styles.dateButton,
+                  staticDateType === STATIC_DATE_TYPE.MONTH && {
+                    borderColor: '#000',
+                  },
+                ]}
+                onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.MONTH)}>
+                <Text
+                  style={[
+                    styles.dateButtonText,
+                    staticDateType === STATIC_DATE_TYPE.MONTH && {
+                      fontFamily: 'Raleway-SemiBold',
+                    },
+                  ]}>
+                  Останній місяць
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingVertical: 14,
+                gap: 16,
+                alignItems: 'center',
+              }}>
+              <Text style={styles.selectDateText}>З</Text>
+
+              <DatePicker
+                setOpen={() => setOpenStartDatePicker(true)}
+                maxDate={endDate || new Date()}
+                date={startDate}
+                isOpen={openStartDatePicker}
+                onClose={() => setOpenStartDatePicker(false)}
+                onChange={date => setStartDate(date || '')}
+              />
+
+              <Text style={styles.selectDateText}>до</Text>
+
+              <DatePicker
+                setOpen={() => setOpenEndDatePicker(true)}
+                date={endDate}
+                maxDate={new Date()}
+                minDate={startDate || null}
+                isOpen={openEndDatePicker}
+                onClose={() => setOpenEndDatePicker(false)}
+                onChange={date => setEndDate(date || '')}
+              />
+            </View>
+          </FilterItem>
+          <FilterItem title="Локація">
+            <EditButton
+              title="Луцьк"
+              onPress={() => setLocationModalOpen(true)}
+            />
+          </FilterItem>
+          <View style={{flexDirection: 'row', gap: 60, marginVertical: 30}}>
+            <Checkbox
+              label="З описом"
+              value={FILTER_TYPE.WITH_DESCRIPTION}
+              onValueChange={handleValueChange}
+              checked={selectedValues.includes(FILTER_TYPE.WITH_DESCRIPTION)}
+            />
+            <Checkbox
+              label="З фото"
+              value={FILTER_TYPE.WITH_PIC}
+              onValueChange={handleValueChange}
+              checked={selectedValues.includes(FILTER_TYPE.WITH_PIC)}
+            />
+          </View>
+        </ScrollView>
+
+        <Button onPress={() => {}}>Застосувати</Button>
+        <Modal
+          openFrom="right"
+          visible={categoryModalOpen}
+          onClose={() => setCategoryModalOpen(false)}
+          title="Категорії">
+          <CategoriesList />
+        </Modal>
+        <Modal
+          openFrom="right"
+          visible={locationModalOpen}
+          onClose={() => setLocationModalOpen(false)}
+          title="Локація">
+          <SelectLocationList style={{padding: 20}} />
+        </Modal>
       </View>
     ),
   };
@@ -240,8 +356,8 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
       setStaticDateType(null);
     }
 
-    setOpenStartDatePicker(false);
     setOpenEndDatePicker(false);
+    setOpenStartDatePicker(false);
   }, [startDate, endDate]);
 
   return (

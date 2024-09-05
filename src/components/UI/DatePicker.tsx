@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View, Modal} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View, Modal, Pressable} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {AppIcon, Button} from '@/components';
 import {formatDate, nullToDash} from '@/helpers';
@@ -25,6 +25,18 @@ const DatePicker = ({
 }: IDatePickerProps) => {
   const currentDate = date || new Date();
 
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (event.type !== 'dismissed' && selectedDate) {
+      onChange(selectedDate);
+      onClose();
+    }
+    onClose();
+  };
+
+  useEffect(() => {
+    onClose();
+  }, [date]);
+
   return (
     <View style={{flexDirection: 'row'}}>
       <Button
@@ -40,18 +52,18 @@ const DatePicker = ({
         transparent={true}
         animationType="fade"
         onRequestClose={onClose}>
-        <View style={styles.modalOverlay}>
+        <Pressable style={styles.modalOverlay} onPress={onClose}>
           <View style={styles.dialogContainer}>
             <DateTimePicker
               maximumDate={maxDate}
               minimumDate={minDate}
-              value={currentDate}
+              value={currentDate instanceof Date ? currentDate : new Date()}
               mode="date"
               display="inline"
-              onChange={(e, selectedDate) => onChange(selectedDate)}
+              onChange={handleDateChange}
             />
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

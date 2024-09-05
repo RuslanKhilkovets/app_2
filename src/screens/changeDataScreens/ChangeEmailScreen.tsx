@@ -70,7 +70,7 @@ const ChangeEmailScreen = () => {
             )}
           />
 
-          <View style={{marginBottom: insets.bottom}}>
+          <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
               onPress={() => goToNextStep('password')}
@@ -100,7 +100,7 @@ const ChangeEmailScreen = () => {
             )}
           />
 
-          <View style={{marginBottom: insets.bottom}}>
+          <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
               onPress={() => goToNextStep('email')}
@@ -131,7 +131,7 @@ const ChangeEmailScreen = () => {
             )}
           />
 
-          <View style={{marginBottom: insets.bottom}}>
+          <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
               onPress={handleSubmit(onSubmit)}

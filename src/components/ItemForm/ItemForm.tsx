@@ -1,5 +1,6 @@
-import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {
   AppIcon,
@@ -10,6 +11,7 @@ import {
   EditButton,
   FilterItem,
   Input,
+  KeyboardScroll,
   Modal,
   PhoneInput,
   PicImageDialog,
@@ -17,7 +19,6 @@ import {
   Thumbnail,
 } from '@/components';
 import {IAddItemFormData} from '@/types';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type TFormType = 'i_find' | 'i_looking_for';
 
@@ -80,104 +81,107 @@ const ItemForm = ({type}: IItemFormProps) => {
 
   return (
     <View style={[styles.form, {paddingBottom: insets.bottom + 60}]}>
-      <View>
-        <Input
-          placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
-          value={formData.name}
-          onChangeText={value => handleInputChange('name', value)}
-          style={{marginBottom: 20}}
-        />
-        <Input
-          multiline
-          numberOfLines={5}
-          placeholder={
-            type === 'i_find' ? 'Де знайдено, опис знахідки' : 'Опис'
-          }
-          value={formData.description}
-          onChangeText={value => handleInputChange('description', value)}
-        />
-
-        <Button
-          onPress={() => setPicImgOpen(true)}
-          style={{marginTop: 20}}
-          type="bordered"
-          before={<AppIcon name="file" />}>
-          Завантажити фото
-        </Button>
-
-        <PicImageDialog
-          visible={picImgOpen}
-          onClose={() => setPicImgOpen(false)}
-          setUris={setFormData}
-        />
-
-        <FlatList
-          scrollEnabled={false}
-          data={formData.imgUris}
-          renderItem={({item}) => (
-            <View style={{width: '25%', paddingHorizontal: 10}}>
-              <Thumbnail
-                uri={item.uri}
-                active={item.active}
-                setActiveImage={setActiveImage}
-                onDelete={onDeleteImage}
-                style={{width: '100%', aspectRatio: 1}}
-              />
-            </View>
-          )}
-          keyExtractor={item => item.uri}
-          numColumns={4}
-          columnWrapperStyle={{}}
-          contentContainerStyle={{
-            marginTop: 20,
-            rowGap: 20,
-          }}
-          style={{marginLeft: -10, marginRight: -10}}
-        />
-
-        <FilterItem title="Категорія">
-          <EditButton
-            title={formData.category || 'Вибрати категорію'}
-            onPress={() => setCategoryModalOpen(true)}
+      <KeyboardScroll>
+        <View>
+          <Input
+            placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
+            value={formData.name}
+            onChangeText={value => handleInputChange('name', value)}
+            style={{marginBottom: 20}}
           />
-        </FilterItem>
-        <FilterItem title="Локація">
-          <EditButton
-            title={formData.location || 'Локація'}
-            onPress={() => setLocationModalOpen(true)}
-          />
-        </FilterItem>
-        <FilterItem title={type === 'i_find' ? 'Дата знахідки' : 'Дата згуби'}>
-          <DatePicker
-            setOpen={() => setDateOpen(true)}
-            date={formData.date}
-            maxDate={new Date()}
-            isOpen={dateOpen}
-            onClose={() => setDateOpen(false)}
-            onChange={date => handleInputChange('date', date)}
-          />
-        </FilterItem>
-        <FilterItem title="Телефон для зв’язку">
-          <PhoneInput
-            placeholder="___ ___ __ __"
-            value={formData.phone}
-            onChange={value => handleInputChange('phone', value)}
-          />
-        </FilterItem>
-
-        <View style={{marginVertical: 20}}>
-          <Checkbox
-            label="За винагороду"
-            value={true}
-            onValueChange={() =>
-              handleInputChange('forRemuneration', !formData.forRemuneration)
+          <Input
+            multiline
+            numberOfLines={5}
+            placeholder={
+              type === 'i_find' ? 'Де знайдено, опис знахідки' : 'Опис'
             }
-            checked={formData.forRemuneration}
+            value={formData.description}
+            onChangeText={value => handleInputChange('description', value)}
           />
-        </View>
-      </View>
 
-      <Button onPress={handleFormSubmit}>Опублікувати</Button>
+          <Button
+            onPress={() => setPicImgOpen(true)}
+            style={{marginTop: 20}}
+            type="bordered"
+            before={<AppIcon name="file" />}>
+            Завантажити фото
+          </Button>
+
+          <PicImageDialog
+            visible={picImgOpen}
+            onClose={() => setPicImgOpen(false)}
+            setUris={setFormData}
+          />
+
+          <FlatList
+            scrollEnabled={false}
+            data={formData.imgUris}
+            renderItem={({item}) => (
+              <View style={{width: '25%', paddingHorizontal: 10}}>
+                <Thumbnail
+                  uri={item.uri}
+                  active={item.active}
+                  setActiveImage={setActiveImage}
+                  onDelete={onDeleteImage}
+                  style={{width: '100%', aspectRatio: 1}}
+                />
+              </View>
+            )}
+            keyExtractor={item => item.uri}
+            numColumns={4}
+            columnWrapperStyle={{}}
+            contentContainerStyle={{
+              marginTop: 20,
+              rowGap: 20,
+            }}
+            style={{marginLeft: -10, marginRight: -10}}
+          />
+
+          <FilterItem title="Категорія">
+            <EditButton
+              title={formData.category || 'Вибрати категорію'}
+              onPress={() => setCategoryModalOpen(true)}
+            />
+          </FilterItem>
+          <FilterItem title="Локація">
+            <EditButton
+              title={formData.location || 'Локація'}
+              onPress={() => setLocationModalOpen(true)}
+            />
+          </FilterItem>
+          <FilterItem
+            title={type === 'i_find' ? 'Дата знахідки' : 'Дата згуби'}>
+            <DatePicker
+              setOpen={() => setDateOpen(true)}
+              date={formData.date}
+              maxDate={new Date()}
+              isOpen={dateOpen}
+              onClose={() => setDateOpen(false)}
+              onChange={date => handleInputChange('date', date)}
+            />
+          </FilterItem>
+          <FilterItem title="Телефон для зв’язку">
+            <PhoneInput
+              placeholder="___ ___ __ __"
+              value={formData.phone}
+              onChange={value => handleInputChange('phone', value)}
+            />
+          </FilterItem>
+
+          <View style={{marginVertical: 20}}>
+            <Checkbox
+              label="За винагороду"
+              value={true}
+              onValueChange={() =>
+                handleInputChange('forRemuneration', !formData.forRemuneration)
+              }
+              checked={formData.forRemuneration}
+            />
+          </View>
+        </View>
+
+        <Button onPress={handleFormSubmit}>Опублікувати</Button>
+      </KeyboardScroll>
       <Modal
         openFrom="right"
         visible={categoryModalOpen}

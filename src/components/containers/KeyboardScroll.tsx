@@ -12,6 +12,7 @@ const KeyboardScroll = ({children}: React.PropsWithChildren) => {
   ) : (
     <KeyboardAwareScrollView
       enableOnAndroid={false}
+      contentContainerStyle={{flex: 1}}
       keyboardShouldPersistTaps="handled">
       {children}
     </KeyboardAwareScrollView>
