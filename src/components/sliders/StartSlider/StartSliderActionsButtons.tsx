@@ -2,8 +2,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View} from 'react-native';
 
-import {Button} from '@/components';
-import {slidesLength} from './slides/slides';
+import {Button, slides} from '@/components';
 
 interface IStartSliderActionsButtonsProps {
   onNext: () => void;
@@ -14,12 +13,17 @@ const StartSliderActionsButtons = ({
   onNext,
   activeSlide,
 }: IStartSliderActionsButtonsProps) => {
-  const lastSlide = activeSlide === slidesLength - 1;
+  const lastSlide = activeSlide === slides.slidesLength - 1;
   const navigation = useNavigation();
 
   const onNavigateToRegister = () => {
     navigation.navigate('SignForms', {action: 'register'});
   };
+  console.log(
+    activeSlide,
+    slides.slidesLength,
+    activeSlide === slides.slidesLength - 1,
+  );
 
   return (
     <View style={styles.buttonsContainer}>

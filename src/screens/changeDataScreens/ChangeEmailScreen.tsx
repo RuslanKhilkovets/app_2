@@ -1,17 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import Carousel from 'react-native-snap-carousel';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {Button, Input, Screen} from '@/components';
+import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {changeEmailSchema} from '@/validations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -20,13 +13,13 @@ const ChangeEmailScreen = () => {
   const carouselRef = useRef<any>();
 
   const screenWidth = Dimensions.get('window').width;
-
   const insets = useSafeAreaInsets();
 
   const {
     control,
     handleSubmit,
     formState: {errors},
+    trigger,
   } = useForm({
     resolver: yupResolver(changeEmailSchema),
     defaultValues: {
@@ -40,8 +33,20 @@ const ChangeEmailScreen = () => {
     console.log('Submitted Data:', data);
   };
 
-  const goToNextStep = () => {
-    carouselRef.current?.snapToNext();
+  const goToNextStep = async (
+    triggerName:
+      | 'password'
+      | 'email'
+      | 'code'
+      | ('password' | 'email' | 'code')[]
+      | readonly ('password' | 'email' | 'code')[]
+      | undefined,
+  ) => {
+    const isValid = await trigger(triggerName);
+
+    if (isValid) {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   const emailSteps = [
@@ -60,14 +65,15 @@ const ChangeEmailScreen = () => {
                 label="Введіть пароль, щоб змінити E-mail"
                 placeholder="Пароль"
                 secureTextEntry
-                error={errors?.password?.message}
+                error={errors.password?.message}
               />
             )}
           />
-          <View style={{marginBottom: insets.bottom + 20}}>
+
+          <View style={{marginBottom: insets.bottom}}>
             <Button
               type="primary"
-              onPress={goToNextStep}
+              onPress={() => goToNextStep('password')}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -93,10 +99,11 @@ const ChangeEmailScreen = () => {
               />
             )}
           />
-          <View style={{marginBottom: insets.bottom + 20}}>
+
+          <View style={{marginBottom: insets.bottom}}>
             <Button
               type="primary"
-              onPress={goToNextStep}
+              onPress={() => goToNextStep('email')}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -123,7 +130,8 @@ const ChangeEmailScreen = () => {
               />
             )}
           />
-          <View style={{marginBottom: insets.bottom + 20}}>
+
+          <View style={{marginBottom: insets.bottom}}>
             <Button
               type="primary"
               onPress={handleSubmit(onSubmit)}
@@ -138,10 +146,7 @@ const ChangeEmailScreen = () => {
 
   return (
     <Screen title="E-mail" backColor="#fff">
-      <KeyboardAvoidingView
-        contentContainerStyle={styles.container}
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardScroll>
         <View style={styles.container}>
           <Carousel
             ref={carouselRef}
@@ -156,7 +161,7 @@ const ChangeEmailScreen = () => {
             scrollEnabled={false}
           />
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardScroll>
     </Screen>
   );
 };

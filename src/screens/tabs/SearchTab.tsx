@@ -79,14 +79,14 @@ const SearchTab = () => {
           <ItemsContainer
             items={items}
             style={{padding: 20}}
-            containerStyle={{paddingBottom: insets.bottom + 200}}
+            containerStyle={{paddingBottom: insets.bottom}}
           />
         )}
         {activeTab === TABS.I_FIND && (
           <ItemsContainer
             items={items}
             style={{padding: 20}}
-            containerStyle={{paddingBottom: insets.bottom + 200}}
+            containerStyle={{paddingBottom: insets.bottom}}
           />
         )}
       </TabsSwitch>

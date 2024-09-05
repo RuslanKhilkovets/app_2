@@ -9,11 +9,19 @@ interface IPhoneInput {
   onChange: () => void;
   placeholder?: string;
   error?: string;
+  label?: string;
 }
 
-const PhoneInput = ({placeholder, value, onChange, error}: IPhoneInput) => {
+const PhoneInput = ({
+  placeholder,
+  value,
+  onChange,
+  error,
+  label,
+}: IPhoneInput) => {
   return (
     <Input
+      label={label}
       placeholder={placeholder || 'Телефон'}
       value={value}
       onChangeText={onChange}

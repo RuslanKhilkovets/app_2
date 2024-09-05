@@ -1,10 +1,11 @@
-import {Image, StyleSheet} from 'react-native';
+import {Image, StyleSheet, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 
 import {ImageModal} from '@/components';
 
 interface IThumbnailProps {
+  style: ViewStyle;
   uri: string;
   active?: boolean;
   setActiveImage: (uri: string) => void;
@@ -12,6 +13,7 @@ interface IThumbnailProps {
 }
 
 const Thumbnail = ({
+  style,
   uri,
   active,
   setActiveImage,
@@ -23,7 +25,8 @@ const Thumbnail = ({
     <>
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => setModalVisible(true)}>
+        onPress={() => setModalVisible(true)}
+        style={style}>
         <Image style={[styles.img, active && styles.active]} source={{uri}} />
       </TouchableOpacity>
 
@@ -44,12 +47,12 @@ export default Thumbnail;
 
 const styles = StyleSheet.create({
   img: {
-    height: 70,
-    width: 70,
     backgroundColor: '#888',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: 'transparent',
+    height: '100%',
+    width: '100%',
   },
   active: {
     borderColor: '#000',

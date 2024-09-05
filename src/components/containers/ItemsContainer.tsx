@@ -1,4 +1,4 @@
-import {FlatList, ScrollView, StyleSheet, ViewStyle} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, View, ViewStyle} from 'react-native';
 import React from 'react';
 
 import {IItem} from '@/types';
@@ -17,20 +17,16 @@ const ItemsContainer = ({
   containerStyle,
 }: IItemsContainerProps) => {
   return (
-    <ScrollView style={[containerStyle, {backgroundColor: '#fff'}]}>
-      <FlatList
-        data={items}
-        renderItem={({item}) => (
-          <Item
-            item={item}
-          />
-        )}
-        keyExtractor={item => String(item.id)}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
-        contentContainerStyle={[style]}
-      />
-    </ScrollView>
+    <FlatList
+      scrollEnabled={false}
+      data={items}
+      renderItem={({item}) => <Item item={item} />}
+      keyExtractor={item => String(item.id)}
+      numColumns={2}
+      columnWrapperStyle={styles.columnWrapper}
+      contentContainerStyle={[style]}
+      style={[containerStyle, {backgroundColor: '#fff'}]}
+    />
   );
 };
 

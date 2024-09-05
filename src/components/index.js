@@ -15,6 +15,7 @@ export {default as FilterItem} from './containers/FilterItem';
 export {default as CategoriesList} from './containers/CategoriesList';
 export {default as TabsSwitch} from './containers/TabsSwitch';
 export {default as ItemsContainer} from './containers/ItemsContainer';
+export {default as KeyboardScroll} from './containers/KeyboardScroll';
 
 export {default as ItemForm} from './ItemForm/ItemForm';
 

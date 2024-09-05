@@ -16,7 +16,7 @@ const Navigation = () => {
         translucent
       />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Tabs">
+        <Stack.Navigator initialRouteName="StartScreen">
           {routes.map(route => {
             return (
               <Stack.Screen

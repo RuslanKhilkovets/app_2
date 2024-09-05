@@ -125,7 +125,7 @@ const Input: React.FC<IInputProps> = ({
           <TouchableOpacity
             style={styles.endAdornment}
             onPress={handleTogglePasswordVisibility}>
-            <AppIcon name={!showPassword ? 'see' : 'hide'} />
+            <AppIcon name={!showPassword ? 'hide' : 'see'} />
           </TouchableOpacity>
         )}
         {searchMode && (

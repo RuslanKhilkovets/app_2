@@ -3,9 +3,8 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {Input, Button, PhoneInput} from '@/components';
+import {Input, Button, PhoneInput, KeyboardScroll} from '@/components';
 import {IRegisterData} from '@/types';
 import {registerSchema} from '@/validations';
 
@@ -45,18 +44,17 @@ const SignUpForm = () => {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardScroll>
       <View style={styles.container}>
         <View style={styles.inputs}>
           <Controller
             control={control}
             name="name"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <Input
                 placeholder="Ім’я"
                 value={value}
                 onChangeText={onChange}
-                onBlur={onBlur}
                 error={errors.name?.message}
               />
             )}
@@ -64,12 +62,11 @@ const SignUpForm = () => {
           <Controller
             control={control}
             name="email"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <Input
                 placeholder="E-mail"
                 value={value}
                 onChangeText={onChange}
-                onBlur={onBlur}
                 error={errors.email?.message}
               />
             )}
@@ -89,7 +86,7 @@ const SignUpForm = () => {
           <Controller
             control={control}
             name="password"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <Input
                 placeholder="Пароль"
                 value={value}
@@ -102,12 +99,11 @@ const SignUpForm = () => {
           <Controller
             control={control}
             name="passwordRepeat"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <Input
                 placeholder="Підтвердження паролю"
                 value={value}
                 onChangeText={onChange}
-                onBlur={onBlur}
                 secureTextEntry
                 error={errors.passwordRepeat?.message}
               />
@@ -131,7 +127,7 @@ const SignUpForm = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </KeyboardScroll>
   );
 };
 

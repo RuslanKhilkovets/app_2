@@ -1,17 +1,17 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import {Input, Button} from '@/components';
+import {Input, Button, KeyboardScroll} from '@/components';
 import {ISignData} from '@/types';
 import {loginSchema} from '@/validations';
 
 const SignInForm = () => {
   const navigation = useNavigation();
   const {
+    reset,
     control,
     handleSubmit,
     formState: {errors},
@@ -23,17 +23,24 @@ const SignInForm = () => {
     },
   });
 
-  const onSubmit = (data: ISignData) => {
-    navigation.navigate('Main');
-  };
+  const onSubmit = (data: ISignData) => {};
 
   const onForgotPassword = () => {
     navigation.navigate('ResetPassword');
   };
 
+  const onSignIn = () => {
+    handleSubmit(onSubmit);
+
+    if (!errors.email?.message || !errors.password?.message) {
+      navigation.navigate('Tabs');
+      reset();
+    }
+  };
+
   return (
-    <KeyboardAwareScrollView>
-      <View style={styles.container}>
+    <KeyboardScroll>
+      <View>
         <View style={styles.inputs}>
           <Controller
             control={control}
@@ -52,7 +59,7 @@ const SignInForm = () => {
           <Controller
             control={control}
             name="password"
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <View>
                 <Input
                   placeholder="Пароль"
@@ -70,11 +77,11 @@ const SignInForm = () => {
           Забули пароль?
         </Button>
 
-        <Button type="primary" onPress={handleSubmit(onSubmit)}>
+        <Button type="primary" onPress={onSignIn}>
           Увійти
         </Button>
       </View>
-    </KeyboardAwareScrollView>
+    </KeyboardScroll>
   );
 };
 

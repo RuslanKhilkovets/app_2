@@ -35,22 +35,20 @@ const ActivePublicationsScreen = () => {
   return (
     <Screen title="Активні публікації" backColor="#fff">
       <Pressable style={{flex: 1}} onPress={handleMenuClose}>
-        <ScrollView style={{marginTop: 25}}>
-          <FlatList
-            data={posts}
-            renderItem={({item}) => (
-              <PostItem
-                item={item}
-                isOpen={openMenuId === item.id}
-                onMenuToggle={() => handleMenuToggle(item.id)}
-                resetMenu={handleMenuClose}
-              />
-            )}
-            style={{overflow: 'visible'}}
-            keyExtractor={item => item.id.toString()}
-            contentContainerStyle={{gap: 15, overflow: 'visible'}}
-          />
-        </ScrollView>
+        <FlatList
+          data={posts}
+          renderItem={({item}) => (
+            <PostItem
+              item={item}
+              isOpen={openMenuId === item.id}
+              onMenuToggle={() => handleMenuToggle(item.id)}
+              resetMenu={handleMenuClose}
+            />
+          )}
+          style={{overflow: 'visible', marginTop: 25}}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={{gap: 15, overflow: 'visible'}}
+        />
       </Pressable>
     </Screen>
   );

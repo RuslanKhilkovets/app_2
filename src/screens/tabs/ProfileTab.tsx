@@ -24,7 +24,7 @@ const ProfileTab = () => {
   const {themes, colorScheme} = useTheme();
 
   return (
-    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
+    <View style={[styles.container]}>
       <View style={[styles.topFigure, {top: -550 + insets.top}]}></View>
       <View style={[styles.profilePicContainer, {paddingTop: insets.top + 60}]}>
         <View style={{height: 138, width: 138, position: 'relative'}}>

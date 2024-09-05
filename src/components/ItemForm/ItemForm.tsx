@@ -80,7 +80,7 @@ const ItemForm = ({type}: IItemFormProps) => {
 
   return (
     <View style={[styles.form, {paddingBottom: insets.bottom + 60}]}>
-      <ScrollView>
+      <View>
         <Input
           placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
           value={formData.name}
@@ -112,22 +112,27 @@ const ItemForm = ({type}: IItemFormProps) => {
         />
 
         <FlatList
+          scrollEnabled={false}
           data={formData.imgUris}
           renderItem={({item}) => (
-            <Thumbnail
-              uri={item.uri}
-              active={item.active}
-              setActiveImage={setActiveImage}
-              onDelete={onDeleteImage}
-            />
+            <View style={{width: '25%', paddingHorizontal: 10}}>
+              <Thumbnail
+                uri={item.uri}
+                active={item.active}
+                setActiveImage={setActiveImage}
+                onDelete={onDeleteImage}
+                style={{width: '100%', aspectRatio: 1}}
+              />
+            </View>
           )}
           keyExtractor={item => item.uri}
+          numColumns={4}
+          columnWrapperStyle={{}}
           contentContainerStyle={{
             marginTop: 20,
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            gap: 21,
+            rowGap: 20,
           }}
+          style={{marginLeft: -10, marginRight: -10}}
         />
 
         <FilterItem title="Категорія">
@@ -170,7 +175,7 @@ const ItemForm = ({type}: IItemFormProps) => {
             checked={formData.forRemuneration}
           />
         </View>
-      </ScrollView>
+      </View>
 
       <Button onPress={handleFormSubmit}>Опублікувати</Button>
       <Modal

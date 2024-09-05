@@ -19,11 +19,6 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
     console.log('Form Data:', data);
   };
 
-  const tabContent = {
-    [TABS.I_LOOKING_FOR]: <ItemForm type="i_looking_for" />,
-    [TABS.I_FIND]: <ItemForm type="i_find" />,
-  };
-
   useEffect(() => {
     Animated.timing(underlinePosition, {
       toValue: activeTab === TABS.I_LOOKING_FOR ? 0 : 1,
@@ -58,7 +53,9 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           headerStyle={{padding: 0}}>
-          {tabContent[activeTab]}
+          <ItemForm
+            type={activeTab === TABS.I_LOOKING_FOR ? 'i_looking_for' : 'i_find'}
+          />
         </TabsSwitch>
       </View>
     </Modal>

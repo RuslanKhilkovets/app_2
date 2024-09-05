@@ -67,6 +67,7 @@ const FavoritesItemsTab = () => {
           <>
             <FavoriteBlock title="Пошуки">
               <FlatList
+                scrollEnabled={false}
                 data={items}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({item}) => <SearchItem data={item} />}
@@ -77,7 +78,7 @@ const FavoritesItemsTab = () => {
               <ItemsContainer
                 items={pubs}
                 style={{paddingTop: 20}}
-                containerStyle={{paddingBottom: insets.bottom + 150}}
+                containerStyle={{paddingBottom: insets.bottom}}
               />
             </FavoriteBlock>
           </>

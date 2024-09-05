@@ -1,20 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import Carousel from 'react-native-snap-carousel';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {Button, Input, Screen} from '@/components';
+import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
 import {changePhoneSchema} from '@/validations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -30,6 +20,7 @@ const ChangePhoneScreen = () => {
     control,
     handleSubmit,
     formState: {errors},
+    trigger,
   } = useForm({
     resolver: yupResolver(changePhoneSchema),
     defaultValues: {
@@ -39,12 +30,19 @@ const ChangePhoneScreen = () => {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log('Submitted Data:', data);
-  };
+  const goToNextStep = async (
+    triggerName:
+      | 'password'
+      | 'phone'
+      | 'code'
+      | ('password' | 'phone' | 'code')[]
+      | readonly ('password' | 'phone' | 'code')[],
+  ) => {
+    const isValid = await trigger(triggerName);
 
-  const goToNextStep = () => {
-    carouselRef.current?.snapToNext();
+    if (isValid) {
+      carouselRef.current?.snapToNext();
+    }
   };
 
   const phoneSteps = [
@@ -70,7 +68,7 @@ const ChangePhoneScreen = () => {
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={goToNextStep}
+              onPress={() => goToNextStep('password')}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -87,9 +85,9 @@ const ChangePhoneScreen = () => {
             control={control}
             name="phone"
             render={({field: {onChange, value}}) => (
-              <Input
+              <PhoneInput
                 value={value}
-                onChangeText={onChange}
+                onChange={onChange}
                 label="Новий номер телефону"
                 placeholder="Телефон"
                 error={errors.phone?.message}
@@ -99,7 +97,7 @@ const ChangePhoneScreen = () => {
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={goToNextStep}
+              onPress={() => goToNextStep('phone')} // Використовуємо ту ж логіку для перевірки
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -112,25 +110,28 @@ const ChangePhoneScreen = () => {
         <View style={styles.container}>
           <View></View>
 
-          <Controller
-            control={control}
-            name="code"
-            render={({field: {onChange, value}}) => (
-              <Input
-                value={value}
-                onChangeText={onChange}
-                label="Введіть код із SMS"
-                placeholder="_ _ _ _"
-                error={errors.code?.message}
-                inputStyle={{textAlign: 'center'}}
-                maxLength={4}
-              />
-            )}
-          />
+          <View>
+            <Controller
+              control={control}
+              name="code"
+              render={({field: {onChange, value}}) => (
+                <Input
+                  value={value}
+                  onChangeText={onChange}
+                  label="Введіть код із SMS"
+                  placeholder="_ _ _ _"
+                  error={errors.code?.message}
+                  inputStyle={{textAlign: 'center'}}
+                  maxLength={4}
+                />
+              )}
+            />
+          </View>
+
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={handleSubmit(onSubmit)}
+              onPress={() => goToNextStep('code')} // В останньому кроці обробляємо дані
               style={{marginTop: 14}}>
               Змінити номер
             </Button>
@@ -142,10 +143,7 @@ const ChangePhoneScreen = () => {
 
   return (
     <Screen title="Телефон" backColor="#fff">
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.container}
-        enableOnAndroid={false}
-        keyboardShouldPersistTaps="handled">
+      <KeyboardScroll>
         <View style={{flex: 1}}>
           <Carousel
             ref={carouselRef}
@@ -160,7 +158,7 @@ const ChangePhoneScreen = () => {
             scrollEnabled={false}
           />
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardScroll>
     </Screen>
   );
 };
