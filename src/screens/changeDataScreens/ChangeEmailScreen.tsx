@@ -1,5 +1,11 @@
 import React, {useRef, useState} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import Carousel from 'react-native-snap-carousel';
@@ -113,7 +119,7 @@ const ChangeEmailScreen = () => {
                 label="Введіть код із E-mail"
                 placeholder="_ _ _ _"
                 error={errors.code?.message}
-                inputStyle={{textAlign: "center"}}
+                inputStyle={{textAlign: 'center'}}
               />
             )}
           />
@@ -132,10 +138,10 @@ const ChangeEmailScreen = () => {
 
   return (
     <Screen title="E-mail" backColor="#fff">
-      <KeyboardAwareScrollView
+      <KeyboardAvoidingView
         contentContainerStyle={styles.container}
-        enableOnAndroid={false}
-        keyboardShouldPersistTaps="handled">
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.container}>
           <Carousel
             ref={carouselRef}
@@ -150,7 +156,7 @@ const ChangeEmailScreen = () => {
             scrollEnabled={false}
           />
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 };

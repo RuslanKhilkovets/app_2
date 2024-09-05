@@ -1,15 +1,7 @@
 import React, {useState} from 'react';
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {FlatList, Pressable, ScrollView} from 'react-native';
 
-import {
-  PostItem,
-  Screen,
-} from '@/components';
+import {PostItem, Screen} from '@/components';
 
 const ActivePublicationsScreen = () => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);

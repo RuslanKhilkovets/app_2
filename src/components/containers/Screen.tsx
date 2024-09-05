@@ -1,4 +1,4 @@
-import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 import {ScreenHeader} from '@/components';

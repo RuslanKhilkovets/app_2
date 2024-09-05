@@ -75,6 +75,7 @@ const Modal = ({
 
   return (
     <NativeModal
+      statusBarTranslucent
       animationType="none"
       transparent={true}
       visible={isVisible}
@@ -87,21 +88,23 @@ const Modal = ({
               {
                 backgroundColor: headerBgColor,
                 paddingTop:
-                  Platform.OS === 'android' ? insets.top + 30 : insets.top,
+                  Platform.OS === 'android' ? insets.top + 30 : insets.top + 10,
               },
             ]}>
-            <Text
-              style={[styles.modalTitle, {color: themes[colorScheme].dark}]}>
-              {title}
-            </Text>
-            <TouchableOpacity
-              onPress={onClose}
-              style={[
-                styles.closeIcon,
-                {top: Platform.OS === 'ios' ? 50 : 35},
-              ]}>
-              <AppIcon name="delete_filter" />
-            </TouchableOpacity>
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+              }}>
+              <Text
+                style={[styles.modalTitle, {color: themes[colorScheme].dark}]}>
+                {title}
+              </Text>
+
+              <TouchableOpacity onPress={onClose} style={[styles.closeIcon]}>
+                <AppIcon name="delete_filter" />
+              </TouchableOpacity>
+            </View>
           </Animated.View>
           {children}
         </Animated.View>
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 25,
   },
@@ -137,9 +139,16 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: 'Raleway-Semibold',
     textAlign: 'center',
+    lineHeight: 26,
   },
   closeIcon: {
     position: 'absolute',
-    right: 20,
+    top: 0,
+    bottom: 0,
+    right: 0,
+
+    justifyContent: 'center',
+
+    // top:
   },
 });

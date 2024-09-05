@@ -1,6 +1,5 @@
 import {
   Animated,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -52,10 +51,6 @@ const TabsSwitch = ({
         useNativeDriver: true,
       }),
     ]).start();
-
-    StatusBar.setBackgroundColor(
-      activeTab === TABS.I_LOOKING_FOR ? '#FFEAEA' : '#EDE7FF',
-    );
   }, [activeTab]);
 
   const underlineLeft = underlinePosition.interpolate({
@@ -78,13 +73,6 @@ const TabsSwitch = ({
 
   return (
     <>
-      <StatusBar
-        animated
-        backgroundColor={
-          activeTab === TABS.I_LOOKING_FOR ? '#FFEAEA' : '#EDE7FF'
-        }
-      />
-
       <Animated.View style={[{backgroundColor}, {padding: 16}, headerStyle]}>
         {header}
       </Animated.View>

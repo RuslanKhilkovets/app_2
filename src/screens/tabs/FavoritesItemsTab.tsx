@@ -12,7 +12,7 @@ import {
 import {IItem} from '@/types';
 
 const FavoritesItemsTab = () => {
-  const [activeTab, setActiveTab] = useState(TABS.I_FIND);
+  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
 
   const insets = useSafeAreaInsets();
 
@@ -74,7 +74,11 @@ const FavoritesItemsTab = () => {
             </FavoriteBlock>
 
             <FavoriteBlock title="Публікації">
-              <ItemsContainer items={pubs} style={{paddingTop: 20}} containerStyle={{paddingBottom: insets.bottom + 150}}/>
+              <ItemsContainer
+                items={pubs}
+                style={{paddingTop: 20}}
+                containerStyle={{paddingBottom: insets.bottom + 150}}
+              />
             </FavoriteBlock>
           </>
         );

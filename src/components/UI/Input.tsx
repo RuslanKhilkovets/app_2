@@ -99,6 +99,7 @@ const Input: React.FC<IInputProps> = ({
           />
         ) : (
           <TextInput
+            textAlignVertical="top"
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}

@@ -1,7 +1,6 @@
 import {
   Image,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -25,14 +24,9 @@ const ProfileTab = () => {
   const {themes, colorScheme} = useTheme();
 
   return (
-    <ScrollView
-      style={[
-        styles.container,
-        {paddingTop: insets.top, paddingBottom: insets.bottom},
-      ]}>
-      <StatusBar backgroundColor={'#FF879D'} />
-      <View style={styles.topFigure}></View>
-      <View style={styles.profilePicContainer}>
+    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
+      <View style={[styles.topFigure, {top: -550 + insets.top}]}></View>
+      <View style={[styles.profilePicContainer, {paddingTop: insets.top + 60}]}>
         <View style={{height: 138, width: 138, position: 'relative'}}>
           <Image source={NoProfilePic} />
 
@@ -48,7 +42,7 @@ const ProfileTab = () => {
           Діана
         </Text>
       </View>
-      <View style={{padding: 16}}>
+      <ScrollView style={{padding: 16}}>
         <Text style={[styles.itemTitle, {color: themes[colorScheme].dark}]}>
           Мої публікації
         </Text>
@@ -132,12 +126,12 @@ const ProfileTab = () => {
             <Text style={styles.bottomButtonText}>Політика конфіндейності</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
       <ExitDialog
         isOpen={isExitModalOpen}
         onClose={() => setIsExitModalOpen(false)}
       />
-    </ScrollView>
+    </View>
   );
 };
 
@@ -151,12 +145,11 @@ const styles = StyleSheet.create({
   profilePicContainer: {
     position: 'relative',
     alignItems: 'center',
-    paddingTop: 60,
   },
   profilePicText: {
     fontFamily: 'Raleway-SemiBold',
     fontSize: 22,
-    marginTop: 20,
+    marginVertical: 20,
   },
   hatIcon: {
     position: 'absolute',
@@ -164,7 +157,6 @@ const styles = StyleSheet.create({
   },
   topFigure: {
     position: 'absolute',
-    top: -550,
     left: -150,
     width: 700,
     height: 700,

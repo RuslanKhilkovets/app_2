@@ -11,11 +11,11 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 import PicIcon from '@icons/pic.svg';
 import CameraIcon from '@icons/camera.svg';
-import {IModalProps} from '@/types';
+import {IAddItemFormData, IModalProps} from '@/types';
 import {Button} from '@/components';
 
 interface IPicImageDialogProps extends IModalProps {
-  setUris: (uri: {uri: string; active: boolean}) => void;
+  setUris: React.Dispatch<React.SetStateAction<IAddItemFormData>>;
 }
 
 const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
@@ -52,12 +52,16 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
       } else {
         console.log('Image selected: ', response?.assets);
         setUris(prev => {
+          const newImgUris = [...prev.imgUris];
+          response?.assets?.[0].uri &&
+            newImgUris.push({
+              uri: response?.assets[0].uri,
+              active: prev.imgUris.length === 0,
+            });
+
           return {
             ...prev,
-            imgUris: [
-              ...prev.imgUris,
-              {uri: response?.assets[0].uri, active: prev.imgUris.length === 0},
-            ],
+            imgUris: newImgUris,
           };
         });
 
@@ -74,10 +78,13 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
         console.log('Camera Error: ', response.errorMessage);
       } else {
         setUris(prev => {
-          return [
+          return {
             ...prev,
-            {uri: response?.assets[0].uri, active: prev.length === 0},
-          ];
+            imgUris: [
+              ...prev.imgUris,
+              {uri: response?.assets[0].uri, active: prev.imgUris.length === 0},
+            ],
+          };
         });
 
         onClose();
