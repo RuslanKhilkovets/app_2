@@ -58,11 +58,7 @@ const SignForm = () => {
       </View>
 
       <Animated.View style={[styles.formContainer, {opacity: fadeAnim}]}>
-        <SignWithServices
-          type={
-            action === SignTypes.SIGN_UP ? SignTypes.SIGN_UP : SignTypes.SIGN_IN
-          }
-        />
+        <SignWithServices type={SignTypes.SIGN_UP || SignTypes.SIGN_IN} />
         {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
       </Animated.View>
     </View>

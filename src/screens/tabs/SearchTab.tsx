@@ -3,9 +3,11 @@ import React, {useState} from 'react';
 
 import {
   AppIcon,
+  CategoriesList,
   FilterModal,
   Input,
   ItemsContainer,
+  Modal,
   SelectedFilterItem,
   TabsSwitch,
 } from '@/components';
@@ -18,6 +20,7 @@ const SearchTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
@@ -71,7 +74,11 @@ const SearchTab = () => {
 
             <View style={styles.categories}>
               <SelectedFilterItem text="Луцьк" />
-              <SelectedFilterItem filterMode text="Виберіть категорію" />
+              <SelectedFilterItem
+                filterMode
+                text="Виберіть категорію"
+                onPress={() => setIsCategoriesOpen(true)}
+              />
             </View>
           </View>
         }>
@@ -90,6 +97,14 @@ const SearchTab = () => {
           />
         )}
       </TabsSwitch>
+
+      <Modal
+        title="Категорії"
+        visible={isCategoriesOpen}
+        onClose={() => setIsCategoriesOpen(false)}
+        openFrom="right">
+        <CategoriesList />
+      </Modal>
 
       <FilterModal
         visible={isFilterModalVisible}

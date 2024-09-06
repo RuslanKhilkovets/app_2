@@ -1,21 +1,22 @@
-import {KeyboardAvoidingView, Platform} from 'react-native';
+import {Platform, ScrollView} from 'react-native';
 import React from 'react';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const KeyboardScroll = ({children}: React.PropsWithChildren) => {
   return Platform.OS === 'ios' ? (
-    <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      {children}
-    </KeyboardAvoidingView>
-  ) : (
     <KeyboardAwareScrollView
-      enableOnAndroid={false}
-      contentContainerStyle={{flex: 1}}
-      keyboardShouldPersistTaps="handled">
+      contentContainerStyle={{flexGrow: 1}}
+      keyboardShouldPersistTaps="handled"
+      enableOnAndroid={true}
+      extraScrollHeight={50}>
       {children}
     </KeyboardAwareScrollView>
+  ) : (
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      keyboardShouldPersistTaps="handled">
+      {children}
+    </ScrollView>
   );
 };
 

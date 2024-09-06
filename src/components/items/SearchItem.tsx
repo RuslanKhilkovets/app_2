@@ -92,14 +92,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Raleway-Regular',
     color: '#000',
     fontSize: 15,
-    flexWrap: 'wrap',
   },
   filters: {
     fontFamily: 'Raleway-Regular',
     color: '#757575',
     fontSize: 15,
     lineHeight: 18,
-    flexWrap: 'wrap',
   },
   rightContent: {
     flexDirection: 'row',
