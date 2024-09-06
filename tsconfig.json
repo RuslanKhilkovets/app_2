@@ -15,7 +15,8 @@
       "@screens/*": ["src/screens/*"],
       "@helpers/*": ["src/helpers/*"],
       "@contexts/*": ["src/contexts/*"],
-      "@navigation/*": ["src/navigation/*"]
+      "@navigation/*": ["src/navigation/*"],
+      "@store/*": ["src/store/*"]
     }
   }
 }

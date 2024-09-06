@@ -1,7 +1,9 @@
 import React from 'react';
+import {Provider} from 'react-redux';
 
 import {Navigation} from '@/navigation';
 import {ThemeContextProvider} from '@/contexts/Theme/ThemeContext';
+import {store} from '@/store';
 
 if (__DEV__) {
   require('./ReactotronConfig');
@@ -10,7 +12,9 @@ if (__DEV__) {
 function App(): React.JSX.Element {
   return (
     <ThemeContextProvider>
-      <Navigation />
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
     </ThemeContextProvider>
   );
 }
