@@ -1,10 +1,9 @@
+import {IImage} from '@/types';
+
 export default interface IAddItemFormData {
   name: string;
   description: string;
-  imgUris: {
-    uri: string;
-    active: boolean;
-  }[];
+  imgUris: IImage[];
   date: string | Date;
   phone: string;
   forRemuneration: boolean;

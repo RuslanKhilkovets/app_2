@@ -7,7 +7,7 @@ interface ItemStatusProps {
 }
 
 const ItemStatus = ({status}: ItemStatusProps) => {
-  const statusText = status === 1 ? 'Знайдено' : 'В пошуку';
+  const statusText = status === ITEM_STATUS.INACTIVE ? 'Знайдено' : 'В пошуку';
 
   return (
     <Text

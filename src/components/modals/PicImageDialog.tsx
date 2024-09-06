@@ -7,12 +7,12 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 import PicIcon from '@icons/pic.svg';
 import CameraIcon from '@icons/camera.svg';
 import {IAddItemFormData, IModalProps} from '@/types';
 import {Button} from '@/components';
+import {selectImage, takePhoto} from '@/helpers';
 
 interface IPicImageDialogProps extends IModalProps {
   setUris: React.Dispatch<React.SetStateAction<IAddItemFormData>>;
@@ -43,53 +43,49 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
     visible ? animateModal(0) : animateModal(300, onClose);
   }, [visible]);
 
-  const selectImage = () => {
-    launchImageLibrary({mediaType: 'photo'}, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else {
-        console.log('Image selected: ', response?.assets);
+  const handleSelectImage = async () => {
+    try {
+      const selectedImage = await selectImage();
+
+      if (selectedImage) {
         setUris(prev => {
           const newImgUris = [...prev.imgUris];
-          response?.assets?.[0].uri &&
-            newImgUris.push({
-              uri: response?.assets[0].uri,
-              active: prev.imgUris.length === 0,
-            });
+          newImgUris.push({
+            uri: selectedImage,
+            active: prev.imgUris.length === 0,
+          });
 
           return {
             ...prev,
             imgUris: newImgUris,
           };
         });
-
-        onClose();
       }
-    });
+    } catch (error) {
+      console.log('Error selecting image:', error);
+    } finally {
+      onClose();
+    }
   };
 
-  const takePhoto = () => {
-    launchCamera({mediaType: 'photo'}, response => {
-      if (response.didCancel) {
-        console.log('User cancelled camera');
-      } else if (response.errorCode) {
-        console.log('Camera Error: ', response.errorMessage);
-      } else {
-        setUris(prev => {
-          return {
-            ...prev,
-            imgUris: [
-              ...prev.imgUris,
-              {uri: response?.assets[0].uri, active: prev.imgUris.length === 0},
-            ],
-          };
-        });
+  const handleTakePhoto = async () => {
+    try {
+      const photoUri = await takePhoto();
 
-        onClose();
+      if (photoUri) {
+        setUris(prev => ({
+          ...prev,
+          imgUris: [
+            ...prev.imgUris,
+            {uri: photoUri, active: prev.imgUris.length === 0},
+          ],
+        }));
       }
-    });
+    } catch (error) {
+      console.log('Error taking photo:', error);
+    } finally {
+      onClose();
+    }
   };
 
   return (
@@ -100,7 +96,7 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.btn}
-            onPress={takePhoto}>
+            onPress={handleTakePhoto}>
             <CameraIcon />
             <Text style={styles.text}>Зробити фото</Text>
           </TouchableOpacity>
@@ -108,7 +104,7 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.btn}
-            onPress={selectImage}>
+            onPress={handleSelectImage}>
             <PicIcon />
             <Text style={styles.text}>Вибрати фото</Text>
           </TouchableOpacity>

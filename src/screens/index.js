@@ -7,6 +7,7 @@ export {default as StartSliderScreen} from './StartSliderScreen';
 export {default as MainScreen} from './MainScreen';
 export {default as About} from './About';
 export {default as ItemScreen} from './ItemScreen';
+export {default as ChatScreen} from './ChatScreen';
 
 // change data screens
 export {default as ActivePublicationsScreen} from './changeDataScreens/ActivePublicationsScreen';

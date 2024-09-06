@@ -14,6 +14,7 @@ import {
   ChangePhoneScreen,
   ChangeEmailScreen,
   ChangePasswordScreen,
+  ChatScreen,
 } from '@/screens';
 import {TabsNavigation} from '@/navigation';
 
@@ -26,6 +27,10 @@ export const routes: IRoutes[] = [
   {
     name: 'StartSlider',
     component: StartSliderScreen,
+  },
+  {
+    name: 'Chat',
+    component: ChatScreen,
   },
   {
     name: 'ActivePublications',

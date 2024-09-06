@@ -23,6 +23,7 @@ export {default as SearchItem} from './items/SearchItem';
 export {default as PostItem} from './items/PostItem';
 export {default as Item} from './items/Item';
 export {default as CategoriesItem} from './items/CategoriesItem';
+export {default as MessageItem} from './items/MessageItem';
 
 export {default as StartSlider} from './sliders/StartSlider/StartSlider';
 export {default as StartSliderActionsButtons} from './sliders/StartSlider/StartSliderActionsButtons';

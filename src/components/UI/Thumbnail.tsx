@@ -1,8 +1,8 @@
-import {Image, StyleSheet, ViewStyle} from 'react-native';
+import {Image, StyleSheet, View, ViewStyle} from 'react-native';
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 
-import {ImageModal} from '@/components';
+import {AppIcon, ImageModal} from '@/components';
 
 interface IThumbnailProps {
   style: ViewStyle;
@@ -10,6 +10,7 @@ interface IThumbnailProps {
   active?: boolean;
   setActiveImage: (uri: string) => void;
   onDelete: (uri: string) => void;
+  readonly?: boolean;
 }
 
 const Thumbnail = ({
@@ -18,6 +19,7 @@ const Thumbnail = ({
   active,
   setActiveImage,
   onDelete,
+  readonly = false,
 }: IThumbnailProps) => {
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,10 +30,18 @@ const Thumbnail = ({
         onPress={() => setModalVisible(true)}
         style={style}>
         <Image style={[styles.img, active && styles.active]} source={{uri}} />
+
+        {readonly && (
+          <TouchableOpacity
+            style={styles.deleteBtn}
+            onPress={() => onDelete(uri)}>
+            <AppIcon name="close" color="#fff" size={15} />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
 
       <ImageModal
-        visible={modalVisible}
+        visible={modalVisible && !readonly}
         onClose={() => setModalVisible(false)}
         makeMain={() => setActiveImage(uri)}
         rotate={() => {}}
@@ -46,6 +56,18 @@ const Thumbnail = ({
 export default Thumbnail;
 
 const styles = StyleSheet.create({
+  deleteBtn: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    backgroundColor: '#000',
+    overflow: 'visible',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   img: {
     backgroundColor: '#888',
     borderRadius: 5,

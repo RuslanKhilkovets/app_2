@@ -59,7 +59,7 @@ const TabNavigator = ({}: ITabNavigatorProps) => {
             </Text>
           ),
         })}
-        initialRouteName="search-tab">
+        initialRouteName="chats-tab">
         <Tab.Screen
           name="search-tab"
           component={SearchTab}

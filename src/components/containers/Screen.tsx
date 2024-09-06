@@ -8,7 +8,7 @@ interface IScreen extends React.PropsWithChildren {
   title?: string;
   headerShown?: boolean;
   backColor?: string;
-  bgColor?: string;
+  header?: React.ReactNode;
 }
 
 const Screen = ({
@@ -16,7 +16,7 @@ const Screen = ({
   title,
   headerShown = true,
   backColor = '#FFEAEA',
-  bgColor,
+  header,
 }: IScreen) => {
   const insets = useSafeAreaInsets();
 
@@ -31,7 +31,7 @@ const Screen = ({
         },
       ]}>
       {headerShown && <ScreenHeader>{title}</ScreenHeader>}
-
+      {header}
       {children}
     </View>
   );
