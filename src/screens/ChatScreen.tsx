@@ -72,7 +72,7 @@ const ChatScreen = () => {
           <GoBack />
         </View>
         <View style={styles.imgHeaderContainer}>
-          <Image style={styles.headerImg} />
+          <Image style={styles.img} />
         </View>
 
         <Text style={styles.name}>Тарас</Text>
