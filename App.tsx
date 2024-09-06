@@ -2,7 +2,8 @@ import React from 'react';
 import {Provider} from 'react-redux';
 
 import {Navigation} from '@/navigation';
-import {ThemeContextProvider} from '@/contexts/Theme/ThemeContext';
+import {ThemeProvider} from '@/contexts/Theme/ThemeContext';
+import {AuthProvider} from '@/contexts/Auth/AuthContext';
 import {store} from '@/store';
 
 if (__DEV__) {
@@ -10,12 +11,16 @@ if (__DEV__) {
 }
 
 function App(): React.JSX.Element {
+  console.log(AuthProvider);
+
   return (
-    <ThemeContextProvider>
-      <Provider store={store}>
-        <Navigation />
-      </Provider>
-    </ThemeContextProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Provider store={store}>
+          <Navigation />
+        </Provider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,3 +1,10 @@
-export {default as userSlice} from './user/userSlice';
-export {default as userSelectors} from './user/userSelectors';
-export {default as store} from './main';
+import {configureStore} from '@reduxjs/toolkit';
+import {user} from '@/store';
+
+const store = configureStore({
+  reducer: {
+    user: user.userReducer,
+  },
+});
+
+export default store;

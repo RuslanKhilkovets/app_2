@@ -16,7 +16,7 @@ const ThemeContext = createContext<ThemeContextProps>({
 
 export const useTheme = () => useContext(ThemeContext);
 
-export const ThemeContextProvider = ({children}: React.PropsWithChildren) => {
+export const ThemeProvider = ({children}: React.PropsWithChildren) => {
   const deviceColorScheme = useColorScheme();
 
   const [colorScheme, setColorScheme] = useState<'light' | 'dark'>(
@@ -41,5 +41,5 @@ export const ThemeContextProvider = ({children}: React.PropsWithChildren) => {
 
 export default {
   useTheme,
-  ThemeContextProvider,
+  ThemeProvider,
 };
