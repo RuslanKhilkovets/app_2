@@ -19,11 +19,6 @@ const StartSliderActionsButtons = ({
   const onNavigateToRegister = () => {
     navigation.navigate('SignForms', {action: 'register'});
   };
-  console.log(
-    activeSlide,
-    slides.slidesLength,
-    activeSlide === slides.slidesLength - 1,
-  );
 
   return (
     <View style={styles.buttonsContainer}>

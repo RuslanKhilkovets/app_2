@@ -27,7 +27,6 @@ const TabsSwitch = ({
 }: ITabSwitchProps) => {
   const underlinePosition = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
-  console.log(activeTab);
 
   const {themes, colorScheme} = useTheme();
 

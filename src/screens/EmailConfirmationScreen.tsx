@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import {Input, Button, Screen} from '@/components';
+import {Input, Button, Screen, KeyboardScroll} from '@/components';
 
 const EmailConfirmationScreen = () => {
   const [code, setCode] = useState('');
@@ -12,23 +12,25 @@ const EmailConfirmationScreen = () => {
 
   return (
     <Screen title="Підтвердження e-mai">
-      <View style={styles.contentContainer}>
-        <Input
-          value={code}
-          onChangeText={text => setCode(text)}
-          label="Введіть код, що прийшов на e-mail"
-          placeholder="Код"
-        />
+      <KeyboardScroll>
+        <View style={styles.contentContainer}>
+          <Input
+            value={code}
+            onChangeText={text => setCode(text)}
+            label="Введіть код, що прийшов на e-mail"
+            placeholder="Код"
+          />
 
-        <Button
-          type="primary"
-          onPress={onRegister}
-          style={{
-            marginTop: 14,
-          }}>
-          Зареєструватися
-        </Button>
-      </View>
+          <Button
+            type="primary"
+            onPress={onRegister}
+            style={{
+              marginTop: 14,
+            }}>
+            Зареєструватися
+          </Button>
+        </View>
+      </KeyboardScroll>
     </Screen>
   );
 };
