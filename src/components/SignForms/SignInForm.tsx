@@ -32,8 +32,9 @@ const SignInForm = () => {
 
   const onLoginSuccess = async (res: any) => {
     const {access_token, user} = handleAuthSuccess(res);
-
     await login(access_token, user);
+
+    reset();
 
     navigation.navigate('Tabs');
   };
@@ -50,8 +51,6 @@ const SignInForm = () => {
 
   const onSubmit = (data: ISignData) => {
     onLogin(data);
-
-    reset();
   };
 
   const onForgotPassword = () => {

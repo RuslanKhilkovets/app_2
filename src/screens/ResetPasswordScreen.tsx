@@ -3,12 +3,17 @@ import React, {useState, useRef} from 'react';
 import Carousel from 'react-native-snap-carousel';
 
 import {Screen, Input, Button} from '@/components';
-import {useTimer} from '@/hooks';
+import {useAuthMutation, useTimer} from '@/hooks';
+import {useForm} from 'react-hook-form';
+import {Api} from '@/api';
 
 export default function ResetPasswordScreen() {
   const [code, setCode] = useState('');
+  const [checkCodeErrors, setCheckCodeErrors] = useState('');
+  const [loginErrors, setLoginErrors] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [password_confirmation, setpassword_confirmation] = useState('');
+  const [password_confirmation, setPassword_confirmation] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
   const {timer, isTimerActive, startTimer} = useTimer(59);
@@ -16,12 +21,66 @@ export default function ResetPasswordScreen() {
 
   const screenWidth = Dimensions.get('window').width;
 
-  const getCode = () => {
-    startTimer();
-  };
+  const {isLoginLoading, mutate: loginMutate} = useAuthMutation({
+    mutationFn: Api.auth.remindPassword,
+    onSuccess: () => {
+      goToNextStep();
+    },
+    onError: ({errors}) => {
+      setLoginErrors(errors?.message);
+    },
+  });
+
+  const {isCheckCodeLoading, mutate: checkCodeMutate} = useAuthMutation({
+    mutationFn: Api.auth.checkCode,
+    onSuccess: () => {
+      goToNextStep();
+    },
+    onError: ({errors}) => {
+      setCheckCodeErrors(errors?.message);
+    },
+  });
+
+  const {mutate: resentCodeMutate} = useAuthMutation({
+    mutationFn: Api.auth.resentPasswordCode,
+    onSuccess: () => {
+      startTimer();
+    },
+    onError: ({errors}) => {
+      console.log(errors);
+    },
+  });
+
+  const {isResetPasswordLoading, mutate: resetPasswordMutate} = useAuthMutation(
+    {
+      mutationFn: Api.auth.resetPassword,
+      onSuccess: () => {
+        goToNextStep();
+      },
+      onError: ({errors}) => {
+        setCheckCodeErrors(errors?.message);
+      },
+    },
+  );
 
   const goToNextStep = () => {
     carouselRef.current?.snapToNext();
+  };
+
+  const getCodeByLogin = () => {
+    loginMutate({login});
+  };
+
+  const resentCode = () => {
+    resentCodeMutate({login});
+  };
+
+  const checkCode = () => {
+    checkCodeMutate({code, login});
+  };
+
+  const resetPassword = () => {
+    resetPasswordMutate({login, code, password, password_confirmation});
   };
 
   const steps = [
@@ -29,15 +88,17 @@ export default function ResetPasswordScreen() {
       component: (
         <View style={styles.content}>
           <Input
-            value={code}
-            onChangeText={text => setCode(text)}
+            value={login}
+            onChangeText={text => setLogin(text)}
             label="Крок 1. Введіть свій e-mail"
             placeholder="E-mail"
+            error={loginErrors}
           />
 
           <Button
             type="primary"
-            onPress={goToNextStep}
+            onPress={getCodeByLogin}
+            isLoading={isLoginLoading}
             style={{
               marginTop: 14,
             }}>
@@ -54,18 +115,22 @@ export default function ResetPasswordScreen() {
             onChangeText={text => setCode(text)}
             label="Крок 2. Введіть код"
             placeholder="Код"
+            error={checkCodeErrors}
           />
           {isTimerActive ? (
             <Text style={styles.text}>
               Код можна знову надіслати через: {timer}с
             </Text>
           ) : (
-            <Button type="secondary" onPress={getCode}>
+            <Button
+              type="secondary"
+              onPress={resentCode}
+              isLoading={isCheckCodeLoading}>
               Надіслати знову код
             </Button>
           )}
 
-          <Button type="primary" onPress={goToNextStep}>
+          <Button type="primary" onPress={checkCode}>
             Далі
           </Button>
         </View>
@@ -84,7 +149,7 @@ export default function ResetPasswordScreen() {
 
           <Input
             value={password_confirmation}
-            onChangeText={text => setpassword_confirmation(text)}
+            onChangeText={text => setPassword_confirmation(text)}
             placeholder="Підтвердження паролю"
             error={
               password !== password_confirmation &&
@@ -97,7 +162,8 @@ export default function ResetPasswordScreen() {
 
           <Button
             type="primary"
-            onPress={() => console.log('Reset password')}
+            onPress={resetPassword}
+            isLoading={isResetPasswordLoading}
             style={{
               marginTop: 14,
             }}>

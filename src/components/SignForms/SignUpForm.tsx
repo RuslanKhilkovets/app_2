@@ -37,6 +37,8 @@ const SignUpForm = () => {
   const onRequestSuccess = res => {
     const {access_token, user} = handleAuthSuccess(res);
     navigation.navigate('EmailConfirmation', {user, access_token});
+
+    setFormErrors(null);
   };
 
   const onRequestError = ({errors}) => {

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -7,20 +7,25 @@ import * as yup from 'yup';
 import {Input, Button, Screen, KeyboardScroll} from '@/components';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
-import {handleAuthSuccess} from '@/helpers';
 import {AuthContext} from '@/contexts/Auth/AuthContext';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 
-const emailConfirmationSchema = yup.object().shape({
-  code: yup
-    .string()
-    .required('Код є обов’язковим')
-    .min(4, 'Код має бути мінімум з 4 символів'),
-});
+interface IRouteParams {
+  user: {
+    email: string;
+    [key: string]: any;
+  };
+  access_token: string;
+}
 
-const EmailConfirmationScreen = () => {
-  const route = useRoute();
-  const {user, access_token} = route.params || {};
+interface IFormInput {
+  code: string;
+}
+
+const EmailConfirmationScreen: React.FC = () => {
+  const [fieldErrors, setFieldErrors] = useState();
+  const route = useRoute<RouteProp<{params: IRouteParams}, 'params'>>();
+  const {user, access_token} = route.params;
 
   const {login} = useContext(AuthContext);
 
@@ -31,8 +36,7 @@ const EmailConfirmationScreen = () => {
     handleSubmit,
     formState: {errors},
     reset,
-  } = useForm({
-    resolver: yupResolver(emailConfirmationSchema),
+  } = useForm<IFormInput>({
     defaultValues: {
       code: '',
     },
@@ -42,17 +46,15 @@ const EmailConfirmationScreen = () => {
     mutationFn: Api.auth.verify,
     onSuccess: () => {
       login(access_token, user);
-
       navigation.navigate('Tabs');
-
       reset();
     },
     onError: ({errors}) => {
-      console.log('Error:', errors);
+      setFieldErrors(errors?.message);
     },
   });
 
-  const onSubmit = (data: {code: string}) => {
+  const onSubmit = (data: IFormInput) => {
     mutate({code: data.code, login: user.email});
   };
 
@@ -69,7 +71,7 @@ const EmailConfirmationScreen = () => {
                 placeholder="Код"
                 value={value}
                 onChangeText={onChange}
-                error={errors.code?.message}
+                error={errors.code?.message || fieldErrors}
               />
             )}
           />
