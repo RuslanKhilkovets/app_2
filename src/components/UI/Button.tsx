@@ -1,16 +1,23 @@
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, Text, ViewStyle} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ViewStyle,
+  ActivityIndicator,
+} from 'react-native';
 
 type TButtonType = 'primary' | 'secondary' | 'bordered' | 'light';
 
-interface IButtonProps extends React.PropsWithChildren<{}> {
+interface IButtonProps extends React.PropsWithChildren {
   type?: TButtonType;
   onPress: (...params: any) => void;
   style?: ViewStyle;
   before?: React.JSX.Element | null;
   after?: React.JSX.Element | null;
   fullWidth?: boolean;
+  isLoading?: boolean;
 }
 
 const Button = ({
@@ -21,6 +28,7 @@ const Button = ({
   fullWidth,
   after = null,
   before = null,
+  isLoading = false,
 }: IButtonProps) => {
   const {themes, colorScheme} = useTheme();
   const textColor =
@@ -30,8 +38,13 @@ const Button = ({
     <TouchableOpacity
       style={[styles.button, styles[type], style, fullWidth && {width: '100%'}]}
       activeOpacity={0.7}
-      onPress={onPress}>
-      {before}
+      onPress={onPress}
+      disabled={isLoading}>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={textColor} />
+      ) : (
+        before
+      )}
 
       <Text
         style={[

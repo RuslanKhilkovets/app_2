@@ -3,12 +3,12 @@ import React, {useState, useRef} from 'react';
 import Carousel from 'react-native-snap-carousel';
 
 import {Screen, Input, Button} from '@/components';
-import useTimer from '@/hooks/useTimer';
+import {useTimer} from '@/hooks';
 
 export default function ResetPasswordScreen() {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
+  const [password_confirmation, setpassword_confirmation] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
   const {timer, isTimerActive, startTimer} = useTimer(59);
@@ -60,22 +60,12 @@ export default function ResetPasswordScreen() {
               Код можна знову надіслати через: {timer}с
             </Text>
           ) : (
-            <Button
-              type="secondary"
-              onPress={getCode}
-              style={{
-                marginTop: 14,
-              }}>
+            <Button type="secondary" onPress={getCode}>
               Надіслати знову код
             </Button>
           )}
 
-          <Button
-            type="primary"
-            onPress={goToNextStep}
-            style={{
-              marginTop: 14,
-            }}>
+          <Button type="primary" onPress={goToNextStep}>
             Далі
           </Button>
         </View>
@@ -93,13 +83,13 @@ export default function ResetPasswordScreen() {
           />
 
           <Input
-            value={passwordRepeat}
-            onChangeText={text => setPasswordRepeat(text)}
+            value={password_confirmation}
+            onChangeText={text => setpassword_confirmation(text)}
             placeholder="Підтвердження паролю"
             error={
-              password !== passwordRepeat &&
+              password !== password_confirmation &&
               password &&
-              passwordRepeat &&
+              password_confirmation &&
               'Паролі не співпадають'
             }
             secureTextEntry
@@ -119,7 +109,7 @@ export default function ResetPasswordScreen() {
   ];
 
   return (
-    <Screen title="Відновлення пароля" bgColor="#FFEAEA">
+    <Screen title="Відновлення пароля" backColor="#FFEAEA">
       <View style={styles.screenContainer}>
         <Carousel
           ref={carouselRef}

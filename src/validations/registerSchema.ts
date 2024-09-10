@@ -15,7 +15,7 @@ const registerSchema = yup.object().shape({
     .string()
     .min(6, 'Пароль повинен бути принаймні 6 символів')
     .required('Пароль є обов’язковим'),
-  passwordRepeat: yup
+  password_confirmation: yup
     .string()
     .oneOf([yup.ref('password'), null], 'Паролі повинні співпадати')
     .required('Підтвердження паролю є обов’язковим'),

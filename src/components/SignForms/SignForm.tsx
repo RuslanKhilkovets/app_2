@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useRoute} from '@react-navigation/native';
 import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
-
 import {SignTypes} from '@/constants';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const SignForm = () => {
   const route = useRoute();
@@ -25,7 +24,6 @@ const SignForm = () => {
   }, [action, fadeAnim]);
 
   const handleFormSwitch = (newAction: string) => {
-    fadeAnim.setValue(0);
     setAction(newAction);
   };
 
@@ -58,7 +56,7 @@ const SignForm = () => {
       </View>
 
       <Animated.View style={[styles.formContainer, {opacity: fadeAnim}]}>
-        <SignWithServices type={SignTypes.SIGN_UP || SignTypes.SIGN_IN} />
+        <SignWithServices type={action} />
         {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
       </Animated.View>
     </View>

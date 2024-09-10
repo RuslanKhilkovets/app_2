@@ -3,7 +3,9 @@ import SInfo from 'react-native-sensitive-info';
 import jwt_decode from 'jwt-decode';
 import {useDispatch} from 'react-redux';
 
-import {user} from '@/helpers';
+import {delCache} from '@/helpers';
+import {resetUser, setUser} from '@/store/user';
+import {Api} from '@/api';
 
 export const AuthContext = React.createContext();
 
@@ -36,19 +38,22 @@ export const AuthProvider = ({children}) => {
     return null;
   };
 
-  const login = (token, userData) => {
+  const login = async (token, userData) => {
     // Зберігаємо токен доступу в захищеному місці збереження
-    SInfo.setItem('accessToken', token, {
+    await SInfo.setItem('accessToken', token, {
       sharedPreferencesName: 'mySharedPrefs',
       keychainService: 'myKeychain',
-    }).then(() => setAccessToken(token));
+    }).then(() => {
+      setAccessToken(token);
+    });
 
     dispatch(setUser(userData));
   };
 
-  const logout = async () => {
-    // Видаляємо токен доступу з захищеного місця збереження
-    SInfo.deleteItem('accessToken', {
+  const logout = async token => {
+    await Api.auth.logout();
+
+    await SInfo.deleteItem('accessToken', {
       sharedPreferencesName: 'mySharedPrefs',
       keychainService: 'myKeychain',
     }).then(() => setAccessToken(null));

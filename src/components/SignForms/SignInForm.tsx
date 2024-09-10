@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useForm, Controller} from 'react-hook-form';
@@ -7,8 +7,15 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {Input, Button, KeyboardScroll} from '@/components';
 import {ISignData} from '@/types';
 import {loginSchema} from '@/validations';
+import {handleAuthSuccess} from '@/helpers';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
+import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const SignInForm = () => {
+  const [formErrors, setFormErrors] = useState<any>(null);
+  const {login} = useContext(AuthContext);
+
   const navigation = useNavigation();
   const {
     reset,
@@ -23,19 +30,32 @@ const SignInForm = () => {
     },
   });
 
-  const onSubmit = (data: ISignData) => {};
+  const onLoginSuccess = async (res: any) => {
+    const {access_token, user} = handleAuthSuccess(res);
+
+    await login(access_token, user);
+
+    navigation.navigate('Tabs');
+  };
+
+  const onLoginError = ({errors}: any) => {
+    setFormErrors({email: errors?.message, password: errors?.message});
+  };
+
+  const {mutate: onLogin, isLoading} = useAuthMutation({
+    mutationFn: Api.auth.login,
+    onError: onLoginError,
+    onSuccess: onLoginSuccess,
+  });
+
+  const onSubmit = (data: ISignData) => {
+    onLogin(data);
+
+    reset();
+  };
 
   const onForgotPassword = () => {
     navigation.navigate('ResetPassword');
-  };
-
-  const onSignIn = () => {
-    handleSubmit(onSubmit);
-
-    if (!errors.email?.message || !errors.password?.message) {
-      navigation.navigate('Tabs');
-      reset();
-    }
   };
 
   return (
@@ -45,30 +65,26 @@ const SignInForm = () => {
           <Controller
             control={control}
             name="email"
-            render={({field: {onChange, onBlur, value}}) => (
-              <View>
-                <Input
-                  placeholder="E-mail"
-                  value={value}
-                  onChangeText={onChange}
-                  error={errors?.email?.message}
-                />
-              </View>
+            render={({field: {onChange, value}}) => (
+              <Input
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+                error={errors?.email?.message || formErrors?.email}
+              />
             )}
           />
           <Controller
             control={control}
             name="password"
             render={({field: {onChange, value}}) => (
-              <View>
-                <Input
-                  placeholder="Пароль"
-                  value={value}
-                  onChangeText={onChange}
-                  error={errors?.password?.message}
-                  secureTextEntry
-                />
-              </View>
+              <Input
+                placeholder="Пароль"
+                value={value}
+                onChangeText={onChange}
+                error={errors?.password?.message || formErrors?.password}
+                secureTextEntry
+              />
             )}
           />
         </View>
@@ -77,7 +93,10 @@ const SignInForm = () => {
           Забули пароль?
         </Button>
 
-        <Button type="primary" onPress={onSignIn}>
+        <Button
+          type="primary"
+          onPress={handleSubmit(onSubmit)}
+          isLoading={isLoading}>
           Увійти
         </Button>
       </View>
@@ -95,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInForm;
+export default React.memo(SignInForm);

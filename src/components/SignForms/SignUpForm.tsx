@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
@@ -7,17 +7,23 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {Input, Button, PhoneInput, KeyboardScroll} from '@/components';
 import {IRegisterData} from '@/types';
 import {registerSchema} from '@/validations';
+import {useAuthMutation} from '@/hooks';
+import {handleAuthSuccess} from '@/helpers';
+import {Api} from '@/api';
+import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const initialData = {
   name: '',
   email: '',
   phone: '',
   password: '',
-  passwordRepeat: '',
+  password_confirmation: '',
 };
 
 const SignUpForm = () => {
   const navigation = useNavigation();
+  const [formErrors, setFormErrors] = useState<any>(null);
+
   const {
     control,
     handleSubmit,
@@ -28,15 +34,29 @@ const SignUpForm = () => {
     defaultValues: initialData,
   });
 
+  const onRequestSuccess = res => {
+    const {access_token, user} = handleAuthSuccess(res);
+    navigation.navigate('EmailConfirmation', {user, access_token});
+  };
+
+  const onRequestError = ({errors}) => {
+    setFormErrors(errors?.errors);
+  };
+
+  const {mutate, isLoading} = useAuthMutation({
+    mutationFn: Api.auth.register,
+    onSuccess: onRequestSuccess,
+    onError: onRequestError,
+  });
+
   const onSignUp = (data: IRegisterData) => {
     const preparedData = {
       ...data,
       phone: parseInt(data.phone.replace(/\D/g, ''), 10),
     };
 
+    mutate(preparedData);
     reset();
-
-    navigation.navigate('EmailConfirmation');
   };
 
   const navToPolicy = () => {
@@ -55,7 +75,7 @@ const SignUpForm = () => {
                 placeholder="Ім’я"
                 value={value}
                 onChangeText={onChange}
-                error={errors.name?.message}
+                error={errors.name?.message || formErrors?.name}
               />
             )}
           />
@@ -67,7 +87,7 @@ const SignUpForm = () => {
                 placeholder="E-mail"
                 value={value}
                 onChangeText={onChange}
-                error={errors.email?.message}
+                error={errors.email?.message || formErrors?.email}
               />
             )}
           />
@@ -79,7 +99,7 @@ const SignUpForm = () => {
                 placeholder="Телефон"
                 value={value}
                 onChange={onChange}
-                error={errors.phone?.message}
+                error={errors.phone?.message || formErrors?.phone}
               />
             )}
           />
@@ -92,26 +112,32 @@ const SignUpForm = () => {
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry
-                error={errors.password?.message}
+                error={errors.password?.message || formErrors?.password}
               />
             )}
           />
           <Controller
             control={control}
-            name="passwordRepeat"
+            name="password_confirmation"
             render={({field: {onChange, value}}) => (
               <Input
                 placeholder="Підтвердження паролю"
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry
-                error={errors.passwordRepeat?.message}
+                error={
+                  errors.password_confirmation?.message ||
+                  formErrors?.password_confirmation
+                }
               />
             )}
           />
         </View>
         <View style={styles.actions}>
-          <Button type="primary" onPress={handleSubmit(onSignUp)}>
+          <Button
+            type="primary"
+            onPress={handleSubmit(onSignUp)}
+            isLoading={isLoading}>
             Далі
           </Button>
 

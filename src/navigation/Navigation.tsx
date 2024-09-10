@@ -4,10 +4,13 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {routes} from '@/navigation';
 import {StatusBar} from 'react-native';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
+  const {user} = useSelector(state => state);
+
   return (
     <>
       <StatusBar
@@ -16,7 +19,7 @@ const Navigation = () => {
         translucent
       />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Tabs">
+        <Stack.Navigator initialRouteName="SignForms">
           {routes.map(route => {
             return (
               <Stack.Screen

@@ -16,7 +16,7 @@ const SignWithServices = ({type}: ISignWithServicesProps) => {
       style={[
         styles.container,
         {
-          paddingTop: type === SignTypes.SIGN_IN ? 80 : 0,
+          paddingTop: type === SignTypes.SIGN_IN ? 60 : 0,
         },
       ]}>
       <Text style={styles.title}>Увійти за допомогою:</Text>

@@ -1,8 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Dialog} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {SignTypes} from '@/constants';
+import {AuthContext} from '@/contexts/Auth/AuthContext';
+import SInfo from 'react-native-sensitive-info';
 
 interface IExitDialogProps {
   isOpen: boolean;
@@ -11,9 +13,22 @@ interface IExitDialogProps {
 
 const ExitDialog = ({isOpen, onClose}: IExitDialogProps) => {
   const navigation = useNavigation();
+  const {logout} = useContext(AuthContext);
 
-  const onExit = () => {
+  const onExit = async () => {
+    await logout();
     navigation.navigate('SignForms', {action: SignTypes.SIGN_IN});
+
+    onClose();
+  };
+
+  const cancel = async () => {
+    const accessToken = await SInfo.getItem('accessToken', {
+      sharedPreferencesName: 'mySharedPrefs',
+      keychainService: 'myKeychain',
+    });
+
+    console.log(accessToken + 'token nigga');
 
     onClose();
   };
@@ -23,7 +38,7 @@ const ExitDialog = ({isOpen, onClose}: IExitDialogProps) => {
       <View style={styles.container}>
         <Text style={styles.title}>Ви впевнені що хочете вийти?</Text>
         <Button onPress={onExit}>Вийти</Button>
-        <Button onPress={onClose} type="bordered">
+        <Button onPress={cancel} type="bordered">
           Скасувати
         </Button>
       </View>

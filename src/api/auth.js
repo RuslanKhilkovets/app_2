@@ -5,10 +5,10 @@ export default axios => ({
   login(payload) {
     return axios.post('/login', payload);
   },
-  logout(payload) {
-    return axios.post('/login', payload);
+  logout() {
+    return axios.post('/logout');
   },
-  socialLogin({ provider, payload }) {
+  socialLogin({provider, payload}) {
     return axios.post(`/socialite/${provider}`, payload);
   },
   verify(payload) {

@@ -22,6 +22,9 @@ client.interceptors.request.use(
       sharedPreferencesName: 'mySharedPrefs',
       keychainService: 'myKeychain',
     });
+
+    console.log(accessToken + 'successedrftgyhujiko');
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
