@@ -3,6 +3,8 @@ import {StyleSheet, View} from 'react-native';
 
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 const ChangeNameScreen = () => {
   const [name, setName] = useState('');
@@ -14,12 +16,18 @@ const ChangeNameScreen = () => {
     setName(text);
   };
 
+  const {mutate} = useAuthMutation({
+    mutationFn: Api.auth.resentPasswordCode,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: ({errors}) => {
+      console.log(errors);
+    },
+  });
+
   const handleSave = () => {
-    if (!name) {
-      setError('Введіть ім`я!');
-    } else {
-      setError('');
-    }
+    mutate({name});
   };
 
   return (

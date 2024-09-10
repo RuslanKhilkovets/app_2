@@ -6,22 +6,40 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import HatIcon from '@icons/hat.svg';
 import EditIcon from '@icons/edit.svg';
 import NoProfilePic from '@images/no_profile_pic.png';
 import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
+import {Api} from '@/api';
+import {useAuthMutation} from '@/hooks';
+import {IProfileData} from '@/types';
 
 const ProfileTab = () => {
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  const [personalData, setPersonalData] = useState<IProfileData>();
   const navigation = useNavigation();
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
+
+  const {mutate, isLoading} = useAuthMutation({
+    mutationFn: Api.profile.getInfo,
+    onSuccess: res => {
+      setPersonalData(res.data.data);
+    },
+    onError: ({errors}) => {
+      console.log(errors);
+    },
+  });
+
+  useEffect(() => {
+    mutate();
+  }, []);
 
   return (
     <View style={[styles.container]}>
@@ -39,7 +57,7 @@ const ProfileTab = () => {
 
         <Text
           style={[styles.profilePicText, {color: themes[colorScheme].dark}]}>
-          Діана
+          {personalData?.name}
         </Text>
       </View>
       <ScrollView style={{padding: 16}}>
@@ -63,13 +81,13 @@ const ProfileTab = () => {
             onPress={() => {
               navigation.navigate('ChangeName');
             }}
-            title="Діана"
+            title={personalData?.name}
           />
         </FilterItem>
 
         <FilterItem title="Локація">
           <EditButton
-            title="Луцьк"
+            title={personalData?.location || 'Невідома локація'}
             onPress={() => {
               navigation.navigate('ChangeLocation');
             }}
@@ -78,7 +96,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Телефон">
           <EditButton
-            title="095 888 77 66"
+            title={String(personalData?.phone)}
             onPress={() => {
               navigation.navigate('ChangePhone');
             }}
@@ -87,7 +105,7 @@ const ProfileTab = () => {
 
         <FilterItem title="E-mail">
           <EditButton
-            title="mymail@gmail.com"
+            title={personalData?.email}
             onPress={() => {
               navigation.navigate('ChangeEmail');
             }}

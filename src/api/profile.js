@@ -14,4 +14,7 @@ export default axios => ({
   delete() {
     return axios.delete('/my/profile');
   },
+  verifyPassword() {
+    return axios.post('/my/profile/password/verify');
+  },
 });

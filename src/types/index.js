@@ -5,3 +5,4 @@ export {default as IItem} from './IItem';
 export {default as IMessage} from './IMessage';
 export {default as IImage} from './IImage';
 export {default as IAddItemFormData} from './IAddItemFormData';
+export {default as IProfileData} from './IProfileData';

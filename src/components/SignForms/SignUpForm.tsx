@@ -52,12 +52,7 @@ const SignUpForm = () => {
   });
 
   const onSignUp = (data: IRegisterData) => {
-    const preparedData = {
-      ...data,
-      phone: parseInt(data.phone.replace(/\D/g, ''), 10),
-    };
-
-    mutate(preparedData);
+    mutate(data);
     reset();
   };
 

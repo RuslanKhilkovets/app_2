@@ -1,48 +1,48 @@
 import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
 import Carousel from 'react-native-snap-carousel';
-
 import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
-import {changePhoneSchema} from '@/validations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Api} from '@/api';
+import {useAuthMutation} from '@/hooks';
 
 const ChangePhoneScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [errors, setErrors] = useState<{
+    password?: string;
+    phone?: string;
+    code?: string;
+  }>({});
+
   const carouselRef = useRef<any>();
-
   const insets = useSafeAreaInsets();
-
   const screenWidth = Dimensions.get('window').width;
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-    trigger,
-  } = useForm({
-    resolver: yupResolver(changePhoneSchema),
-    defaultValues: {
-      password: '',
-      phone: '',
-      code: '',
-    },
-  });
+  const {mutate: passwordMutate, isLoading: isPasswordLoading} =
+    useAuthMutation({
+      mutationFn: Api.profile.verifyPassword,
+      onSuccess: () => {
+        setErrors({});
+      },
+      onError: ({errors}) => {
+        setErrors(prev => ({
+          ...prev,
+          password: errors.message,
+        }));
+      },
+    });
 
-  const goToNextStep = async (
-    triggerName:
-      | 'password'
-      | 'phone'
-      | 'code'
-      | ('password' | 'phone' | 'code')[]
-      | readonly ('password' | 'phone' | 'code')[],
-  ) => {
-    const isValid = await trigger(triggerName);
+  const checkPassword = () => {
+    console.log(password);
 
-    if (isValid) {
-      carouselRef.current?.snapToNext();
-    }
+    passwordMutate({password});
+  };
+
+  const goToNextStep = () => {
+    carouselRef.current?.snapToNext();
   };
 
   const phoneSteps = [
@@ -50,25 +50,19 @@ const ChangePhoneScreen = () => {
       component: (
         <View style={styles.container}>
           <View></View>
-
-          <Controller
-            control={control}
-            name="password"
-            render={({field: {onChange, value}}) => (
-              <Input
-                value={value}
-                onChangeText={onChange}
-                label="Введіть пароль, щоб змінити номер телефону"
-                placeholder="Пароль"
-                secureTextEntry
-                error={errors.password?.message}
-              />
-            )}
+          <Input
+            value={password}
+            onChangeText={(text: string) => setPassword(text)}
+            label="Введіть пароль, щоб змінити номер телефону"
+            placeholder="Пароль"
+            secureTextEntry
+            error={errors.password}
           />
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={() => goToNextStep('password')}
+              onPress={checkPassword}
+              isLoading={isPasswordLoading}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -80,24 +74,17 @@ const ChangePhoneScreen = () => {
       component: (
         <View style={styles.container}>
           <View></View>
-
-          <Controller
-            control={control}
-            name="phone"
-            render={({field: {onChange, value}}) => (
-              <PhoneInput
-                value={value}
-                onChange={onChange}
-                label="Новий номер телефону"
-                placeholder="Телефон"
-                error={errors.phone?.message}
-              />
-            )}
+          <PhoneInput
+            value={phone}
+            onChange={(text: string) => setPhone(text)}
+            label="Новий номер телефону"
+            placeholder="Телефон"
+            error={errors.phone}
           />
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={() => goToNextStep('phone')} // Використовуємо ту ж логіку для перевірки
+              onPress={() => goToNextStep()}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -109,29 +96,19 @@ const ChangePhoneScreen = () => {
       component: (
         <View style={styles.container}>
           <View></View>
-
-          <View>
-            <Controller
-              control={control}
-              name="code"
-              render={({field: {onChange, value}}) => (
-                <Input
-                  value={value}
-                  onChangeText={onChange}
-                  label="Введіть код із SMS"
-                  placeholder="_ _ _ _"
-                  error={errors.code?.message}
-                  inputStyle={{textAlign: 'center'}}
-                  maxLength={4}
-                />
-              )}
-            />
-          </View>
-
+          <Input
+            value={code}
+            onChangeText={setCode}
+            label="Введіть код із SMS"
+            placeholder="_ _ _ _"
+            error={errors.code}
+            inputStyle={{textAlign: 'center'}}
+            maxLength={4}
+          />
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={() => goToNextStep('code')} // В останньому кроці обробляємо дані
+              onPress={() => goToNextStep()}
               style={{marginTop: 14}}>
               Змінити номер
             </Button>

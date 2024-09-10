@@ -8,7 +8,6 @@ import {SignTypes} from '@/constants';
 
 const SignForm = () => {
   const route = useRoute();
-
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
@@ -30,7 +29,9 @@ const SignForm = () => {
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop: insets.top}]}>
-        <GoBack />
+        <View style={{position: 'absolute', left: 0, top: insets.top}}>
+          <GoBack />
+        </View>
 
         <View style={styles.headerActions}>
           <TouchableOpacity onPress={() => handleFormSwitch(SignTypes.SIGN_IN)}>
@@ -72,10 +73,11 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 20,
     flexDirection: 'row',
-    gap: 70,
+    justifyContent: 'center',
   },
   headerActions: {
     flexDirection: 'row',
+    justifyContent: 'center',
     gap: 30,
   },
   formTypeLabel: {

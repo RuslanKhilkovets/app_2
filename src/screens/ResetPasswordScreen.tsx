@@ -4,7 +4,6 @@ import Carousel from 'react-native-snap-carousel';
 
 import {Screen, Input, Button} from '@/components';
 import {useAuthMutation, useTimer} from '@/hooks';
-import {useForm} from 'react-hook-form';
 import {Api} from '@/api';
 
 export default function ResetPasswordScreen() {

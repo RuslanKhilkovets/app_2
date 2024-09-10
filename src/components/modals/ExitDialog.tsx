@@ -4,7 +4,6 @@ import {Button, Dialog} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {SignTypes} from '@/constants';
 import {AuthContext} from '@/contexts/Auth/AuthContext';
-import SInfo from 'react-native-sensitive-info';
 
 interface IExitDialogProps {
   isOpen: boolean;
@@ -23,13 +22,6 @@ const ExitDialog = ({isOpen, onClose}: IExitDialogProps) => {
   };
 
   const cancel = async () => {
-    const accessToken = await SInfo.getItem('accessToken', {
-      sharedPreferencesName: 'mySharedPrefs',
-      keychainService: 'myKeychain',
-    });
-
-    console.log(accessToken + 'token nigga');
-
     onClose();
   };
 

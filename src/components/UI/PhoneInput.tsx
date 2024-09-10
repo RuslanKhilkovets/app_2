@@ -6,7 +6,7 @@ import {Input} from '@/components';
 
 interface IPhoneInput {
   value: string;
-  onChange: () => void;
+  onChange: (() => void) | ((text: string) => void);
   placeholder?: string;
   error?: string;
   label?: string;
