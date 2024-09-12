@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -17,34 +17,58 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {AppIcon, Button, GoBack, ItemStatus} from '@/components';
 import NoProfile from '@images/no_profile_pic.png';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
+import {IItem, IUser} from '@/types';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
+import {formatDate} from '@/helpers';
+
+type RouteParamsList = {
+  MyRouteName: {
+    id: string;
+  };
+};
 
 const ItemScreen = () => {
-  const [phoneActive, setPhoneActive] = useState(false);
-  const route = useRoute();
-  const insets = useSafeAreaInsets();
-
-  const {id} = route.params || {};
   const {width: screenWidth} = Dimensions.get('window');
 
-  const {themes, colorScheme} = useTheme();
-
-  const images = [
-    {
-      uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsaDG81Hj7mKMcUPrBvlxSt8Wd2M8BdACzw&s',
-    },
-    {
-      uri: 'https://img.freepik.com/premium-photo/iphone-15-pro-black-background_946696-2759.jpg',
-    },
-  ];
-
   const [activeSlide, setActiveSlide] = useState(0);
+  const [data, setData] = useState<(IItem & {user: IUser | null}) | null>();
+  const [phoneActive, setPhoneActive] = useState(false);
+  const [error, setError] = useState('');
+  const [photos, setPhotos] = useState<string[]>([]);
+
+  const route = useRoute<RouteProp<RouteParamsList, 'MyRouteName'>>();
+
+  const {id} = route.params || {};
+
+  const {themes, colorScheme} = useTheme();
+  const insets = useSafeAreaInsets();
+
+  const {isLoading, mutate} = useAuthMutation({
+    mutationFn: Api.posts.getById,
+    onSuccess: res => {
+      setData(res.data.data);
+
+      const photos = res.data.data.photos.map(
+        (photo: {url: string}) => photo.url,
+      );
+      setPhotos(photos);
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
 
   const handlePhonePress = () => {
-    const phoneNumber = 'tel:0959998877';
+    const phoneNumber = `tel:${data?.user?.phone}`;
     Linking.openURL(phoneNumber).catch(err =>
       console.error('Failed to open phone dialer', err),
     );
   };
+
+  useEffect(() => {
+    mutate(id);
+  }, []);
 
   return (
     <ScrollView>
@@ -56,39 +80,42 @@ const ItemScreen = () => {
           </Pressable>
         </View>
 
-        <Carousel
-          loop
-          data={images}
-          renderItem={({item}) => (
-            <View style={styles.imgContainer}>
-              {item.uri ? (
-                <Image source={{uri: item.uri}} style={styles.img} />
-              ) : (
-                <View style={styles.noImg}>
-                  <Text>Немає фото</Text>
+        {photos.length !== 0 ? (
+          <>
+            <Carousel
+              loop
+              data={photos}
+              renderItem={({item}) => (
+                <View style={styles.imgContainer}>
+                  {item && <Image source={{uri: item}} style={styles.img} />}
                 </View>
               )}
-            </View>
-          )}
-          sliderWidth={screenWidth}
-          itemWidth={screenWidth}
-          inactiveSlideScale={1}
-          inactiveSlideOpacity={1}
-          onSnapToItem={index => setActiveSlide(index)}
-        />
-
-        <Pagination
-          dotsLength={images.length}
-          activeDotIndex={activeSlide}
-          containerStyle={styles.paginationContainer}
-          dotStyle={styles.paginationDot}
-          inactiveDotStyle={styles.inactiveDot}
-          inactiveDotOpacity={0.7}
-          inactiveDotScale={0.6}
-        />
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={1}
+              onSnapToItem={index => setActiveSlide(index)}
+            />
+            <Pagination
+              dotsLength={data?.photos.length || 1}
+              activeDotIndex={activeSlide}
+              containerStyle={styles.paginationContainer}
+              dotStyle={styles.paginationDot}
+              inactiveDotStyle={styles.inactiveDot}
+              inactiveDotOpacity={0.7}
+              inactiveDotScale={0.6}
+            />
+          </>
+        ) : (
+          <View style={styles.noImg}>
+            <Text style={styles.noPhotoText}>Немає фото</Text>
+          </View>
+        )}
       </View>
       <View style={styles.block}>
-        <Text style={styles.item_title}>Опубліковано 88 серпня 2022</Text>
+        <Text style={styles.item_title}>
+          Опубліковано {formatDate(new Date(data?.published_at || ''), true)}
+        </Text>
         <View
           style={{
             flexDirection: 'row',
@@ -97,7 +124,7 @@ const ItemScreen = () => {
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
             <Text style={[styles.title, {color: themes[colorScheme].dark}]}>
-              Iphone 15
+              {data?.name}
             </Text>
             <ItemStatus status={1} />
           </View>
@@ -108,7 +135,7 @@ const ItemScreen = () => {
       <View style={styles.block}>
         <Text style={[styles.item_title, {fontSize: 15}]}>Опис:</Text>
         <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
-          Був знайдений під сидінням в таксі
+          {data?.body}
         </Text>
       </View>
       <View style={styles.block}>
@@ -119,7 +146,7 @@ const ItemScreen = () => {
               styles.text,
               {marginTop: 0, color: themes[colorScheme].dark},
             ]}>
-            Знайдено 8 серпня 2022
+            Знайдено {formatDate(new Date(data?.published_at || ''), true)}
           </Text>
         </View>
         <View
@@ -135,7 +162,7 @@ const ItemScreen = () => {
               styles.text,
               {marginTop: 0, color: themes[colorScheme].dark},
             ]}>
-            м. Луцьк, Волинська область
+            {data?.location.name}
           </Text>
         </View>
       </View>
@@ -157,21 +184,22 @@ const ItemScreen = () => {
             <Image style={styles.img} source={NoProfile} />
           </View>
           <Text style={[styles.profileName, {color: themes[colorScheme].dark}]}>
-            Діана
+            {data?.user?.name || 'Невідомий користувач'}
           </Text>
         </View>
-
-        <TouchableOpacity>
-          {!phoneActive ? (
-            <Button type="secondary" onPress={() => setPhoneActive(true)}>
-              Показати телефон
-            </Button>
-          ) : (
-            <Button type="secondary" onPress={handlePhonePress}>
-              095 999 88 77
-            </Button>
-          )}
-        </TouchableOpacity>
+        {data?.user?.phone && (
+          <TouchableOpacity>
+            {!phoneActive ? (
+              <Button type="secondary" onPress={() => setPhoneActive(true)}>
+                Показати телефон
+              </Button>
+            ) : (
+              <Button type="secondary" onPress={handlePhonePress}>
+                {data?.user?.phone}
+              </Button>
+            )}
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={{marginHorizontal: 15, marginBottom: 35 + insets.bottom}}>
@@ -218,6 +246,12 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#757575',
+  },
+  noPhotoText: {
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'Raleway-Medium',
   },
   paginationContainer: {
     position: 'absolute',
@@ -243,6 +277,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Raleway-SemiBold',
     fontSize: 22,
+    width: 230,
   },
   item_title: {
     color: '#AFAFAF',

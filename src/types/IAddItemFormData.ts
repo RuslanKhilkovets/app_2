@@ -1,12 +1,12 @@
-import {IImage} from '@/types';
+import {ICategory, ILocation, IPicture} from '@/types';
 
 export default interface IAddItemFormData {
   name: string;
   description: string;
-  imgUris: IImage[];
+  imgUris: IPicture[];
   date: string | Date;
   phone: string;
   forRemuneration: boolean;
-  category: string;
-  location: string;
+  category: ICategory | null;
+  location: ILocation;
 }

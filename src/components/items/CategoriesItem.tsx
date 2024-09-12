@@ -1,43 +1,50 @@
 import {
   Image,
+  ImageStyle,
   StyleSheet,
   Text,
   TouchableOpacity,
-  ViewStyle,
+  View,
 } from 'react-native';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 
-import Phone from '../../../assets/images/phones.png';
+import {ICategory, IImage} from '@/types';
 
 interface ICategoriesItemProps {
-  text: string;
-  img: string;
-  borderColor: string;
-  style?: ViewStyle;
+  id: string;
+  name: string;
+  image?: IImage | null;
+  style?: ImageStyle;
+  setCategory: Dispatch<SetStateAction<ICategory | null>>;
 }
 
 const CategoriesItem = ({
-  text,
-  img,
-  borderColor,
+  id,
+  name,
+  image,
   style,
+  setCategory,
 }: ICategoriesItemProps) => {
+  const onCategoryChange = () => {
+    setCategory && setCategory({id, name});
+  };
+
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.7}>
-      <Image
-        source={Phone}
-        style={[
-          style,
-          styles.image,
-          {
-            borderWidth: 1,
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={onCategoryChange}>
+      <View style={styles.image}>
+        {image?.url ? (
+          <Image source={{uri: image.url}} style={[style, styles.image]} />
+        ) : (
+          <View style={[styles.noImg, styles.image]}>
+            <Text style={styles.noPhotoText}>Немає фото</Text>
+          </View>
+        )}
+      </View>
 
-            borderColor,
-          },
-        ]}
-      />
-
-      <Text style={styles.text}>{text}</Text>
+      <Text style={styles.text}>{name}</Text>
     </TouchableOpacity>
   );
 };
@@ -53,9 +60,26 @@ const styles = StyleSheet.create({
   text: {
     color: '#000',
     fontFamily: 'Raleway-Medium',
+    width: 110,
+    textAlign: 'center',
   },
   image: {
     aspectRatio: 1,
     borderRadius: 50,
+    width: 100,
+    height: 100,
+  },
+  noImg: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#757575',
+    borderRadius: 40,
+  },
+  noPhotoText: {
+    color: '#fff',
+    fontSize: 10,
+    fontFamily: 'Raleway-Medium',
   },
 });

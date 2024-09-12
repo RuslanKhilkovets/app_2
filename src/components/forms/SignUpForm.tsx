@@ -38,6 +38,7 @@ const SignUpForm = () => {
     const {access_token, user} = handleAuthSuccess(res);
     navigation.navigate('EmailConfirmation', {user, access_token});
 
+    reset();
     setFormErrors(null);
   };
 
@@ -53,7 +54,6 @@ const SignUpForm = () => {
 
   const onSignUp = (data: IRegisterData) => {
     mutate(data);
-    reset();
   };
 
   const navToPolicy = () => {

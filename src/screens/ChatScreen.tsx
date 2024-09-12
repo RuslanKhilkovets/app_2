@@ -19,12 +19,12 @@ import {
 } from '@/components';
 import {ITEM_STATUS} from '@/constants';
 import SendIcon from '@icons/send.svg';
-import {IImage} from '@/types';
+import {IPicture} from '@/types';
 import {selectImage} from '@/helpers';
 
 const ChatScreen = () => {
   const [newMessage, setNewMessage] = useState('');
-  const [imgUris, setImgUris] = useState<IImage[]>([]);
+  const [imgUris, setImgUris] = useState<IPicture[]>([]);
 
   const insets = useSafeAreaInsets();
 

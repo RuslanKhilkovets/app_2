@@ -1,5 +1,5 @@
 import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import TABS from '@/constants/Tabs';
@@ -10,62 +10,33 @@ import {
   TabsSwitch,
 } from '@/components';
 import {IItem} from '@/types';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState('');
 
   const insets = useSafeAreaInsets();
 
-  const items = [
-    {
-      id: 1,
-      name: 'Iphone 12',
-      category: 'phones',
-      dateFrom: '1 серпня',
-      dateTo: '12 серпня',
-      location: 'м.Київ',
-      photo: true,
-      results: 1,
+  const {isLoading: isPostsLoading, mutate: postsMutate} = useAuthMutation({
+    mutationFn: Api.favorites.getAll,
+    onSuccess: res => {
+      setPosts(res.data);
+      console.log(res);
     },
-    {
-      id: 2,
-      name: 'Iphone 12',
-      category: 'keys',
-      dateFrom: '1 серпня',
-      dateTo: '12 серпня',
-      location: 'м.Луцьк',
-      photo: false,
-      results: 0,
+    onError: ({errors}) => {
+      setError(errors?.message);
     },
-  ];
-
-  const pubs: IItem[] = [
-    {
-      id: 1,
-      title: 'Iphone 12',
-      city: 'Луцьк',
-      date: '9 серпня',
-    },
-    {
-      id: 2,
-      title: 'Iphone 12',
-      city: 'Луцьк',
-      date: '9 серпня',
-    },
-    {
-      id: 3,
-      title: 'Iphone 12',
-      city: 'Луцьк',
-      date: '9 серпня',
-    },
-  ];
+  });
 
   const getContent = () => {
     switch (activeTab) {
       case TABS.I_LOOKING_FOR: {
         return (
           <>
-            <FavoriteBlock title="Пошуки">
+            {/* <FavoriteBlock title="Пошуки">
               <FlatList
                 scrollEnabled={false}
                 data={items}
@@ -80,13 +51,16 @@ const FavoritesItemsTab = () => {
                 style={{paddingTop: 20}}
                 containerStyle={{paddingBottom: insets.bottom}}
               />
-            </FavoriteBlock>
+            </FavoriteBlock> */}
           </>
         );
       }
     }
   };
 
+  useEffect(() => {
+    postsMutate({type: activeTab});
+  }, []);
   return (
     <View style={styles.container}>
       <TabsSwitch

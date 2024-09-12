@@ -1,4 +1,10 @@
 export default interface IImage {
-  uri: string;
-  active: boolean;
+  id: string;
+  mime_type: string;
+  extension: string;
+  name: string;
+  is_main: boolean;
+  size: number;
+  url: string;
+  delete: boolean;
 }

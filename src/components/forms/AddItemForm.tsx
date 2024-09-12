@@ -5,20 +5,19 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   AppIcon,
   Button,
-  CategoriesList,
+  CategoriesModal,
   Checkbox,
   DatePicker,
   EditButton,
   FilterItem,
   Input,
   KeyboardScroll,
-  Modal,
+  LocationModal,
   PhoneInput,
   PicImageDialog,
-  SelectLocationList,
   Thumbnail,
 } from '@/components';
-import {IAddItemFormData} from '@/types';
+import {IAddItemFormData, ICategory, ILocation} from '@/types';
 
 type TFormType = 'i_find' | 'i_looking_for';
 
@@ -26,7 +25,7 @@ interface IItemFormProps {
   type: TFormType;
 }
 
-const ItemForm = ({type}: IItemFormProps) => {
+const AddItemForm = ({type}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     name: '',
     description: '',
@@ -34,8 +33,8 @@ const ItemForm = ({type}: IItemFormProps) => {
     imgUris: [],
     forRemuneration: false,
     phone: '',
-    category: '',
-    location: '',
+    category: null,
+    location: {name: 'Невідомо'},
   });
 
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -79,8 +78,17 @@ const ItemForm = ({type}: IItemFormProps) => {
     console.log('Form Data:', formData);
   };
 
+  useEffect(() => {
+    setCategoryModalOpen(false);
+  }, [formData.category]);
+
+  useEffect(() => {
+    setLocationModalOpen(false);
+  }, [formData.location]);
+
   return (
-    <View style={[styles.form, {paddingBottom: insets.bottom + 60}]}>
+    <View
+      style={[styles.form, {padding: 20, paddingBottom: insets.bottom + 60}]}>
       <KeyboardScroll>
         <View>
           <Input
@@ -139,13 +147,13 @@ const ItemForm = ({type}: IItemFormProps) => {
 
           <FilterItem title="Категорія">
             <EditButton
-              title={formData.category || 'Вибрати категорію'}
+              title={formData.category?.name || 'Вибрати категорію'}
               onPress={() => setCategoryModalOpen(true)}
             />
           </FilterItem>
           <FilterItem title="Локація">
             <EditButton
-              title={formData.location || 'Локація'}
+              title={formData.location.name || 'Локація'}
               onPress={() => setLocationModalOpen(true)}
             />
           </FilterItem>
@@ -182,29 +190,31 @@ const ItemForm = ({type}: IItemFormProps) => {
 
         <Button onPress={handleFormSubmit}>Опублікувати</Button>
       </KeyboardScroll>
-      <Modal
+
+      <CategoriesModal
+        setCategory={(category: ICategory) =>
+          handleInputChange('category', category)
+        }
         openFrom="right"
         visible={categoryModalOpen}
         onClose={() => setCategoryModalOpen(false)}
-        title="Категорії">
-        <CategoriesList />
-      </Modal>
-      <Modal
+      />
+
+      <LocationModal
+        setLocation={(location: ILocation) =>
+          handleInputChange('location', location)
+        }
+        location={formData.location}
         openFrom="right"
         visible={locationModalOpen}
         onClose={() => setLocationModalOpen(false)}
-        title="Локація">
-        <SelectLocationList style={{padding: 20}} />
-      </Modal>
+      />
     </View>
   );
 };
 
-export default ItemForm;
+export default AddItemForm;
 
 const styles = StyleSheet.create({
-  form: {
-    padding: 20,
-    paddingBottom: 60,
-  },
+  form: {},
 });

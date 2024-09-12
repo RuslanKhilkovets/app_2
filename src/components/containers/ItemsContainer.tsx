@@ -3,7 +3,6 @@ import React from 'react';
 
 import {IItem} from '@/types';
 import {Item} from '@/components';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface IItemsContainerProps {
   items: IItem[];

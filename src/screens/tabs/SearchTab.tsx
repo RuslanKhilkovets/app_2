@@ -1,5 +1,11 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState, useMemo} from 'react';
 
 import {
   AppIcon,
@@ -15,48 +21,51 @@ import TABS from '@/constants/Tabs';
 import {IItem} from '@/types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 const SearchTab = () => {
+  const [error, setError] = useState('');
+  const [items, setItems] = useState<{[key: string]: IItem[]}>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
+
+  const {mutate} = useAuthMutation({
+    mutationFn: Api.posts.getAll,
+    onSuccess: res => {
+      setItems(prev => ({
+        ...prev,
+        [activeTab]: res.data.data,
+      }));
+      setIsLoading(false);
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+      setIsLoading(false);
+    },
+  });
 
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
   };
 
-  const searchInputEndAdornment = (
-    <View style={styles.endAdornments}>
-      <AppIcon name="favorite_menu" size={20} />
+  useEffect(() => {
+    if (!items[activeTab]) {
+      setIsLoading(true);
+      mutate({type: activeTab});
+    }
+  }, [activeTab]);
 
-      <TouchableOpacity
-        style={[styles.filterBtn, {borderColor: themes[colorScheme].dark}]}
-        activeOpacity={0.7}
-        onPress={() => setIsFilterModalVisible(true)}>
-        <Text style={{color: themes[colorScheme].dark}}>Фільтр</Text>
-
-        <AppIcon size={10} name="filter" />
-      </TouchableOpacity>
-    </View>
+  const memoizedItems = useMemo(
+    () => items[activeTab] || [],
+    [items, activeTab],
   );
-
-  const items: IItem[] = [
-    {id: '4', title: 'Ipho', city: 'Луцьк', date: '8 fdddd 2022'},
-    {id: '5', title: 'Iphone 1', city: 'Луцьк', date: '8 серпняffff 2022'},
-    {
-      id: '3',
-      title:
-        'Iphone 12fdsdfkkllkledrfgbhnjmkl,kmjinhbugyfvtdsadfghjkl;;lkjhgfdsdsdf',
-      city: 'Луffdsfцьк',
-      date: '8 серпня 2022',
-    },
-    {id: '4', title: 'Ipho', city: 'Луцьк', date: '8 fdddd 2022'},
-    {id: '5', title: 'Iphone 1', city: 'Луцьк', date: '8 серпняffff 2022'},
-  ];
 
   return (
     <>
@@ -69,7 +78,25 @@ const SearchTab = () => {
               value={searchQuery}
               onChangeText={onSearchChange}
               placeholder="Пошук..."
-              endAdornment={searchInputEndAdornment}
+              endAdornment={
+                <View style={styles.endAdornments}>
+                  <AppIcon name="favorite_menu" size={20} />
+
+                  <TouchableOpacity
+                    style={[
+                      styles.filterBtn,
+                      {borderColor: themes[colorScheme].dark},
+                    ]}
+                    activeOpacity={0.7}
+                    onPress={() => setIsFilterModalVisible(true)}>
+                    <Text style={{color: themes[colorScheme].dark}}>
+                      Фільтр
+                    </Text>
+
+                    <AppIcon size={10} name="filter" />
+                  </TouchableOpacity>
+                </View>
+              }
             />
 
             <View style={styles.categories}>
@@ -82,19 +109,29 @@ const SearchTab = () => {
             </View>
           </View>
         }>
-        {activeTab === TABS.I_LOOKING_FOR && (
-          <ItemsContainer
-            items={items}
-            style={{padding: 20}}
-            containerStyle={{paddingBottom: insets.bottom}}
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            color={themes[colorScheme].primary}
+            style={{marginTop: 100}}
           />
-        )}
-        {activeTab === TABS.I_FIND && (
-          <ItemsContainer
-            items={items}
-            style={{padding: 20}}
-            containerStyle={{paddingBottom: insets.bottom}}
-          />
+        ) : (
+          <>
+            {activeTab === TABS.I_LOOKING_FOR && (
+              <ItemsContainer
+                items={memoizedItems}
+                style={{padding: 20}}
+                containerStyle={{paddingBottom: insets.bottom}}
+              />
+            )}
+            {activeTab === TABS.I_FIND && (
+              <ItemsContainer
+                items={memoizedItems}
+                style={{padding: 20}}
+                containerStyle={{paddingBottom: insets.bottom}}
+              />
+            )}
+          </>
         )}
       </TabsSwitch>
 

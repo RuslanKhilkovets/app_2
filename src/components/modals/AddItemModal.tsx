@@ -1,7 +1,7 @@
 import {Animated, StyleSheet, View} from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 
-import {Modal, TabsSwitch, ItemForm} from '@/components';
+import {Modal, TabsSwitch, AddItemForm} from '@/components';
 import {IModalProps} from '@/types';
 import TABS from '@/constants/Tabs';
 
@@ -53,7 +53,7 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           headerStyle={{padding: 0}}>
-          <ItemForm
+          <AddItemForm
             type={activeTab === TABS.I_LOOKING_FOR ? 'i_looking_for' : 'i_find'}
           />
         </TabsSwitch>

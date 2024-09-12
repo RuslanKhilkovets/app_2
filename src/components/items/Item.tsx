@@ -1,20 +1,14 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import Phone from '../../../assets/images/item_example.png';
 
 import {AppIcon} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
+import {IItem} from '@/types';
+import {formatDate} from '@/helpers';
 
 interface IItemProps {
-  item: {
-    id: number | string;
-    title: string;
-    date: any;
-    city: string;
-    image?: string;
-    isSaved?: boolean;
-  }
+  item: IItem;
 }
 
 const Item = ({item}: IItemProps) => {
@@ -27,8 +21,15 @@ const Item = ({item}: IItemProps) => {
       style={[styles.container, {borderColor: themes[colorScheme].bgTertiary}]}
       activeOpacity={0.7}
       onPress={() => navigation.navigate('Item', {id: item.id})}>
-      {item.image ? (
-        <Image source={Phone} style={styles.image} />
+      {item.photos.length !== 0 ? (
+        <Image
+          source={{
+            uri:
+              item.photos.find(item => item.is_main)?.url ||
+              item?.photos[0]?.url,
+          }}
+          style={styles.image}
+        />
       ) : (
         <View
           style={[
@@ -45,7 +46,7 @@ const Item = ({item}: IItemProps) => {
             style={[styles.contentTitle, {color: themes[colorScheme].dark}]}
             ellipsizeMode="tail"
             numberOfLines={1}>
-            {item.title}
+            {item.name}
           </Text>
 
           <TouchableOpacity activeOpacity={0.7}>
@@ -58,7 +59,7 @@ const Item = ({item}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {item.city}
+            {item.location.name}
           </Text>
 
           <Text
@@ -66,7 +67,7 @@ const Item = ({item}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {item.date}
+            {formatDate(new Date(item.published_at))}
           </Text>
         </View>
       </View>

@@ -3,13 +3,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   ViewStyle,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 
 import TABS from '@/constants/Tabs';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
+import {useTabAnimation} from '@/hooks';
 
 interface ITabSwitchProps extends React.PropsWithChildren {
   activeTab: TABS;
@@ -25,42 +25,9 @@ const TabsSwitch = ({
   header,
   headerStyle,
 }: ITabSwitchProps) => {
-  const underlinePosition = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(0)).current;
+  const {underlinePosition, contentOpacity} = useTabAnimation(activeTab);
 
   const {themes, colorScheme} = useTheme();
-
-  useEffect(() => {
-    Animated.timing(underlinePosition, {
-      toValue: activeTab === TABS.I_LOOKING_FOR ? 0 : 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-
-    Animated.sequence([
-      Animated.timing(contentOpacity, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 300,
-        delay: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [activeTab]);
-
-  const underlineLeft = underlinePosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '50%'],
-  });
-
-  const underlineColor = underlinePosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [themes[colorScheme].primary, themes[colorScheme].purple],
-  });
 
   const backgroundColor = underlinePosition.interpolate({
     inputRange: [0, 1],
@@ -68,6 +35,15 @@ const TabsSwitch = ({
       themes[colorScheme].pinkLight,
       themes[colorScheme].purpleLight,
     ],
+  });
+
+  const underlineColor = underlinePosition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [themes[colorScheme].primary, themes[colorScheme].purple],
+  });
+  const underlineLeft = underlinePosition.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '50%'],
   });
 
   return (

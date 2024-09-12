@@ -1,6 +1,6 @@
 enum TABS {
-  I_LOOKING_FOR = 1,
-  I_FIND = 2,
+  I_LOOKING_FOR = 'wanted',
+  I_FIND = 'founded',
 }
 
 export default TABS;
