@@ -120,10 +120,14 @@ const ItemScreen = () => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
             marginTop: 10,
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-            <Text style={[styles.title, {color: themes[colorScheme].dark}]}>
+            <Text
+              style={[styles.title, {color: themes[colorScheme].dark}]}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
               {data?.name}
             </Text>
             <ItemStatus status={1} />
