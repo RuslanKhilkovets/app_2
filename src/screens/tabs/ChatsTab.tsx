@@ -3,13 +3,7 @@ import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import TABS from '@/constants/Tabs';
-import {
-  FavoriteBlock,
-  ItemsContainer,
-  MessageItem,
-  SearchItem,
-  TabsSwitch,
-} from '@/components';
+import {MessageItem, TabsSwitch} from '@/components';
 import {IMessage} from '@/types';
 
 const ChatsTab = () => {
@@ -41,23 +35,6 @@ const ChatsTab = () => {
     },
   ];
 
-  const getContent = () => {
-    switch (activeTab) {
-      case TABS.I_LOOKING_FOR: {
-        return (
-          <FlatList
-            scrollEnabled={false}
-            data={messages}
-            renderItem={({item}) => <MessageItem item={item} />}
-            keyExtractor={item => String(item.id)}
-            contentContainerStyle={[]}
-            style={[{backgroundColor: '#fff'}]}
-          />
-        );
-      }
-    }
-  };
-
   return (
     <View style={styles.container}>
       <TabsSwitch
@@ -68,7 +45,20 @@ const ChatsTab = () => {
             Повідомлення
           </Text>
         }>
-        <ScrollView style={styles.content}>{getContent()}</ScrollView>
+        <ScrollView style={styles.content}>
+          {activeTab === TABS.I_LOOKING_FOR ? (
+            <FlatList
+              scrollEnabled={false}
+              data={messages}
+              renderItem={({item}) => <MessageItem item={item} />}
+              keyExtractor={item => String(item.id)}
+              contentContainerStyle={[]}
+              style={[{backgroundColor: '#fff'}]}
+            />
+          ) : (
+            <></>
+          )}
+        </ScrollView>
       </TabsSwitch>
     </View>
   );

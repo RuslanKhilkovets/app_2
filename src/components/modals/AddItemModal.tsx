@@ -4,11 +4,12 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Modal, TabsSwitch, AddItemForm} from '@/components';
 import {IModalProps} from '@/types';
 import TABS from '@/constants/Tabs';
+import {useTabAnimation} from '@/hooks';
 
 const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
-  const underlinePosition = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(0)).current;
+
+  const {underlinePosition} = useTabAnimation(activeTab);
 
   const backgroundColor = underlinePosition.interpolate({
     inputRange: [0, 1],
@@ -18,28 +19,6 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
   const handleFormSubmit = (data: any) => {
     console.log('Form Data:', data);
   };
-
-  useEffect(() => {
-    Animated.timing(underlinePosition, {
-      toValue: activeTab === TABS.I_LOOKING_FOR ? 0 : 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-
-    Animated.sequence([
-      Animated.timing(contentOpacity, {
-        toValue: 0,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 300,
-        delay: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [activeTab]);
 
   return (
     <Modal

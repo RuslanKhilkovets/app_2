@@ -30,6 +30,8 @@ export {default as MessageItem} from './items/MessageItem';
 export {default as FilterItem} from './items/FilterItem';
 export {default as FavoriteBlock} from './items/FavoriteBlock';
 export {default as SelectLocationItem} from './items/SelectLocationItem';
+export {default as SelectedFilterItem} from './items/SelectedFilterItem';
+export {default as MenuAddItem} from './items/MenuAddItem';
 
 export {default as StartSlider} from './sliders/StartSlider/StartSlider';
 export {default as StartSliderActionsButtons} from './sliders/StartSlider/StartSliderActionsButtons';
@@ -37,7 +39,6 @@ export {default as StartSliderActionsButtons} from './sliders/StartSlider/StartS
 export {default as Button} from './UI/Button';
 export {default as Input} from './UI/Input';
 export {default as GoBack} from './UI/GoBack';
-export {default as SelectedFilterItem} from './UI/SelectedFilterItem';
 export {default as Modal} from './UI/Modal';
 export {default as EditButton} from './UI/EditButton';
 export {default as Checkbox} from './UI/Checkbox';
@@ -45,7 +46,6 @@ export {default as DatePicker} from './UI/DatePicker';
 export {default as Logo} from './UI/Logo';
 export {default as Dialog} from './UI/Dialog';
 export {default as AppIcon} from './UI/AppIcon';
-export {default as MenuAddItem} from './UI/MenuAddItem';
 export {default as PhoneInput} from './UI/PhoneInput';
 export {default as Thumbnail} from './UI/Thumbnail';
 export {default as ItemStatus} from './UI/ItemStatus';

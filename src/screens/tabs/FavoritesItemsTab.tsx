@@ -31,12 +31,22 @@ const FavoritesItemsTab = () => {
     },
   });
 
-  const getContent = () => {
-    switch (activeTab) {
-      case TABS.I_LOOKING_FOR: {
-        return (
-          <>
-            {/* <FavoriteBlock title="Пошуки">
+  useEffect(() => {
+    postsMutate({type: activeTab});
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <TabsSwitch
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        header={
+          <Text style={[styles.title, {paddingTop: insets.top}]}>Вибране</Text>
+        }>
+        <ScrollView style={styles.content}>
+          {activeTab === TABS.I_LOOKING_FOR ? (
+            <>
+              {/* <FavoriteBlock title="Пошуки">
               <FlatList
                 scrollEnabled={false}
                 data={items}
@@ -52,24 +62,11 @@ const FavoritesItemsTab = () => {
                 containerStyle={{paddingBottom: insets.bottom}}
               />
             </FavoriteBlock> */}
-          </>
-        );
-      }
-    }
-  };
-
-  useEffect(() => {
-    postsMutate({type: activeTab});
-  }, []);
-  return (
-    <View style={styles.container}>
-      <TabsSwitch
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        header={
-          <Text style={[styles.title, {paddingTop: insets.top}]}>Вибране</Text>
-        }>
-        <ScrollView style={styles.content}>{getContent()}</ScrollView>
+            </>
+          ) : (
+            <></>
+          )}
+        </ScrollView>
       </TabsSwitch>
     </View>
   );
