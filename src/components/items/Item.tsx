@@ -53,7 +53,7 @@ const Item = ({item}: IItemProps) => {
             <AppIcon
               name="favorite_menu"
               size={15}
-              color={item.is_favorite && 'red'}
+              color={item.is_favorite ? 'red' : '#000'}
             />
           </TouchableOpacity>
         </View>
