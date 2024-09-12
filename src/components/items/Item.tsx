@@ -50,7 +50,11 @@ const Item = ({item}: IItemProps) => {
           </Text>
 
           <TouchableOpacity activeOpacity={0.7}>
-            <AppIcon name="favorite_menu" size={15} />
+            <AppIcon
+              name="favorite_menu"
+              size={15}
+              color={item.is_favorite && 'red'}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.contentFooter}>

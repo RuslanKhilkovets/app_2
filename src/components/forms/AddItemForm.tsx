@@ -18,6 +18,8 @@ import {
   Thumbnail,
 } from '@/components';
 import {IAddItemFormData, ICategory, ILocation} from '@/types';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 type TFormType = 'i_find' | 'i_looking_for';
 
@@ -36,7 +38,7 @@ const AddItemForm = ({type}: IItemFormProps) => {
     category: null,
     location: {name: 'Невідомо'},
   });
-
+  const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
@@ -44,9 +46,15 @@ const AddItemForm = ({type}: IItemFormProps) => {
 
   const insets = useSafeAreaInsets();
 
-  useEffect(() => {
-    setDateOpen(false);
-  }, [formData.date]);
+  const {isLoading, mutate} = useAuthMutation({
+    mutationFn: Api.suggest.getLocations, // TODO: change for real endpoint callback when it will created on the server side
+    onSuccess: res => {
+      console.log('success');
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
 
   const handleInputChange = (field: keyof typeof formData, value: any) => {
     setFormData(prev => ({
@@ -75,7 +83,7 @@ const AddItemForm = ({type}: IItemFormProps) => {
   };
 
   const handleFormSubmit = () => {
-    console.log('Form Data:', formData);
+    mutate();
   };
 
   useEffect(() => {
@@ -86,9 +94,12 @@ const AddItemForm = ({type}: IItemFormProps) => {
     setLocationModalOpen(false);
   }, [formData.location]);
 
+  useEffect(() => {
+    setDateOpen(false);
+  }, [formData.date]);
+
   return (
-    <View
-      style={[styles.form, {padding: 20, paddingBottom: insets.bottom + 60}]}>
+    <View style={[{padding: 20, paddingBottom: insets.bottom + 60}]}>
       <KeyboardScroll>
         <View>
           <Input
@@ -137,7 +148,6 @@ const AddItemForm = ({type}: IItemFormProps) => {
             )}
             keyExtractor={item => item.uri}
             numColumns={4}
-            columnWrapperStyle={{}}
             contentContainerStyle={{
               marginTop: 20,
               rowGap: 20,
@@ -214,7 +224,3 @@ const AddItemForm = ({type}: IItemFormProps) => {
 };
 
 export default AddItemForm;
-
-const styles = StyleSheet.create({
-  form: {},
-});

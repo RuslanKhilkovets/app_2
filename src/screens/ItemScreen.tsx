@@ -129,7 +129,7 @@ const ItemScreen = () => {
             <ItemStatus status={1} />
           </View>
 
-          <AppIcon name="favorite_menu" />
+          <AppIcon name="favorite_menu" color={data?.is_favorite && 'red'} />
         </View>
       </View>
       <View style={styles.block}>

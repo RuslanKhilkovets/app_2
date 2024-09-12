@@ -1,5 +1,5 @@
-import {Animated, StyleSheet, View} from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 
 import {Modal, TabsSwitch, AddItemForm} from '@/components';
 import {IModalProps} from '@/types';
@@ -15,10 +15,6 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
     inputRange: [0, 1],
     outputRange: ['#FFEAEA', '#EDE7FF'],
   });
-
-  const handleFormSubmit = (data: any) => {
-    console.log('Form Data:', data);
-  };
 
   return (
     <Modal
