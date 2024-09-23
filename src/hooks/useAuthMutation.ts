@@ -11,7 +11,10 @@ export const useAuthMutation = options => {
     return logout();
   }
 
-  return mutation;
+  return {
+    ...mutation,
+    isLoading: mutation.isPending,
+  };
 };
 
 export default useAuthMutation;

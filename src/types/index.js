@@ -10,3 +10,5 @@ export {default as IImage} from './IImage';
 export {default as ILocation} from './ILocation';
 export {default as IAddItemFormData} from './IAddItemFormData';
 export {default as IProfileData} from './IProfileData';
+export {default as TRouteNames} from './TRouteNames';
+export {default as IRoute} from './IRoute';

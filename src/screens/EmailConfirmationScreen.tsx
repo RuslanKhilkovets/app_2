@@ -1,8 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import {Input, Button, Screen, KeyboardScroll} from '@/components';
 import {Api} from '@/api';

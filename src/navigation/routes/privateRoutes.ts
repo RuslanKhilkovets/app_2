@@ -1,11 +1,6 @@
 import {
   MainScreen,
-  ResetPasswordScreen,
-  EmailConfirmationScreen,
   PrivacyPolicyScreen,
-  SignFormsScreen,
-  StartScreen,
-  StartSliderScreen,
   About,
   ItemScreen,
   ActivePublicationsScreen,
@@ -15,26 +10,27 @@ import {
   ChangeEmailScreen,
   ChangePasswordScreen,
   ChatScreen,
+  SignFormsScreen,
 } from '@/screens';
 import {TabsNavigation} from '@/navigation';
+import {IRoute} from '@/types';
 
-interface IRoutes {
-  name: string;
-  component: React.ComponentType;
-}
-
-export const routes: IRoutes[] = [
+export const privateRoutes: IRoute[] = [
   {
-    name: 'StartSlider',
-    component: StartSliderScreen,
+    name: 'Tabs',
+    component: TabsNavigation,
+  },
+  {
+    name: 'ActivePublications',
+    component: ActivePublicationsScreen,
   },
   {
     name: 'Chat',
     component: ChatScreen,
   },
   {
-    name: 'ActivePublications',
-    component: ActivePublicationsScreen,
+    name: 'SignForms',
+    component: SignFormsScreen,
   },
   {
     name: 'ChangeName',
@@ -60,22 +56,10 @@ export const routes: IRoutes[] = [
     name: 'Item',
     component: ItemScreen,
   },
-  {name: 'Start', component: StartScreen},
-  {
-    name: 'SignForms',
-    component: SignFormsScreen,
-  },
+
   {
     name: 'PrivacyPolicy',
     component: PrivacyPolicyScreen,
-  },
-  {
-    name: 'EmailConfirmation',
-    component: EmailConfirmationScreen,
-  },
-  {
-    name: 'ResetPassword',
-    component: ResetPasswordScreen,
   },
   {
     name: 'About',
@@ -85,10 +69,6 @@ export const routes: IRoutes[] = [
     name: 'Main',
     component: MainScreen,
   },
-  {
-    name: 'Tabs',
-    component: TabsNavigation,
-  },
 ];
 
-export default routes;
+export default privateRoutes;

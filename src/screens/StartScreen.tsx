@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import Character from '@images/character.png';
+import {navToRoute} from '@/helpers';
 
 const StartScreen = () => {
   const navigation = useNavigation();

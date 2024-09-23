@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -8,6 +8,7 @@ import {SignTypes} from '@/constants';
 
 const SignForm = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
@@ -25,14 +26,19 @@ const SignForm = () => {
   const handleFormSwitch = (newAction: string) => {
     setAction(newAction);
   };
-
+  const canGoBack = () => {
+    const state = navigation.getState();
+    const previousRoute = state?.routes[state?.index - 1];
+    return previousRoute?.name !== 'Tabs';
+  };
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop: insets.top}]}>
-        <View style={{position: 'absolute', left: 0, top: insets.top}}>
-          <GoBack />
-        </View>
-
+        {canGoBack() && (
+          <View style={{position: 'absolute', left: 0, top: insets.top}}>
+            <GoBack />
+          </View>
+        )}
         <View style={styles.headerActions}>
           <TouchableOpacity onPress={() => handleFormSwitch(SignTypes.SIGN_IN)}>
             <Text

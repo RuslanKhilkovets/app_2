@@ -4,6 +4,7 @@ import {Button, Dialog} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {SignTypes} from '@/constants';
 import {AuthContext} from '@/contexts/Auth/AuthContext';
+import {navToRoute} from '@/helpers';
 
 interface IExitDialogProps {
   isOpen: boolean;

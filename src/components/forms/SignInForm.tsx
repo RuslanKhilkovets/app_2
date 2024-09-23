@@ -13,7 +13,10 @@ import {Api} from '@/api';
 import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const SignInForm = () => {
-  const [formErrors, setFormErrors] = useState<any>(null);
+  const [formErrors, setFormErrors] = useState<any>({
+    password: '',
+    email: '',
+  });
   const {login} = useContext(AuthContext);
 
   const navigation = useNavigation();
@@ -40,7 +43,10 @@ const SignInForm = () => {
   };
 
   const onLoginError = ({errors}: any) => {
-    setFormErrors({email: errors?.message, password: errors?.message});
+    setFormErrors({
+      email: errors?.errors?.email ? errors.errors.email[0] : '',
+      password: errors?.errors?.password ? errors.errors.password[0] : '',
+    });
   };
 
   const {mutate: onLogin, isLoading} = useAuthMutation({

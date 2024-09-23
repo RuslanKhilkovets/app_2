@@ -28,7 +28,7 @@ const Button = ({
   fullWidth,
   after = null,
   before = null,
-  isLoading = false,
+  isLoading,
 }: IButtonProps) => {
   const {themes, colorScheme} = useTheme();
   const textColor =
@@ -40,7 +40,7 @@ const Button = ({
       activeOpacity={0.7}
       onPress={onPress}
       disabled={isLoading}>
-      {isLoading ? (
+      {!!isLoading ? (
         <ActivityIndicator size="small" color={textColor} />
       ) : (
         before

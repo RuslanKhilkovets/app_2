@@ -10,7 +10,6 @@ import {registerSchema} from '@/validations';
 import {useAuthMutation} from '@/hooks';
 import {handleAuthSuccess} from '@/helpers';
 import {Api} from '@/api';
-import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const initialData = {
   name: '',
