@@ -56,17 +56,17 @@ const SelectLocationList = ({
         placeholder="Пошук"
         searchMode
       />
+      <FilterItem title="Ваша локація">
+        <SelectLocationItem
+          location={location}
+          borderColor="#FF879D"
+          setLocation={setLocation}
+        />
+      </FilterItem>
       {isLoading ? (
         <ActivityIndicator style={{marginTop: 40}} />
       ) : (
         <>
-          <FilterItem title="Ваша локація">
-            <SelectLocationItem
-              location={location}
-              borderColor="#FF879D"
-              setLocation={setLocation}
-            />
-          </FilterItem>
           <ScrollView style={{flexGrow: 1, height: 550}}>
             <FilterItem title="Великі міста">
               {locationsList.map((loc: ILocation) => {

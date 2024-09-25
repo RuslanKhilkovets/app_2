@@ -20,7 +20,7 @@ import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {IItem, IUser} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
-import {formatDate} from '@/helpers';
+import {DateFormatter} from '@/helpers';
 
 type RouteParamsList = {
   MyRouteName: {
@@ -131,7 +131,11 @@ const ItemScreen = () => {
       </View>
       <View style={styles.block}>
         <Text style={styles.item_title}>
-          Опубліковано {formatDate(new Date(data?.published_at || ''), true)}
+          Опубліковано{' '}
+          {DateFormatter.formatLocalizedDate(
+            new Date(data?.published_at || ''),
+            true,
+          )}
         </Text>
         <View
           style={{
@@ -171,7 +175,11 @@ const ItemScreen = () => {
               styles.text,
               {marginTop: 0, color: themes[colorScheme].dark},
             ]}>
-            Знайдено {formatDate(new Date(data?.published_at || ''), true)}
+            Знайдено{' '}
+            {DateFormatter.formatLocalizedDate(
+              new Date(data?.published_at || ''),
+              true,
+            )}
           </Text>
         </View>
         <View

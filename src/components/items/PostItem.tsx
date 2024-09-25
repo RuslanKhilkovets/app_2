@@ -1,37 +1,60 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Pressable,
-} from 'react-native';
-import React from 'react';
-
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 import {AppIcon, ItemStatus} from '@/components';
 import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
+import {ILocation} from '@/types';
+import {DateFormatter} from '@/helpers';
+import {ITEM_STATUS} from '@/constants';
+import {IPhoto} from '@/types';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 interface IPostItemProps {
   item: {
-    id: number;
-    img: string;
-    title: string;
-    status: number;
-    city: string;
-    date: string;
-  }
+    id: string;
+    name: string;
+    location: ILocation;
+    photos: IPhoto[];
+    action_at?: Date | string;
+    status: ITEM_STATUS;
+  };
   isOpen: boolean;
   onMenuToggle: () => void;
   resetMenu: () => void;
 }
 
-const PostItem = ({
-  item,
-  isOpen,
-  onMenuToggle,
-  resetMenu,
-}: IPostItemProps) => {
+const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
+  const mainPhoto = item.photos.find((photo: IPhoto) => photo.is_main);
+  const [error, setError] = useState('');
+
+  const formattedDate =
+    typeof item.action_at === 'string'
+      ? item.action_at
+      : DateFormatter.formatDateTime(item.action_at as Date);
+
+  const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
+    mutationFn: Api.myPosts.delete,
+    onSuccess: res => {},
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
+  const {isLoading: isRestoreLoading, mutate: mutateRestore} = useAuthMutation({
+    mutationFn: Api.myPosts.restore,
+    onSuccess: res => {},
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
+
+  const onDelete = () => {
+    mutateDelete(item.id);
+  };
+
+  const onRestore = () => {
+    mutateRestore(item.id);
+  };
   return (
     <>
       <TouchableOpacity
@@ -42,13 +65,13 @@ const PostItem = ({
           <View
             style={[
               styles.imgContainer,
-              item.status === 0
+              item.status === ITEM_STATUS.INACTIVE
                 ? styles.imgContainer_inactive
                 : styles.imgContainer_active,
             ]}>
-            {item.img ? (
-              <Image source={{uri: item.img}} style={styles.img} />
-            ) : !item.img && item.status === 0 ? (
+            {item.photos && mainPhoto ? (
+              <Image source={{uri: mainPhoto.uri}} style={styles.img} />
+            ) : item.status === ITEM_STATUS.INACTIVE ? (
               <Image source={InactiveItem} style={styles.img} />
             ) : (
               <Image source={ActiveItem} style={styles.img} />
@@ -56,13 +79,15 @@ const PostItem = ({
           </View>
 
           <View style={{gap: 6}}>
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title}>{item.name}</Text>
 
             <ItemStatus status={item.status} />
 
-            <Text style={styles.bottomText}>{item.city}</Text>
+            <Text style={styles.bottomText}>
+              {item?.location?.name || 'Unknown location'}
+            </Text>
 
-            <Text style={styles.bottomText}>{item.date}</Text>
+            <Text style={styles.bottomText}>{formattedDate}</Text>
           </View>
         </View>
 
@@ -72,6 +97,7 @@ const PostItem = ({
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
+
       {isOpen && (
         <View style={styles.menuContent}>
           <TouchableOpacity
@@ -82,19 +108,11 @@ const PostItem = ({
             <Text style={styles.menuBtnText}>Редагувати</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.menuBtn}
-            onPress={() => {
-              /* Archive action */
-            }}>
+          <TouchableOpacity style={styles.menuBtn} onPress={onRestore}>
             <Text style={styles.menuBtnText}>В архів</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.menuBtn}
-            onPress={() => {
-              /* Delete action */
-            }}>
+          <TouchableOpacity style={styles.menuBtn} onPress={onDelete}>
             <Text style={styles.menuBtnText}>Видалити</Text>
           </TouchableOpacity>
         </View>

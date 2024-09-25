@@ -8,7 +8,9 @@ import {useAuthMutation} from '@/hooks';
 import {ICategory} from '@/types';
 
 interface ICategoriesListProps {
-  setCategory: Dispatch<SetStateAction<ICategory | null>>;
+  setCategory:
+    | Dispatch<SetStateAction<ICategory | null>>
+    | ((category: ICategory) => void);
   searchQuery?: string;
 }
 
@@ -43,7 +45,7 @@ const CategoriesList = ({setCategory, searchQuery}: ICategoriesListProps) => {
       ) : (
         <FlatList
           contentContainerStyle={styles.container}
-          data={filteredCategories} // Use the filtered categories
+          data={filteredCategories}
           renderItem={({item}) => (
             <CategoriesItem
               id={item.id}

@@ -3,16 +3,16 @@ import {StyleSheet, View, Modal, Pressable} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import {AppIcon, Button} from '@/components';
-import {formatDate, nullToDash} from '@/helpers';
+import {DateFormatter, nullToDash} from '@/helpers';
 
 interface IDatePickerProps {
   isOpen: boolean;
-  date: Date | string;
+  date?: Date;
   onChange: (date: Date | undefined) => void;
   onClose: () => void;
   setOpen: () => void;
-  maxDate?: Date | null | string;
-  minDate?: Date | null | string;
+  maxDate?: Date;
+  minDate?: Date;
 }
 
 const DatePicker = ({
@@ -45,7 +45,7 @@ const DatePicker = ({
         type="light"
         style={styles.selectDateButton}
         after={<AppIcon name="arrow_down" size={6} />}>
-        {nullToDash(formatDate(date))}
+        {nullToDash(DateFormatter.formatLocalizedDate(date))}
       </Button>
 
       <Modal

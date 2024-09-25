@@ -1,6 +1,6 @@
 enum ITEM_STATUS {
-  ACTIVE = 1,
-  INACTIVE = 0,
+  ACTIVE = 'archived',
+  INACTIVE = 'inactive',
 }
 
 export default ITEM_STATUS;

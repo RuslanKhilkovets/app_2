@@ -11,7 +11,10 @@ const ItemStatus = ({status}: ItemStatusProps) => {
 
   return (
     <Text
-      style={[styles.status, status === 0 ? styles.inactive : styles.active]}>
+      style={[
+        styles.status,
+        status === ITEM_STATUS.INACTIVE ? styles.inactive : styles.active,
+      ]}>
       {statusText}
     </Text>
   );

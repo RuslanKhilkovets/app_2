@@ -4,7 +4,9 @@ import {CategoriesList, Modal} from '@/components';
 import {ICategory, IModalProps} from '@/types';
 
 interface ICategoriesModalProps extends IModalProps {
-  setCategory: Dispatch<SetStateAction<ICategory | null>>;
+  setCategory:
+    | Dispatch<SetStateAction<ICategory | null>>
+    | ((category: ICategory) => void);
 }
 
 const CategoriesModal = ({

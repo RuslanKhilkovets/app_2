@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
-import {FlatList, Pressable, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Pressable} from 'react-native';
 
 import {PostItem, Screen} from '@/components';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 const ActivePublicationsScreen = () => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState([]);
 
   const handleMenuToggle = (id: number | null) => {
     setOpenMenuId(prevId => (prevId === id ? null : id));
@@ -13,24 +17,19 @@ const ActivePublicationsScreen = () => {
     setOpenMenuId(null);
   };
 
-  const posts = [
-    {
-      id: 1,
-      img: '',
-      title: 'Iphone 12',
-      status: 1,
-      city: 'Луцьк',
-      date: '9 серпня 2022',
+  const {isLoading, mutate} = useAuthMutation({
+    mutationFn: Api.myPosts.getAll,
+    onSuccess: res => {
+      setPosts(res.data.data);
     },
-    {
-      id: 2,
-      img: '',
-      title: 'Iphone 12',
-      status: 0,
-      city: 'Луцьк',
-      date: '9 серпня 2022',
+    onError: ({errors}) => {
+      setError(errors?.message);
     },
-  ];
+  });
+
+  useEffect(() => {
+    mutate();
+  }, []);
 
   return (
     <Screen title="Активні публікації" backColor="#fff">

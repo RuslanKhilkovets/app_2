@@ -38,13 +38,15 @@ interface IFilterItemsFormProps {
 
 const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
   const [selectedValues, setSelectedValues] = useState<FILTER_TYPE[]>([]);
-  const [startDate, setStartDate] = useState<Date | string>('');
-  const [endDate, setEndDate] = useState<Date | string>('');
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
   const [category, setCategory] = useState<ICategory | null>(null);
   const [staticDateType, setStaticDateType] = useState<STATIC_DATE_TYPE | null>(
     null,
   );
-  const [location, setLocation] = useState<ILocation>({name: 'Невідомо'});
+  const [location, setLocation] = useState<ILocation | null>({
+    name: 'Невідомо',
+  });
   const [error, setError] = useState('');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -62,8 +64,8 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
   });
 
   const handleChooseStaticDate = (type: STATIC_DATE_TYPE | null) => {
-    setStartDate('');
-    setEndDate('');
+    setStartDate(undefined);
+    setEndDate(undefined);
 
     setStaticDateType(type);
   };
@@ -78,8 +80,8 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
 
   useEffect(() => {
     if (staticDateType !== null) {
-      setEndDate('');
-      setEndDate('');
+      setEndDate(undefined);
+      setEndDate(undefined);
     }
   }, [staticDateType]);
 
@@ -193,7 +195,7 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
               date={startDate}
               isOpen={openStartDatePicker}
               onClose={() => setOpenStartDatePicker(false)}
-              onChange={date => setStartDate(date || '')}
+              onChange={date => setStartDate(date || undefined)}
             />
 
             <Text style={styles.selectDateText}>до</Text>
@@ -202,16 +204,16 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
               setOpen={() => setOpenEndDatePicker(true)}
               date={endDate}
               maxDate={new Date()}
-              minDate={startDate || null}
+              minDate={startDate || undefined}
               isOpen={openEndDatePicker}
               onClose={() => setOpenEndDatePicker(false)}
-              onChange={date => setEndDate(date || '')}
+              onChange={date => setEndDate(date || undefined)}
             />
           </View>
         </FilterItem>
         <FilterItem title="Локація">
           <EditButton
-            title={location.name}
+            title={location?.name || 'Unknown'}
             onPress={() => setLocationModalOpen(true)}
           />
         </FilterItem>

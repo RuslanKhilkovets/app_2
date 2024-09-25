@@ -5,7 +5,7 @@ import {AppIcon} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {IItem} from '@/types';
-import {formatDate} from '@/helpers';
+import {DateFormatter} from '@/helpers';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 
@@ -90,7 +90,7 @@ const Item = ({item}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {formatDate(new Date(item.published_at))}
+            {DateFormatter.formatLocalizedDate(new Date(item.published_at))}
           </Text>
         </View>
       </View>

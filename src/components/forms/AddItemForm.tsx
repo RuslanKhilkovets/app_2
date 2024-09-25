@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -21,6 +21,8 @@ import {IAddItemFormData, ICategory, ILocation} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
+import {DateFormatter} from '@/helpers';
+import {useSelector} from 'react-redux';
 
 interface IItemFormProps {
   onFormClose: () => void;
@@ -31,7 +33,6 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     name: '',
     description: '',
-    date: '',
     imgUris: [],
     forRemuneration: false,
     phone: '',
@@ -46,10 +47,12 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
 
   const insets = useSafeAreaInsets();
 
+  const {user_id} = useSelector(state => state)?.user;
+
   const {isLoading, mutate} = useAuthMutation({
-    mutationFn: Api.favorites.createFilter,
+    mutationFn: Api.myPosts.add,
     onSuccess: res => {
-      console.log('success');
+      onFormClose();
     },
     onError: ({errors}) => {
       setError(errors?.message);
@@ -85,18 +88,18 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   const handleFormSubmit = () => {
     const data = {
       type,
+      is_remuneration: +formData.forRemuneration,
+      status: 'archived',
       name: formData.name,
-      description: formData.description,
-      date: formData.date,
-      image: formData.imgUris,
-      forRemuneration: formData.forRemuneration,
       phone: formData.phone,
+      body: formData.description,
+      action_at: DateFormatter.formatDateTime(formData.date),
       category_id: formData.category?.id,
       location_id: formData.location.id,
+      user_id,
+      photos: [], // TODO: add photos (formData.imgUris)
     };
     mutate(data);
-
-    onFormClose();
   };
 
   useEffect(() => {
@@ -116,7 +119,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       <KeyboardScroll>
         <View>
           <Input
-            placeholder={type === 'i_find' ? 'Що знайшли' : 'Що згубили'}
+            placeholder={type === TABS.I_FIND ? 'Що знайшли' : 'Що згубили'}
             value={formData.name}
             onChangeText={value => handleInputChange('name', value)}
             style={{marginBottom: 20}}
@@ -125,7 +128,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             multiline
             numberOfLines={5}
             placeholder={
-              type === 'i_find' ? 'Де знайдено, опис знахідки' : 'Опис'
+              type === TABS.I_FIND ? 'Де знайдено, опис знахідки' : 'Опис'
             }
             value={formData.description}
             onChangeText={value => handleInputChange('description', value)}
@@ -181,7 +184,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             />
           </FilterItem>
           <FilterItem
-            title={type === 'i_find' ? 'Дата знахідки' : 'Дата згуби'}>
+            title={type === TABS.I_FIND ? 'Дата знахідки' : 'Дата згуби'}>
             <DatePicker
               setOpen={() => setDateOpen(true)}
               date={formData.date}

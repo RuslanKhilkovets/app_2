@@ -52,8 +52,6 @@ export const AuthProvider = ({children}) => {
     }).then(() => {
       dispatch(setUser(userData));
     });
-    console.log('userData: ', userData);
-    console.log('setUser: ', setUser);
   };
 
   const logout = async token => {

@@ -15,7 +15,9 @@ interface ICategoriesItemProps {
   name: string;
   image?: IImage | null;
   style?: ImageStyle;
-  setCategory: Dispatch<SetStateAction<ICategory | null>>;
+  setCategory:
+    | Dispatch<SetStateAction<ICategory | null>>
+    | ((category: ICategory) => void);
 }
 
 const CategoriesItem = ({
