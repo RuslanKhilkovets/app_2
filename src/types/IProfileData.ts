@@ -1,3 +1,5 @@
+import ILocation from '@/types/ILocation';
+
 export default interface IProfileData {
   id: string;
   name: string;
@@ -7,7 +9,7 @@ export default interface IProfileData {
   updated_at: Date;
   is_online: boolean;
   is_verified: boolean;
-  location: null;
+  location: ILocation;
   photo: null;
   added: null;
 }

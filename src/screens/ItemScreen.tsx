@@ -36,6 +36,7 @@ const ItemScreen = () => {
   const [phoneActive, setPhoneActive] = useState(false);
   const [error, setError] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const route = useRoute<RouteProp<RouteParamsList, 'MyRouteName'>>();
 
@@ -44,10 +45,11 @@ const ItemScreen = () => {
   const {themes, colorScheme} = useTheme();
   const insets = useSafeAreaInsets();
 
-  const {isLoading, mutate} = useAuthMutation({
+  const {isLoading: isPostLoading, mutate: postMutate} = useAuthMutation({
     mutationFn: Api.posts.getById,
     onSuccess: res => {
       setData(res.data.data);
+      setIsFavorite(res.data.data.is_favorite);
 
       const photos = res.data.data.photos.map(
         (photo: {url: string}) => photo.url,
@@ -59,6 +61,21 @@ const ItemScreen = () => {
     },
   });
 
+  const {isLoading: isFavoriteLoading, mutate: favoriteMutate} =
+    useAuthMutation({
+      mutationFn: Api.favorites.togglePost,
+      onSuccess: res => {
+        setIsFavorite(res.data.result);
+      },
+      onError: ({errors}) => {
+        setError(errors?.message);
+      },
+    });
+
+  const handleAddToFavourites = () => {
+    favoriteMutate(id);
+  };
+
   const handlePhonePress = () => {
     const phoneNumber = `tel:${data?.user?.phone}`;
     Linking.openURL(phoneNumber).catch(err =>
@@ -67,7 +84,7 @@ const ItemScreen = () => {
   };
 
   useEffect(() => {
-    mutate(id);
+    postMutate(id);
   }, []);
 
   return (
@@ -132,11 +149,12 @@ const ItemScreen = () => {
             </Text>
             <ItemStatus status={1} />
           </View>
-
-          <AppIcon
-            name="favorite_menu"
-            color={data?.is_favorite ? 'red' : '#000'}
-          />
+          <TouchableOpacity onPress={handleAddToFavourites} activeOpacity={0.7}>
+            <AppIcon
+              name={isFavorite ? 'liked_card' : 'favorite_menu'}
+              color={'red'}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.block}>

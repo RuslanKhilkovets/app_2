@@ -17,11 +17,15 @@ import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
-import {IProfileData} from '@/types';
+import {ILocation, IProfileData} from '@/types';
+import {formatPhone} from '@/helpers';
+import {useSelector} from 'react-redux';
 
 const ProfileTab = () => {
+  const userData = useSelector(state => state)?.user;
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [personalData, setPersonalData] = useState<IProfileData>();
+  const [personalData, setPersonalData] = useState<IProfileData>(userData);
+
   const navigation = useNavigation();
 
   const insets = useSafeAreaInsets();
@@ -40,6 +44,10 @@ const ProfileTab = () => {
   useEffect(() => {
     mutate();
   }, []);
+
+  useEffect(() => {
+    setPersonalData(userData);
+  }, [userData]);
 
   return (
     <View style={[styles.container]}>
@@ -87,7 +95,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Локація">
           <EditButton
-            title={personalData?.location || 'Невідома локація'}
+            title={personalData?.location.name || 'Невідома локація'}
             onPress={() => {
               navigation.navigate('ChangeLocation');
             }}
@@ -96,7 +104,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Телефон">
           <EditButton
-            title={String(personalData?.phone)}
+            title={formatPhone(String(personalData?.phone))}
             onPress={() => {
               navigation.navigate('ChangePhone');
             }}

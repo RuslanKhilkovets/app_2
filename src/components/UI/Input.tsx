@@ -32,6 +32,7 @@ interface IInputProps {
   endAdornment?: React.JSX.Element | null;
   numberOfLines?: number;
   multiline?: boolean;
+  ref?: React.LegacyRef<TextInput>;
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -52,6 +53,7 @@ const Input: React.FC<IInputProps> = ({
   endAdornment,
   numberOfLines = 1,
   multiline = false,
+  ref,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -99,6 +101,7 @@ const Input: React.FC<IInputProps> = ({
           />
         ) : (
           <TextInput
+            ref={ref}
             textAlignVertical="top"
             value={value}
             onChangeText={onChangeText}

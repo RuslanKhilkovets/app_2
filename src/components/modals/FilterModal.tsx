@@ -1,5 +1,5 @@
-import {Animated, View} from 'react-native';
-import React, {useState, useRef} from 'react';
+import {View} from 'react-native';
+import React, {useState} from 'react';
 
 import {Modal, TabsSwitch, FilterItemsForm} from '@/components';
 import {IModalProps} from '@/types';

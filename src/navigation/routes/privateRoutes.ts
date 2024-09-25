@@ -17,6 +17,10 @@ import {IRoute} from '@/types';
 
 export const privateRoutes: IRoute[] = [
   {
+    name: 'Main',
+    component: MainScreen,
+  },
+  {
     name: 'Tabs',
     component: TabsNavigation,
   },
@@ -64,10 +68,6 @@ export const privateRoutes: IRoute[] = [
   {
     name: 'About',
     component: About,
-  },
-  {
-    name: 'Main',
-    component: MainScreen,
   },
 ];
 

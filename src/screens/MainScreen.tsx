@@ -1,17 +1,12 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
-
-import {Screen, Menu, Categories} from '@/components';
+import {Screen, Categories} from '@/components';
+import {View} from 'react-native';
 
 const MainScreen = () => {
   return (
-    <Screen headerShown={false} backColor="#fff">
+    <View style={{flex: 1}}>
       <Categories />
-      <Menu />
-    </Screen>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default MainScreen;

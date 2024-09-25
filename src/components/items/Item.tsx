@@ -1,20 +1,39 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 import {AppIcon} from '@/components';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {IItem} from '@/types';
 import {formatDate} from '@/helpers';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 interface IItemProps {
   item: IItem;
 }
 
 const Item = ({item}: IItemProps) => {
+  const [isFavorite, setIsFavorite] = useState(item?.is_favorite);
+  const [error, setError] = useState('');
   const navigation = useNavigation();
 
   const {themes, colorScheme} = useTheme();
+
+  const handleAddToFavourites = () => {
+    favoriteMutate(item.id);
+  };
+
+  const {isLoading: isFavoriteLoading, mutate: favoriteMutate} =
+    useAuthMutation({
+      mutationFn: Api.favorites.togglePost,
+      onSuccess: res => {
+        setIsFavorite(res.data.result);
+      },
+      onError: ({errors}) => {
+        setError(errors?.message);
+      },
+    });
 
   return (
     <TouchableOpacity
@@ -49,11 +68,11 @@ const Item = ({item}: IItemProps) => {
             {item.name}
           </Text>
 
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={handleAddToFavourites}>
             <AppIcon
-              name="favorite_menu"
+              name={isFavorite ? 'liked_card' : 'favorite_menu'}
               size={15}
-              color={item.is_favorite ? 'red' : '#000'}
+              color={isFavorite ? 'red' : '#000'}
             />
           </TouchableOpacity>
         </View>

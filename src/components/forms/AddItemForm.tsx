@@ -20,14 +20,14 @@ import {
 import {IAddItemFormData, ICategory, ILocation} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
-
-type TFormType = 'i_find' | 'i_looking_for';
+import TABS from '@/constants/Tabs';
 
 interface IItemFormProps {
-  type: TFormType;
+  onFormClose: () => void;
+  type: TABS;
 }
 
-const AddItemForm = ({type}: IItemFormProps) => {
+const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     name: '',
     description: '',
@@ -47,7 +47,7 @@ const AddItemForm = ({type}: IItemFormProps) => {
   const insets = useSafeAreaInsets();
 
   const {isLoading, mutate} = useAuthMutation({
-    mutationFn: Api.suggest.getLocations, // TODO: change for real endpoint callback when it will created on the server side
+    mutationFn: Api.favorites.createFilter,
     onSuccess: res => {
       console.log('success');
     },
@@ -83,7 +83,20 @@ const AddItemForm = ({type}: IItemFormProps) => {
   };
 
   const handleFormSubmit = () => {
-    mutate();
+    const data = {
+      type,
+      name: formData.name,
+      description: formData.description,
+      date: formData.date,
+      image: formData.imgUris,
+      forRemuneration: formData.forRemuneration,
+      phone: formData.phone,
+      category_id: formData.category?.id,
+      location_id: formData.location.id,
+    };
+    mutate(data);
+
+    onFormClose();
   };
 
   useEffect(() => {

@@ -15,7 +15,8 @@ import {Api} from '@/api';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
-  const [posts, setPosts] = useState([]);
+  const [wantedPosts, setWantedPosts] = useState<IItem[]>([]);
+  const [foundedPosts, setFoundedPosts] = useState<IItem[]>([]);
   const [error, setError] = useState('');
 
   const insets = useSafeAreaInsets();
@@ -23,8 +24,9 @@ const FavoritesItemsTab = () => {
   const {isLoading: isPostsLoading, mutate: postsMutate} = useAuthMutation({
     mutationFn: Api.favorites.getAll,
     onSuccess: res => {
-      setPosts(res.data);
-      console.log(res);
+      activeTab === TABS.I_LOOKING_FOR
+        ? setWantedPosts(res.data.data)
+        : setFoundedPosts(res.data.data);
     },
     onError: ({errors}) => {
       setError(errors?.message);
@@ -33,7 +35,7 @@ const FavoritesItemsTab = () => {
 
   useEffect(() => {
     postsMutate({type: activeTab});
-  }, []);
+  }, [activeTab]);
 
   return (
     <View style={styles.container}>
@@ -47,24 +49,32 @@ const FavoritesItemsTab = () => {
           {activeTab === TABS.I_LOOKING_FOR ? (
             <>
               {/* <FavoriteBlock title="Пошуки">
-              <FlatList
-                scrollEnabled={false}
-                data={items}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({item}) => <SearchItem data={item} />}
-              />
-            </FavoriteBlock>
+                <FlatList
+                  scrollEnabled={false}
+                  data={posts}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({item}) => <SearchItem data={item} />}
+                />
+              </FavoriteBlock> */}
 
-            <FavoriteBlock title="Публікації">
-              <ItemsContainer
-                items={pubs}
-                style={{paddingTop: 20}}
-                containerStyle={{paddingBottom: insets.bottom}}
-              />
-            </FavoriteBlock> */}
+              <FavoriteBlock title="Публікації">
+                <ItemsContainer
+                  items={wantedPosts}
+                  style={{paddingTop: 20}}
+                  containerStyle={{paddingBottom: insets.bottom}}
+                />
+              </FavoriteBlock>
             </>
           ) : (
-            <></>
+            <>
+              <FavoriteBlock title="Публікації">
+                <ItemsContainer
+                  items={foundedPosts}
+                  style={{paddingTop: 20}}
+                  containerStyle={{paddingBottom: insets.bottom}}
+                />
+              </FavoriteBlock>
+            </>
           )}
         </ScrollView>
       </TabsSwitch>

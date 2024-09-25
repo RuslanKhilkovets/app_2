@@ -1,10 +1,13 @@
 import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
-import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+
 import {Api} from '@/api';
-import {useAuthMutation} from '@/hooks';
+import {useAuthMutation, useGoBack} from '@/hooks';
+import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
+import {setUser} from '@/store/user';
 
 const ChangePhoneScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -17,15 +20,19 @@ const ChangePhoneScreen = () => {
     code?: string;
   }>({});
 
+  const user = useSelector(state => state)?.user;
+  const dispatch = useDispatch();
+
   const carouselRef = useRef<any>();
   const insets = useSafeAreaInsets();
   const screenWidth = Dimensions.get('window').width;
+  const goBack = useGoBack();
 
   const {mutate: passwordMutate, isLoading: isPasswordLoading} =
     useAuthMutation({
       mutationFn: Api.profile.verifyPassword,
       onSuccess: () => {
-        setErrors({});
+        goToNextStep();
       },
       onError: ({errors}) => {
         setErrors(prev => ({
@@ -35,10 +42,44 @@ const ChangePhoneScreen = () => {
       },
     });
 
-  const checkPassword = () => {
-    console.log(password);
+  const {mutate: phoneMutate, isLoading: isPhoneLoading} = useAuthMutation({
+    mutationFn: Api.profile.update,
+    onSuccess: () => {
+      goToNextStep();
+    },
+    onError: ({errors}) => {
+      setErrors(prev => ({
+        ...prev,
+        phone: errors.message,
+      }));
+    },
+  });
 
+  const {isLoading: isCheckCodeLoading, mutate: checkCodeMutate} =
+    useAuthMutation({
+      mutationFn: Api.auth.checkCode,
+      onSuccess: () => {
+        dispatch(setUser({...user, phone}));
+        goBack();
+      },
+      onError: ({errors}) => {
+        setErrors(prev => ({
+          ...prev,
+          code: errors.message,
+        }));
+      },
+    });
+
+  const checkCode = () => {
+    checkCodeMutate({code, login: user.email});
+  };
+
+  const checkPassword = () => {
     passwordMutate({password});
+  };
+
+  const updatePhone = () => {
+    phoneMutate({phone});
   };
 
   const goToNextStep = () => {
@@ -84,7 +125,7 @@ const ChangePhoneScreen = () => {
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={() => goToNextStep()}
+              onPress={updatePhone}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -106,10 +147,7 @@ const ChangePhoneScreen = () => {
             maxLength={4}
           />
           <View style={{marginBottom: insets.bottom + 20}}>
-            <Button
-              type="primary"
-              onPress={() => goToNextStep()}
-              style={{marginTop: 14}}>
+            <Button type="primary" onPress={checkCode} style={{marginTop: 14}}>
               Змінити номер
             </Button>
           </View>

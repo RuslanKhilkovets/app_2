@@ -1,27 +1,43 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {defaultLocation} from '@/constants/globals';
-import {AppIcon, Input} from '@/components';
+import {AppIcon, Input, LocationModal} from '@/components';
+import {ILocation} from '@/types';
 
 interface ICategotiesHeaderProps {
   searchQuery: string;
   setSearchQuery: (state: string) => void;
+  location: ILocation;
+  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
 }
 
 const CategoriesHeader = ({
   searchQuery,
   setSearchQuery,
+  location,
+  setLocation,
 }: ICategotiesHeaderProps) => {
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsLocationModalOpen(false);
+  }, [location]);
+
   return (
-    <View>
+    <View style={{padding: 16}}>
       <View style={styles.circle}></View>
 
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>Локація:</Text>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.changeLocationBtn}>
-          <Text style={styles.activeLocationText}>{defaultLocation}</Text>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.changeLocationBtn}
+          onPress={() => setIsLocationModalOpen(true)}>
+          <Text style={styles.activeLocationText}>
+            {location?.name || defaultLocation}
+          </Text>
 
           <AppIcon name="arrow" size={15} />
         </TouchableOpacity>
@@ -40,6 +56,13 @@ const CategoriesHeader = ({
           elevation: 5,
         }}
       />
+
+      <LocationModal
+        location={location}
+        visible={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        setLocation={setLocation}
+      />
     </View>
   );
 };
@@ -49,8 +72,8 @@ export default CategoriesHeader;
 const styles = StyleSheet.create({
   circle: {
     position: 'absolute',
-    top: -747,
-    left: -261,
+    top: -725,
+    left: -250,
     backgroundColor: '#FF879D',
     height: 883,
     width: 883,

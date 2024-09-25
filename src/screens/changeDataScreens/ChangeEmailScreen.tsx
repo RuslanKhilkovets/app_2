@@ -1,52 +1,87 @@
 import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
 import Carousel from 'react-native-snap-carousel';
 
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
-import {changeEmailSchema} from '@/validations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Api} from '@/api';
+import {useAuthMutation, useGoBack} from '@/hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '@/store/user';
 
 const ChangeEmailScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [errors, setErrors] = useState<{
+    password?: string;
+    email?: string;
+    code?: string;
+  }>({});
   const carouselRef = useRef<any>();
 
   const screenWidth = Dimensions.get('window').width;
   const insets = useSafeAreaInsets();
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-    trigger,
-  } = useForm({
-    resolver: yupResolver(changeEmailSchema),
-    defaultValues: {
-      password: '',
-      email: '',
-      code: '',
+  const user = useSelector(state => state)?.user;
+  const dispatch = useDispatch();
+
+  const goBack = useGoBack();
+
+  const goToNextStep = () => {
+    carouselRef.current?.snapToNext();
+  };
+
+  const {mutate: passwordMutate, isLoading: isPasswordLoading} =
+    useAuthMutation({
+      mutationFn: Api.profile.verifyPassword,
+      onSuccess: () => {
+        goToNextStep();
+      },
+      onError: ({errors}) => {
+        setErrors(prev => ({
+          ...prev,
+          password: errors.message,
+        }));
+      },
+    });
+  const {mutate: emailMutate, isLoading: isEmailLoading} = useAuthMutation({
+    mutationFn: Api.profile.update,
+    onSuccess: () => {
+      goToNextStep();
+    },
+    onError: ({errors}) => {
+      setErrors({
+        email: errors.message,
+      });
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log('Submitted Data:', data);
+  const {isLoding: isCheckCodeLoading, mutate: checkCodeMutate} =
+    useAuthMutation({
+      mutationFn: Api.profile.updateEmail,
+      onSuccess: () => {
+        dispatch(setUser({...user, email}));
+        goBack();
+      },
+      onError: ({errors}) => {
+        setErrors({
+          code: errors.message,
+        });
+      },
+    });
+
+  const checkCode = () => {
+    checkCodeMutate({code, login: user.email});
   };
 
-  const goToNextStep = async (
-    triggerName:
-      | 'password'
-      | 'email'
-      | 'code'
-      | ('password' | 'email' | 'code')[]
-      | readonly ('password' | 'email' | 'code')[]
-      | undefined,
-  ) => {
-    const isValid = await trigger(triggerName);
+  const checkPassword = () => {
+    passwordMutate({password});
+  };
 
-    if (isValid) {
-      carouselRef.current?.snapToNext();
-    }
+  const updateEmail = () => {
+    emailMutate({email});
   };
 
   const emailSteps = [
@@ -54,26 +89,41 @@ const ChangeEmailScreen = () => {
       component: (
         <View style={styles.container}>
           <View></View>
-
-          <Controller
-            control={control}
-            name="password"
-            render={({field: {onChange, value}}) => (
-              <Input
-                value={value}
-                onChangeText={onChange}
-                label="Введіть пароль, щоб змінити E-mail"
-                placeholder="Пароль"
-                secureTextEntry
-                error={errors.password?.message}
-              />
-            )}
+          <Input
+            value={password}
+            onChangeText={(text: string) => setPassword(text)}
+            label="Введіть пароль, щоб змінити e-mail"
+            placeholder="Пароль"
+            secureTextEntry
+            error={errors.password}
           />
-
           <View style={{marginBottom: insets.bottom + 20}}>
             <Button
               type="primary"
-              onPress={() => goToNextStep('password')}
+              onPress={checkPassword}
+              isLoading={isPasswordLoading}
+              style={{marginTop: 14}}>
+              Надіслати код
+            </Button>
+          </View>
+        </View>
+      ),
+    },
+    {
+      component: (
+        <View style={styles.container}>
+          <View></View>
+          <Input
+            value={email}
+            onChangeText={(text: string) => setEmail(text)}
+            label="Новий e-mail"
+            placeholder="E-mail"
+            error={errors.email}
+          />
+          <View style={{marginBottom: insets.bottom + 20}}>
+            <Button
+              type="primary"
+              onPress={updateEmail}
               style={{marginTop: 14}}>
               Надіслати код
             </Button>
@@ -86,56 +136,17 @@ const ChangeEmailScreen = () => {
         <View style={styles.container}>
           <View></View>
 
-          <Controller
-            control={control}
-            name="email"
-            render={({field: {onChange, value}}) => (
-              <Input
-                value={value}
-                onChangeText={onChange}
-                label="Новий E-mail"
-                placeholder="E-mail"
-                error={errors.email?.message}
-              />
-            )}
+          <Input
+            value={code}
+            onChangeText={(text: string) => setCode(text)}
+            label="Введіть код із E-mail"
+            placeholder="_ _ _ _"
+            error={errors.code}
+            inputStyle={{textAlign: 'center'}}
           />
 
           <View style={{marginBottom: insets.bottom + 20}}>
-            <Button
-              type="primary"
-              onPress={() => goToNextStep('email')}
-              style={{marginTop: 14}}>
-              Надіслати код
-            </Button>
-          </View>
-        </View>
-      ),
-    },
-    {
-      component: (
-        <View style={styles.container}>
-          <View></View>
-
-          <Controller
-            control={control}
-            name="code"
-            render={({field: {onChange, value}}) => (
-              <Input
-                value={value}
-                onChangeText={onChange}
-                label="Введіть код із E-mail"
-                placeholder="_ _ _ _"
-                error={errors.code?.message}
-                inputStyle={{textAlign: 'center'}}
-              />
-            )}
-          />
-
-          <View style={{marginBottom: insets.bottom + 20}}>
-            <Button
-              type="primary"
-              onPress={handleSubmit(onSubmit)}
-              style={{marginTop: 14}}>
+            <Button type="primary" onPress={checkCode} style={{marginTop: 14}}>
               Змінити E-mail
             </Button>
           </View>

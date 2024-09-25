@@ -2,19 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {StatusBar, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import SInfo from 'react-native-sensitive-info';
 
-import {privateRoutes, publicRoutes, TabsNavigation} from '@/navigation';
+import {privateRoutes, publicRoutes} from '@/navigation';
 import {IRoute} from '@/types';
 import {Logo} from '@/components';
+import {setUser} from '@/store/user';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
-  const {user} = useSelector(state => state);
+  const dispatch = useDispatch();
 
   const getToken = async () => {
     const accessToken = await SInfo.getItem('accessToken', {
@@ -24,10 +25,23 @@ const Navigation = () => {
     return accessToken;
   };
 
+  const getUser = async () => {
+    const user = await SInfo.getItem('user', {
+      sharedPreferencesName: 'mySharedPrefs',
+      keychainService: 'myKeychain',
+    });
+    return JSON.parse(user);
+  };
+
   useEffect(() => {
     const fetchToken = async () => {
       const accessToken = await getToken();
+      const user = await getUser();
+
       setIsAuth(!!accessToken);
+      dispatch(setUser(user));
+
+      console.log(user);
 
       // Simulate loading for 5 seconds
       setTimeout(() => {

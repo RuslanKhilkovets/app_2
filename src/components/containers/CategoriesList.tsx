@@ -1,5 +1,6 @@
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {Dispatch, SetStateAction} from 'react';
 
 import {CategoriesItem} from '@/components';
 import {Api} from '@/api';
@@ -8,9 +9,10 @@ import {ICategory} from '@/types';
 
 interface ICategoriesListProps {
   setCategory: Dispatch<SetStateAction<ICategory | null>>;
+  searchQuery?: string;
 }
 
-const CategoriesList = ({setCategory}: ICategoriesListProps) => {
+const CategoriesList = ({setCategory, searchQuery}: ICategoriesListProps) => {
   const [error, setError] = useState('');
   const [categories, setCategories] = useState<ICategory[]>([]);
 
@@ -28,6 +30,12 @@ const CategoriesList = ({setCategory}: ICategoriesListProps) => {
     mutate();
   }, []);
 
+  const filteredCategories = searchQuery
+    ? categories.filter(category =>
+        category.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    : categories;
+
   return (
     <View style={{flex: 1}}>
       {isLoading ? (
@@ -35,7 +43,7 @@ const CategoriesList = ({setCategory}: ICategoriesListProps) => {
       ) : (
         <FlatList
           contentContainerStyle={styles.container}
-          data={categories}
+          data={filteredCategories} // Use the filtered categories
           renderItem={({item}) => (
             <CategoriesItem
               id={item.id}

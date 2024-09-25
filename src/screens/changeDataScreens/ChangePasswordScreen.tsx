@@ -42,8 +42,6 @@ const ChangePasswordScreen = () => {
   const onSubmit = (data: any) => {
     const {password, current_password, password_confirmation} = data;
 
-    console.log(data);
-
     mutate({
       password,
       current_password,

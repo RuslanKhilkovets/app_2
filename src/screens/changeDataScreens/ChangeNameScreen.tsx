@@ -3,31 +3,38 @@ import {StyleSheet, View} from 'react-native';
 
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useAuthMutation} from '@/hooks';
+import {useAuthMutation, useGoBack} from '@/hooks';
 import {Api} from '@/api';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '@/store/user';
 
 const ChangeNameScreen = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
+  const user = useSelector(state => state)?.user;
+  const dispatch = useDispatch();
+
   const insets = useSafeAreaInsets();
+  const goBack = useGoBack();
 
   const onChange = (text: string) => {
     setName(text);
   };
 
   const {mutate} = useAuthMutation({
-    mutationFn: Api.auth.resentPasswordCode,
+    mutationFn: Api.profile.update,
     onSuccess: () => {
-      console.log('success');
+      dispatch(setUser({...user, name}));
+      goBack();
     },
     onError: ({errors}) => {
-      console.log(errors);
+      setError(errors.message);
     },
   });
 
   const handleSave = () => {
-    mutate({name});
+    mutate({login: user.email, name});
   };
 
   return (

@@ -8,9 +8,9 @@ import {ILocation} from '@/types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface ISelectLocationListProps {
-  location: ILocation;
+  location: ILocation | null;
   style?: ViewStyle;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
+  setLocation: React.Dispatch<React.SetStateAction<ILocation | null>>;
 }
 
 const SelectLocationList = ({
@@ -40,7 +40,7 @@ const SelectLocationList = ({
   });
 
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 100);
+    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 300);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
@@ -49,17 +49,17 @@ const SelectLocationList = ({
   }, [debouncedQuery]);
 
   return (
-    <ScrollView style={[style, {marginBottom: insets.bottom + 30}]}>
+    <View style={[style, {marginBottom: insets.bottom + 30}]}>
+      <Input
+        value={searchQuery}
+        onChangeText={handleQueryChange}
+        placeholder="Пошук"
+        searchMode
+      />
       {isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator style={{marginTop: 40}} />
       ) : (
         <>
-          <Input
-            value={searchQuery}
-            onChangeText={handleQueryChange}
-            placeholder="Пошук"
-            searchMode
-          />
           <FilterItem title="Ваша локація">
             <SelectLocationItem
               location={location}
@@ -67,20 +67,22 @@ const SelectLocationList = ({
               setLocation={setLocation}
             />
           </FilterItem>
-          <FilterItem title="Великі міста">
-            {locationsList.map((loc: ILocation) => {
-              return (
-                <SelectLocationItem
-                  key={loc.id}
-                  location={loc}
-                  setLocation={setLocation}
-                />
-              );
-            })}
-          </FilterItem>
+          <ScrollView style={{flexGrow: 1, height: 550}}>
+            <FilterItem title="Великі міста">
+              {locationsList.map((loc: ILocation) => {
+                return (
+                  <SelectLocationItem
+                    key={loc.id}
+                    location={loc}
+                    setLocation={setLocation}
+                  />
+                );
+              })}
+            </FilterItem>
+          </ScrollView>
         </>
       )}
-    </ScrollView>
+    </View>
   );
 };
 

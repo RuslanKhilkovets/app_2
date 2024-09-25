@@ -1,13 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React from 'react';
 
 interface IFilterItemProps extends React.PropsWithChildren {
   title: string;
+  style?: ViewStyle;
 }
 
-const FilterItem = ({title, children}: IFilterItemProps) => {
+const FilterItem = ({title, children, style}: IFilterItemProps) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.text}>{title}</Text>
 
       {children}

@@ -28,9 +28,7 @@ const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           headerStyle={{padding: 0}}>
-          <AddItemForm
-            type={activeTab === TABS.I_LOOKING_FOR ? 'i_looking_for' : 'i_find'}
-          />
+          <AddItemForm onFormClose={onClose} type={activeTab} />
         </TabsSwitch>
       </View>
     </Modal>

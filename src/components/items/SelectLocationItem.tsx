@@ -3,9 +3,9 @@ import React from 'react';
 import {ILocation} from '@/types';
 
 interface ISelectLocationItemProps {
-  location: ILocation;
+  location: ILocation | null;
   borderColor?: string;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
+  setLocation: React.Dispatch<React.SetStateAction<ILocation | null>>;
 }
 
 const SelectLocationItem = ({
@@ -21,7 +21,9 @@ const SelectLocationItem = ({
         styles.currentLocationContainer,
         {borderBottomColor: borderColor || '#E7E3E3'},
       ]}>
-      <Text style={styles.currentLocationText}>{location.name}</Text>
+      <Text style={styles.currentLocationText}>
+        {location?.name || 'Unknown'}
+      </Text>
     </TouchableOpacity>
   );
 };

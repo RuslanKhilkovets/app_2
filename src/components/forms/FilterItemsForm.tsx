@@ -132,7 +132,7 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
       <ScrollView>
         <FilterItem title="Категорія">
           <EditButton
-            title="Вибрати категорію"
+            title={category?.name || 'Вибрати категорію'}
             onPress={() => setCategoryModalOpen(true)}
           />
         </FilterItem>
@@ -211,7 +211,7 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
         </FilterItem>
         <FilterItem title="Локація">
           <EditButton
-            title="Луцьк"
+            title={location.name}
             onPress={() => setLocationModalOpen(true)}
           />
         </FilterItem>

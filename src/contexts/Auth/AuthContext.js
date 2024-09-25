@@ -46,8 +46,14 @@ export const AuthProvider = ({children}) => {
     }).then(() => {
       setAccessToken(token);
     });
-
-    dispatch(setUser(userData));
+    await SInfo.setItem('user', JSON.stringify(userData), {
+      sharedPreferencesName: 'mySharedPrefs',
+      keychainService: 'myKeychain',
+    }).then(() => {
+      dispatch(setUser(userData));
+    });
+    console.log('userData: ', userData);
+    console.log('setUser: ', setUser);
   };
 
   const logout = async token => {
@@ -58,9 +64,12 @@ export const AuthProvider = ({children}) => {
       keychainService: 'myKeychain',
     }).then(() => setAccessToken(null));
 
-    await delCache('progress');
+    await SInfo.deleteItem('user', {
+      sharedPreferencesName: 'mySharedPrefs',
+      keychainService: 'myKeychain',
+    }).then(() => dispatch(resetUser()));
 
-    dispatch(resetUser());
+    await delCache('progress');
   };
 
   return (
