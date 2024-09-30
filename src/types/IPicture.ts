@@ -1,4 +1,6 @@
 export default interface IPicture {
+  id: string;
   uri: string;
-  active: boolean;
+  is_main: boolean;
+  delete?: boolean;
 }

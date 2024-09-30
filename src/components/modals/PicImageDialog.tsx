@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Animated,
   Easing,
+  ActivityIndicator,
 } from 'react-native';
 
 import PicIcon from '@icons/pic.svg';
@@ -13,12 +14,14 @@ import CameraIcon from '@icons/camera.svg';
 import {IAddItemFormData, IModalProps} from '@/types';
 import {Button} from '@/components';
 import {selectImage, takePhoto} from '@/helpers';
+import {Api} from '@/api';
 
 interface IPicImageDialogProps extends IModalProps {
   setUris: React.Dispatch<React.SetStateAction<IAddItemFormData>>;
 }
 
 const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const slideAnim = useRef(new Animated.Value(300)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -48,18 +51,24 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
       const selectedImage = await selectImage();
 
       if (selectedImage) {
-        setUris(prev => {
-          const newImgUris = [...prev.imgUris];
-          newImgUris.push({
-            uri: selectedImage,
-            active: prev.imgUris.length === 0,
-          });
+        setIsLoading(true);
+        await Api.media.upload(selectedImage).then(res => {
+          setUris(prev => {
+            const newImgUris = [...prev.imgUris];
+            newImgUris.push({
+              id: res.data.data.id,
+              uri: res.data.data.url,
+              is_main: prev.imgUris.length === 0,
+              delete: false,
+            });
 
-          return {
-            ...prev,
-            imgUris: newImgUris,
-          };
+            return {
+              ...prev,
+              imgUris: newImgUris,
+            };
+          });
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log('Error selecting image:', error);
@@ -70,17 +79,25 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
 
   const handleTakePhoto = async () => {
     try {
-      const photoUri = await takePhoto();
+      const photo = await takePhoto();
+      const getFileData = await Api.media.upload(photo);
 
-      if (photoUri) {
-        setUris(prev => ({
-          ...prev,
-          imgUris: [
-            ...prev.imgUris,
-            {uri: photoUri, active: prev.imgUris.length === 0},
-          ],
-        }));
+      if (photo !== null) {
+        setUris(prev => {
+          const newImgUris = [...prev.imgUris];
+          newImgUris.push({
+            id: getFileData.data.id,
+            uri: getFileData.url,
+            is_main: prev.imgUris.length === 0,
+          });
+
+          return {
+            ...prev,
+            imgUris: newImgUris,
+          };
+        });
       }
+      onClose();
     } catch (error) {
       console.log('Error taking photo:', error);
     } finally {
@@ -91,27 +108,31 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
   return (
     <Modal transparent visible={visible} onRequestClose={onClose}>
       <Animated.View style={[styles.overlay, {opacity: opacityAnim}]}>
-        <Animated.View
-          style={[styles.content, {transform: [{translateY: slideAnim}]}]}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.btn}
-            onPress={handleTakePhoto}>
-            <CameraIcon />
-            <Text style={styles.text}>Зробити фото</Text>
-          </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator style={{flex: 1}} size={'large'} />
+        ) : (
+          <Animated.View
+            style={[styles.content, {transform: [{translateY: slideAnim}]}]}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.btn}
+              onPress={handleTakePhoto}>
+              <CameraIcon />
+              <Text style={styles.text}>Зробити фото</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.btn}
-            onPress={handleSelectImage}>
-            <PicIcon />
-            <Text style={styles.text}>Вибрати фото</Text>
-          </TouchableOpacity>
-          <Button onPress={() => animateModal(300, onClose)} type="secondary">
-            Закрити
-          </Button>
-        </Animated.View>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.btn}
+              onPress={handleSelectImage}>
+              <PicIcon />
+              <Text style={styles.text}>Вибрати фото</Text>
+            </TouchableOpacity>
+            <Button onPress={() => animateModal(300, onClose)} type="secondary">
+              Закрити
+            </Button>
+          </Animated.View>
+        )}
       </Animated.View>
     </Modal>
   );

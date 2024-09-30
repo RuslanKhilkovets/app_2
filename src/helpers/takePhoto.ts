@@ -1,8 +1,8 @@
 import {launchCamera} from 'react-native-image-picker';
 
-export const takePhoto = (): Promise<string | null> => {
+export const takePhoto = (): Promise<FormData | null> => {
   return new Promise((resolve, reject) => {
-    launchCamera({mediaType: 'photo'}, response => {
+    launchCamera({mediaType: 'photo', includeBase64: true}, response => {
       if (response.didCancel) {
         console.log('User cancelled camera');
         resolve(null);
@@ -10,8 +10,16 @@ export const takePhoto = (): Promise<string | null> => {
         console.log('Camera Error: ', response.errorMessage);
         reject(new Error(response.errorMessage || 'Unknown error'));
       } else {
-        const uri = response.assets?.[0].uri || null;
-        resolve(uri);
+        const formData = new FormData();
+        const image = {...response.assets?.[0]};
+
+        formData.append('file', {
+          ...image,
+          name: image.fileName,
+          size: image.fileSize,
+        });
+
+        resolve(formData);
       }
     });
   });

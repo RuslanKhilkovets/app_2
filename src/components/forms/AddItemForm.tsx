@@ -45,6 +45,8 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
 
+  console.log(formData.imgUris);
+
   const insets = useSafeAreaInsets();
 
   const {user_id} = useSelector(state => state)?.user;
@@ -71,18 +73,30 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       ...prev,
       imgUris: prev.imgUris.map(image => ({
         ...image,
-        active: image.uri === uri,
+        is_main: image.uri === uri,
       })),
     }));
   };
+  const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
+    mutationFn: Api.media.delete,
+    onSuccess: res => {},
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
 
-  const onDeleteImage = (uri: string) => {
+  const deleteVisualImage = (id: string) => {
     setFormData((prev: IAddItemFormData) => {
       return {
         ...prev,
-        imgUris: prev.imgUris.filter(item => item.uri !== uri),
+        imgUris: prev.imgUris.filter(item => item.id !== id),
       };
     });
+  };
+
+  const onDeleteImage = (id: string) => {
+    deleteVisualImage(id);
+    mutateDelete(id);
   };
 
   const handleFormSubmit = () => {
@@ -97,8 +111,10 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       category_id: formData.category?.id,
       location_id: formData.location.id,
       user_id,
-      photos: [], // TODO: add photos (formData.imgUris)
+      photos: formData.imgUris,
     };
+    console.log(formData.imgUris);
+
     mutate(data);
   };
 
@@ -154,8 +170,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             renderItem={({item}) => (
               <View style={{width: '25%', paddingHorizontal: 10}}>
                 <Thumbnail
+                  id={item.id}
                   uri={item.uri}
-                  active={item.active}
+                  active={item.is_main}
                   setActiveImage={setActiveImage}
                   onDelete={onDeleteImage}
                   style={{width: '100%', aspectRatio: 1}}

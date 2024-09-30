@@ -5,6 +5,7 @@ import {AppIcon, Button, Modal} from '@/components';
 import {IModalProps} from '@/types';
 
 interface IImageModalProps extends IModalProps {
+  id: string;
   uri: string;
   active: boolean;
   onDelete: (uri: string) => void;
@@ -20,8 +21,11 @@ const ImageModal = ({
   rotate,
   makeMain,
   uri,
+  id,
   active,
 }: IImageModalProps) => {
+  console.log(active);
+
   return (
     <Modal
       visible={visible}
@@ -36,7 +40,7 @@ const ImageModal = ({
           <Button
             style={{flex: 1}}
             type="bordered"
-            onPress={() => onDelete(uri)}
+            onPress={() => onDelete(id)}
             before={<AppIcon name="delete" />}>
             Видалити
           </Button>

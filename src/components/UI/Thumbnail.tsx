@@ -5,6 +5,7 @@ import {TouchableOpacity} from 'react-native';
 import {AppIcon, ImageModal} from '@/components';
 
 interface IThumbnailProps {
+  id: string;
   style: ViewStyle;
   uri: string;
   active?: boolean;
@@ -15,6 +16,7 @@ interface IThumbnailProps {
 
 const Thumbnail = ({
   style,
+  id,
   uri,
   active,
   setActiveImage,
@@ -47,6 +49,7 @@ const Thumbnail = ({
         rotate={() => {}}
         onDelete={onDelete}
         uri={uri}
+        id={id}
         active={!!active}
       />
     </>

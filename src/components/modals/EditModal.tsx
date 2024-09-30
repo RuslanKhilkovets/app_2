@@ -2,12 +2,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 
 import {Modal, EditForm} from '@/components';
-import {IModalProps, IPostItem} from '@/types';
+import {IAddItemFormData, IModalProps, IPostItem} from '@/types';
 import TABS from '@/constants/Tabs';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IEditModalProps extends IModalProps {
-  item?: IPostItem;
+  item: IAddItemFormData;
 }
 
 const EditModal = ({visible, onClose, item}: IEditModalProps) => {
@@ -28,7 +28,7 @@ const EditModal = ({visible, onClose, item}: IEditModalProps) => {
     <Modal
       visible={visible}
       onClose={onClose}
-      title="Фільтр"
+      title="Редагування"
       headerBgColor={backgroundColor}>
       <View style={{flex: 1}}>
         <View style={[styles.tabsSwitchersContainer, {backgroundColor}]}>

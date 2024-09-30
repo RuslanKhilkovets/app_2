@@ -29,7 +29,10 @@ interface IItemFormProps {
 }
 
 const EditForm = ({item, onFormClose}: IItemFormProps) => {
-  const [formData, setFormData] = useState<IAddItemFormData>(item);
+  const [formData, setFormData] = useState<IAddItemFormData>({
+    ...item,
+    imgUris: [],
+  });
   const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -60,20 +63,58 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
       ...prev,
       imgUris: prev.imgUris.map(image => ({
         ...image,
-        active: image.uri === uri,
+        is_main: image.uri === uri,
       })),
     }));
   };
 
-  const onDeleteImage = (uri: string) => {
+  const {isLoading: isDeleteImageLoading, mutate: mutateDeleteImage} =
+    useAuthMutation({
+      mutationFn: Api.media.delete,
+      onSuccess: res => {},
+      onError: ({errors}) => {
+        setError(errors?.message);
+      },
+    });
+
+  const deleteVisualImage = (id: string) => {
     setFormData((prev: IAddItemFormData) => {
       return {
         ...prev,
-        imgUris: prev.imgUris.filter(item => item.uri !== uri),
+        imgUris: prev.imgUris.filter(item => item.id !== id),
       };
     });
   };
-  console.log(item);
+
+  const onDeleteImage = (id: string) => {
+    deleteVisualImage(id);
+    mutateDeleteImage(id);
+  };
+
+  const {isLoading: isRestoreLoading, mutate: mutateRestore} = useAuthMutation({
+    mutationFn: Api.myPosts.restore,
+    onSuccess: res => {},
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
+
+  const onRestore = () => {
+    mutateRestore(formData.id);
+  };
+  const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
+    mutationFn: Api.myPosts.delete,
+    onSuccess: res => {
+      onFormClose();
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
+
+  const onDelete = () => {
+    mutateDelete(formData.id);
+  };
 
   const handleFormSubmit = () => {
     const payload = {
@@ -147,8 +188,9 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
             renderItem={({item}) => (
               <View style={{width: '25%', paddingHorizontal: 10}}>
                 <Thumbnail
+                  id={item.id}
                   uri={item.uri}
-                  active={item.active}
+                  active={item.is_main}
                   setActiveImage={setActiveImage}
                   onDelete={onDeleteImage}
                   style={{width: '100%', aspectRatio: 1}}
@@ -172,7 +214,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
           </FilterItem>
           <FilterItem title="Локація">
             <EditButton
-              title={formData.location.name || 'Локація'}
+              title={formData.location?.name || 'Локація'}
               onPress={() => setLocationModalOpen(true)}
             />
           </FilterItem>
@@ -208,8 +250,21 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
             />
           </View>
         </View>
-
-        <Button onPress={handleFormSubmit}>Опублікувати</Button>
+        <View style={{gap: 14}}>
+          <Button onPress={handleFormSubmit}>Зберегти</Button>
+          <Button
+            type="bordered"
+            onPress={onRestore}
+            before={<AppIcon name="archive" size={15} />}>
+            В архів
+          </Button>
+          <Button
+            type="bordered"
+            onPress={onDelete}
+            before={<AppIcon name="delete" size={16} />}>
+            Видалити
+          </Button>
+        </View>
       </KeyboardScroll>
 
       <CategoriesModal

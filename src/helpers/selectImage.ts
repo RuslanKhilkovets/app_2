@@ -1,8 +1,8 @@
 import {launchImageLibrary} from 'react-native-image-picker';
 
-export const selectImage = (): Promise<string | null> => {
+export const selectImage = (): Promise<FormData | null> => {
   return new Promise((resolve, reject) => {
-    launchImageLibrary({mediaType: 'photo'}, response => {
+    launchImageLibrary({mediaType: 'photo', includeBase64: true}, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
         resolve(null);
@@ -10,8 +10,16 @@ export const selectImage = (): Promise<string | null> => {
         console.log('ImagePicker Error: ', response.errorMessage);
         reject(new Error(response.errorMessage || 'Unknown error'));
       } else {
-        const uri = response.assets?.[0].uri || null;
-        resolve(uri);
+        const formData = new FormData();
+        const image = {...response.assets?.[0]};
+
+        formData.append('file', {
+          ...image,
+          name: image.fileName,
+          size: image.fileSize,
+        });
+
+        resolve(formData);
       }
     });
   });
