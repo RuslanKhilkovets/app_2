@@ -54,7 +54,7 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
   const {isLoading, mutate} = useAuthMutation({
-    mutationFn: Api.myPosts.getAll,
+    mutationFn: Api.favorites.createFilter,
     onSuccess: res => {
       console.log(res);
     },

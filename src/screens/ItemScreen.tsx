@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -89,155 +90,164 @@ const ItemScreen = () => {
 
   return (
     <ScrollView>
-      <View style={[styles.head, {marginTop: insets.top}]}>
-        <View style={[styles.actions, {paddingHorizontal: 16, paddingTop: 20}]}>
-          <GoBack color="#fff" />
-          <Pressable>
-            <AppIcon name="share" color="#fff" size={25} />
-          </Pressable>
-        </View>
+      {data ? (
+        <>
+          <View style={[styles.head, {marginTop: insets.top}]}>
+            <View
+              style={[styles.actions, {paddingHorizontal: 16, paddingTop: 20}]}>
+              <GoBack color="#fff" />
+              <Pressable>
+                <AppIcon name="share" color="#fff" size={25} />
+              </Pressable>
+            </View>
 
-        {photos.length !== 0 ? (
-          <>
-            <Carousel
-              loop
-              data={photos}
-              renderItem={({item}) => (
-                <View style={styles.imgContainer}>
-                  {item && <Image source={{uri: item}} style={styles.img} />}
-                </View>
-              )}
-              sliderWidth={screenWidth}
-              itemWidth={screenWidth}
-              inactiveSlideScale={1}
-              inactiveSlideOpacity={1}
-              onSnapToItem={index => setActiveSlide(index)}
-            />
-            <Pagination
-              dotsLength={data?.photos.length || 1}
-              activeDotIndex={activeSlide}
-              containerStyle={styles.paginationContainer}
-              dotStyle={styles.paginationDot}
-              inactiveDotStyle={styles.inactiveDot}
-              inactiveDotOpacity={0.7}
-              inactiveDotScale={0.6}
-            />
-          </>
-        ) : (
-          <View style={styles.noImg}>
-            <Text style={styles.noPhotoText}>Немає фото</Text>
-          </View>
-        )}
-      </View>
-      <View style={styles.block}>
-        <Text style={styles.item_title}>
-          Опубліковано{' '}
-          {DateFormatter.formatLocalizedDate(
-            new Date(data?.published_at || ''),
-            true,
-          )}
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 10,
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-            <Text
-              style={[styles.title, {color: themes[colorScheme].dark}]}
-              ellipsizeMode="tail"
-              numberOfLines={1}>
-              {data?.name}
-            </Text>
-            <ItemStatus status={1} />
-          </View>
-          <TouchableOpacity onPress={handleAddToFavourites} activeOpacity={0.7}>
-            <AppIcon
-              name={isFavorite ? 'liked_card' : 'favorite_menu'}
-              color={'red'}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.block}>
-        <Text style={[styles.item_title, {fontSize: 15}]}>Опис:</Text>
-        <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
-          {data?.body}
-        </Text>
-      </View>
-      <View style={styles.block}>
-        <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
-          <AppIcon name="location" color="#757575" />
-          <Text
-            style={[
-              styles.text,
-              {marginTop: 0, color: themes[colorScheme].dark},
-            ]}>
-            Знайдено{' '}
-            {DateFormatter.formatLocalizedDate(
-              new Date(data?.published_at || ''),
-              true,
-            )}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 10,
-            alignItems: 'center',
-            marginTop: 10,
-          }}>
-          <AppIcon name="calendar" color="#757575" />
-          <Text
-            style={[
-              styles.text,
-              {marginTop: 0, color: themes[colorScheme].dark},
-            ]}>
-            {data?.location.name}
-          </Text>
-        </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          margin: 20,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 20,
-          }}>
-          <View style={styles.profileImage}>
-            <Image style={styles.img} source={NoProfile} />
-          </View>
-          <Text style={[styles.profileName, {color: themes[colorScheme].dark}]}>
-            {data?.user?.name || 'Невідомий користувач'}
-          </Text>
-        </View>
-        {data?.user?.phone && (
-          <TouchableOpacity>
-            {!phoneActive ? (
-              <Button type="secondary" onPress={() => setPhoneActive(true)}>
-                Показати телефон
-              </Button>
+            {photos.length !== 0 ? (
+              <>
+                <Carousel
+                  loop
+                  data={photos}
+                  renderItem={({item}) => (
+                    <View style={styles.imgContainer}>
+                      {item && (
+                        <Image source={{uri: item}} style={styles.img} />
+                      )}
+                    </View>
+                  )}
+                  sliderWidth={screenWidth}
+                  itemWidth={screenWidth}
+                  inactiveSlideScale={1}
+                  inactiveSlideOpacity={1}
+                  onSnapToItem={index => setActiveSlide(index)}
+                />
+                <Pagination
+                  dotsLength={data?.photos.length || 1}
+                  activeDotIndex={activeSlide}
+                  containerStyle={styles.paginationContainer}
+                  dotStyle={styles.paginationDot}
+                  inactiveDotStyle={styles.inactiveDot}
+                  inactiveDotOpacity={0.7}
+                  inactiveDotScale={0.6}
+                />
+              </>
             ) : (
-              <Button type="secondary" onPress={handlePhonePress}>
-                {data?.user?.phone}
-              </Button>
+              <View style={styles.noImg}>
+                <Text style={styles.noPhotoText}>Немає фото</Text>
+              </View>
             )}
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <View style={{marginHorizontal: 15, marginBottom: 35 + insets.bottom}}>
-        <Button onPress={() => {}}>Написати</Button>
-      </View>
+          </View>
+          <View style={styles.block}>
+            <Text style={styles.item_title}>
+              {data.published_at !== null ||
+                `Опубліковано ${data.published_at}`}
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <View
+                style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                <Text
+                  style={[styles.title, {color: themes[colorScheme].dark}]}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}>
+                  {data?.name}
+                </Text>
+                <ItemStatus status={1} />
+              </View>
+              <TouchableOpacity
+                onPress={handleAddToFavourites}
+                activeOpacity={0.7}>
+                <AppIcon
+                  name={isFavorite ? 'liked_card' : 'favorite_menu'}
+                  color={'red'}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.block}>
+            <Text style={[styles.item_title, {fontSize: 15}]}>Опис:</Text>
+            <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+              {data?.body}
+            </Text>
+          </View>
+          <View style={styles.block}>
+            <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
+              <AppIcon name="location" color="#757575" />
+              <Text
+                style={[
+                  styles.text,
+                  {marginTop: 0, color: themes[colorScheme].dark},
+                ]}>
+                {data?.location?.name}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <AppIcon name="calendar" color="#757575" />
+              <Text
+                style={[
+                  styles.text,
+                  {marginTop: 0, color: themes[colorScheme].dark},
+                ]}>
+                Знайдено{' '}
+                {DateFormatter.formatLocalizedDate(
+                  new Date(data?.action_at),
+                  true,
+                )}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              margin: 20,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 20,
+              }}>
+              <View style={styles.profileImage}>
+                <Image style={styles.img} source={NoProfile} />
+              </View>
+              <Text
+                style={[styles.profileName, {color: themes[colorScheme].dark}]}>
+                {data?.user?.name || 'Невідомий користувач'}
+              </Text>
+            </View>
+            {data?.user?.phone && (
+              <TouchableOpacity>
+                {!phoneActive ? (
+                  <Button type="secondary" onPress={() => setPhoneActive(true)}>
+                    Показати телефон
+                  </Button>
+                ) : (
+                  <Button type="secondary" onPress={handlePhonePress}>
+                    {data?.user?.phone}
+                  </Button>
+                )}
+              </TouchableOpacity>
+            )}
+          </View>
+          <View
+            style={{marginHorizontal: 15, marginBottom: 35 + insets.bottom}}>
+            <Button onPress={() => {}}>Написати</Button>
+          </View>
+        </>
+      ) : (
+        <ActivityIndicator style={{marginTop: 200}} size="large" />
+      )}
     </ScrollView>
   );
 };

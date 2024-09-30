@@ -1,9 +1,10 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
-import {AppIcon, ItemStatus} from '@/components';
+
+import {AppIcon, EditModal, ItemStatus} from '@/components';
 import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
-import {ILocation} from '@/types';
+import {IPostItem} from '@/types';
 import {DateFormatter} from '@/helpers';
 import {ITEM_STATUS} from '@/constants';
 import {IPhoto} from '@/types';
@@ -11,20 +12,14 @@ import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 
 interface IPostItemProps {
-  item: {
-    id: string;
-    name: string;
-    location: ILocation;
-    photos: IPhoto[];
-    action_at?: Date | string;
-    status: ITEM_STATUS;
-  };
+  item: IPostItem;
   isOpen: boolean;
   onMenuToggle: () => void;
   resetMenu: () => void;
 }
 
 const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const mainPhoto = item.photos.find((photo: IPhoto) => photo.is_main);
   const [error, setError] = useState('');
 
@@ -102,9 +97,7 @@ const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
         <View style={styles.menuContent}>
           <TouchableOpacity
             style={styles.menuBtn}
-            onPress={() => {
-              /* Edit action */
-            }}>
+            onPress={() => setIsEditModalOpen(true)}>
             <Text style={styles.menuBtnText}>Редагувати</Text>
           </TouchableOpacity>
 
@@ -117,6 +110,11 @@ const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
           </TouchableOpacity>
         </View>
       )}
+      <EditModal
+        visible={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        item={item}
+      />
     </>
   );
 };

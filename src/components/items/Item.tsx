@@ -82,7 +82,7 @@ const Item = ({item}: IItemProps) => {
               styles.contentFooterText,
               {color: themes[colorScheme].textSecondary},
             ]}>
-            {item.location.name}
+            {item?.location?.name}
           </Text>
 
           <Text

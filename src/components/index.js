@@ -21,6 +21,7 @@ export {default as AddItemForm} from './forms/AddItemForm';
 export {default as SignInForm} from './forms/SignInForm';
 export {default as SignUpForm} from './forms/SignUpForm';
 export {default as FilterItemsForm} from './forms/FilterItemsForm';
+export {default as EditForm} from './forms/EditForm';
 
 export {default as SearchItem} from './items/SearchItem';
 export {default as PostItem} from './items/PostItem';
@@ -57,3 +58,4 @@ export {default as PicImageDialog} from './modals/PicImageDialog';
 export {default as ImageModal} from './modals/ImageModal';
 export {default as LocationModal} from './modals/LocationModal';
 export {default as CategoriesModal} from './modals/CategoriesModal';
+export {default as EditModal} from './modals/EditModal';
