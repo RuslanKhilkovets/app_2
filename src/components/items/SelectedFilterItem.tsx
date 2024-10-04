@@ -1,4 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import AppIcon from '@/components/UI/AppIcon';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
@@ -8,6 +13,7 @@ interface ISelectedFilterItemProps {
   filterMode?: boolean;
   icon?: React.JSX.Element;
   onPress?: () => void;
+  removeItem?: () => void;
 }
 
 const SelectedFilterItem = ({
@@ -15,6 +21,7 @@ const SelectedFilterItem = ({
   filterMode,
   icon,
   onPress,
+  removeItem,
 }: ISelectedFilterItemProps) => {
   const {themes, colorScheme} = useTheme();
 
@@ -22,12 +29,13 @@ const SelectedFilterItem = ({
     <TouchableOpacity
       onPress={onPress}
       style={[styles.container, {backgroundColor: themes[colorScheme].light}]}
-      activeOpacity={0.7}>
+      activeOpacity={1}>
       <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
         {text}
       </Text>
-
-      <AppIcon size={12} name={filterMode ? 'arrow' : 'delete_filter'} />
+      <Pressable onPress={removeItem}>
+        <AppIcon size={12} name={filterMode ? 'arrow' : 'delete_filter'} />
+      </Pressable>
     </TouchableOpacity>
   );
 };
@@ -43,6 +51,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     alignItems: 'center',
     borderRadius: 5,
+    marginRight: 10,
   },
   text: {
     fontFamily: 'Raleway-Regular',

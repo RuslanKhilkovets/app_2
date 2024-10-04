@@ -8,56 +8,89 @@ import {
 import React from 'react';
 
 import {AppIcon} from '@/components';
+import TABS from '@/constants/Tabs';
+import {ICategory, ILocation} from '@/types';
+import {FILTER_TYPE, StaticDateType} from '@/constants';
+import {useNavigation} from '@react-navigation/native';
+import {DateFormatter} from '@/helpers';
 
 interface ISearchItemProps {
   data: {
-    id: number;
-    name: string;
-    category?: string;
-    dateFrom?: string;
-    dateTo?: string;
-    location?: string;
-    photo?: boolean;
-    results?: number;
+    id: string;
+    is_favorite: boolean;
+    value: {
+      q: string;
+      type: TABS;
+      category?: ICategory | null;
+      action_at_from?: string;
+      action_at_to?: string;
+      location?: ILocation | null;
+      withPhoto: FILTER_TYPE;
+      withBody: FILTER_TYPE;
+    };
   };
 }
 
 const SearchItem = ({data}: ISearchItemProps) => {
+  const {navigate} = useNavigation();
   const renderFilters = () => {
     let filtersStr = '';
 
-    if (data.category) {
-      filtersStr += `Категорія: ${data.category} / `;
+    if (data.value.category) {
+      filtersStr += `Категорія: ${data?.value?.category?.name} / `;
     }
-    if (data.dateFrom || data.dateTo) {
-      filtersStr += `Період: з ${data.dateFrom} по ${data.dateTo} /`;
+    if (data.value.action_at_from && data.value.action_at_to) {
+      filtersStr += `Період: з ${DateFormatter.formatLocalizedDate(
+        new Date(data.value.action_at_from),
+      )} по ${DateFormatter.formatLocalizedDate(new Date(data.value.action_at_to))} /`;
     }
-    if (data.location) {
-      filtersStr += `Локація: ${data.location} / `;
+    if (data.value.location) {
+      filtersStr += `Локація: ${data?.value?.location?.name} / `;
     }
-    if (data.photo) {
-      filtersStr += `З фото`;
+    if (data.value.withPhoto) {
+      filtersStr += `З фото / `;
     }
+    if (data.value.withBody) {
+      filtersStr += `З описом / `;
+    }
+    filtersStr += `Тип пошуку: ${
+      data?.value?.type === TABS.I_FIND ? 'Знайшов / ' : 'Загубив / '
+    }`;
+
+    filtersStr += `За останній:  ${
+      data?.value?.last === StaticDateType.MONTH ? 'місяць' : 'тиждень'
+    }`;
 
     return filtersStr;
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.container}
+      onPress={() =>
+        navigate('search-tab', {
+          filters: data?.value,
+          is_favorite: data?.is_favorite,
+          id: data?.id,
+        })
+      }>
       <View style={styles.mainContent}>
         <AppIcon name="edit" />
         <View style={styles.textContainer}>
-          <Text style={styles.name}>{data.name}</Text>
+          {data.value.q !== null && (
+            <Text style={styles.name}>{data.value.q}</Text>
+          )}
           <Text style={styles.filters}>{renderFilters()}</Text>
         </View>
       </View>
 
       <View style={styles.rightContent}>
-        {!!data.results && data.results !== 0 && (
+        {/* {!!data.value.results && data.value.results !== 0 && (
           <View style={styles.resultsContainer}>
-            <Text style={styles.results}>{data.results}</Text>
+            <Text style={styles.results}>{data.value.results}</Text>
           </View>
-        )}
+        )} */}
         <Pressable>
           <AppIcon name="arrow" size={12} />
         </Pressable>

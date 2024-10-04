@@ -24,6 +24,7 @@ export default ItemStatus;
 
 const styles = StyleSheet.create({
   status: {
+    alignSelf: 'flex-start',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderWidth: 1,

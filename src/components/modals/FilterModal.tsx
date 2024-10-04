@@ -2,11 +2,21 @@ import {View} from 'react-native';
 import React, {useState} from 'react';
 
 import {Modal, TabsSwitch, FilterItemsForm} from '@/components';
-import {IModalProps} from '@/types';
+import {IFilters, IModalProps} from '@/types';
 import TABS from '@/constants/Tabs';
 import {useTabAnimation} from '@/hooks';
 
-const FilterModal = ({visible, onClose}: IModalProps) => {
+interface IFilterModalProps extends IModalProps {
+  filters?: IFilters;
+  setFilters: React.Dispatch<React.SetStateAction<IFilters | undefined>>;
+}
+
+const FilterModal = ({
+  visible,
+  onClose,
+  filters,
+  setFilters,
+}: IFilterModalProps) => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
 
   const {underlinePosition} = useTabAnimation(activeTab);
@@ -26,7 +36,12 @@ const FilterModal = ({visible, onClose}: IModalProps) => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           headerStyle={{padding: 0}}>
-          <FilterItemsForm type={activeTab} />
+          <FilterItemsForm
+            type={activeTab}
+            filters={filters}
+            setFilters={setFilters}
+            onFormClose={onClose}
+          />
         </TabsSwitch>
       </View>
     </Modal>

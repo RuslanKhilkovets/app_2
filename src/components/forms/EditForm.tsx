@@ -22,6 +22,7 @@ import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
 import {DateFormatter} from '@/helpers';
+import {ITEM_STATUS} from '@/constants';
 
 interface IItemFormProps {
   onFormClose: () => void;
@@ -38,6 +39,9 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
+  const [isArchieved, setIsArchieved] = useState(
+    item?.status === ITEM_STATUS.ACTIVE,
+  );
 
   const insets = useSafeAreaInsets();
 
@@ -93,7 +97,9 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
 
   const {isLoading: isRestoreLoading, mutate: mutateRestore} = useAuthMutation({
     mutationFn: Api.myPosts.restore,
-    onSuccess: res => {},
+    onSuccess: res => {
+      setIsArchieved(!isArchieved);
+    },
     onError: ({errors}) => {
       setError(errors?.message);
     },
@@ -102,6 +108,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const onRestore = () => {
     mutateRestore(formData.id);
   };
+
   const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
     mutationFn: Api.myPosts.delete,
     onSuccess: res => {
@@ -255,8 +262,10 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
           <Button
             type="bordered"
             onPress={onRestore}
-            before={<AppIcon name="archive" size={15} />}>
-            В архів
+            before={
+              <AppIcon name={isArchieved ? 'activate' : 'archive'} size={15} />
+            }>
+            {isArchieved ? 'Активувати' : 'В архів'}
           </Button>
           <Button
             type="bordered"

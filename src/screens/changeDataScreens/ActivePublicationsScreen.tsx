@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Pressable} from 'react-native';
+import {FlatList, Pressable, RefreshControl} from 'react-native';
 
 import {PostItem, Screen} from '@/components';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
+import {IPostItem} from '@/types';
 
 const ActivePublicationsScreen = () => {
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState([]);
+  const [openMenuId, setOpenMenuId] = useState<string | null>();
+  const [posts, setPosts] = useState<IPostItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleMenuToggle = (id: number | null) => {
+  const handleMenuToggle = (id: string) => {
     setOpenMenuId(prevId => (prevId === id ? null : id));
   };
+
   const handleMenuClose = () => {
     setOpenMenuId(null);
   };
@@ -27,9 +29,17 @@ const ActivePublicationsScreen = () => {
     },
   });
 
-  useEffect(() => {
+  const fetchPosts = () => {
     mutate();
+  };
+
+  useEffect(() => {
+    fetchPosts();
   }, []);
+
+  const onRefresh = () => {
+    fetchPosts();
+  };
 
   return (
     <Screen title="Активні публікації" backColor="#fff">
@@ -42,11 +52,15 @@ const ActivePublicationsScreen = () => {
               isOpen={openMenuId === item.id}
               onMenuToggle={() => handleMenuToggle(item.id)}
               resetMenu={handleMenuClose}
+              setPosts={setPosts}
             />
           )}
           style={{overflow: 'visible', marginTop: 25}}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{gap: 15, overflow: 'visible'}}
+          contentContainerStyle={{gap: 15}}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+          }
         />
       </Pressable>
     </Screen>

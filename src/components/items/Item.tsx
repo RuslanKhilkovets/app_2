@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     marginBottom: 16,
+    overflow: 'hidden',
   },
   content: {
     flex: 1,

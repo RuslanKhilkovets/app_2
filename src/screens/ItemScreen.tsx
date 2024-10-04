@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Linking,
   ActivityIndicator,
+  Share,
 } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -83,7 +84,15 @@ const ItemScreen = () => {
       console.error('Failed to open phone dialer', err),
     );
   };
-
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Поділіться цією публікацією: ${data?.name} - ${data?.body}`,
+      });
+    } catch (error) {
+      console.error('Share Error: ', error);
+    }
+  };
   useEffect(() => {
     postMutate(id);
   }, []);
@@ -96,9 +105,9 @@ const ItemScreen = () => {
             <View
               style={[styles.actions, {paddingHorizontal: 16, paddingTop: 20}]}>
               <GoBack color="#fff" />
-              <Pressable>
+              <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
                 <AppIcon name="share" color="#fff" size={25} />
-              </Pressable>
+              </TouchableOpacity>
             </View>
 
             {photos.length !== 0 ? (

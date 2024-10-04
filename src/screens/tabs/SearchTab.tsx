@@ -4,34 +4,61 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
+  Pressable,
 } from 'react-native';
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useRoute} from '@react-navigation/native';
 
 import {
   AppIcon,
-  CategoriesList,
+  CategoriesModal,
   FilterModal,
   Input,
   ItemsContainer,
-  Modal,
   SelectedFilterItem,
   TabsSwitch,
 } from '@/components';
 import TABS from '@/constants/Tabs';
-import {IItem} from '@/types';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ICategory, IFilters, IItem, ILocation} from '@/types';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
+import {DateFormatter} from '@/helpers';
+import STATIC_DATE_TYPE from '@/constants/StaticDateType';
 
 const SearchTab = () => {
+  const route = useRoute();
+
+  const initialFilters: IFilters = route.params?.filters || {
+    action_at_from: null,
+    action_at_to: null,
+    category: route.params?.category,
+    location: route.params?.location,
+    last: undefined,
+    type: TABS.I_LOOKING_FOR,
+    withPhoto: undefined,
+    withBody: undefined,
+  };
+
+  const [isFilterFavorite, setIsFilterFavorite] = useState(
+    route?.params?.is_favorite,
+  );
+
+  const [activeTab, setActiveTab] = useState(
+    route.params?.filters?.type || TABS.I_LOOKING_FOR,
+  );
+
   const [error, setError] = useState('');
-  const [items, setItems] = useState<{[key: string]: IItem[]}>({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [items, setItems] = useState<{[key: TABS]: IItem[]}>({});
+  const [searchQuery, setSearchQuery] = useState(initialFilters.q || '');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [filterId, setFilterId] = useState(route?.params?.id || null);
+
+  const [filters, setFilters] = useState<IFilters>(initialFilters);
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
@@ -51,21 +78,75 @@ const SearchTab = () => {
     },
   });
 
+  const {isLoading: isAddFavoritePostsLoading, mutate: addFavoriteFilter} =
+    useAuthMutation({
+      mutationFn: Api.favorites.createFilter,
+      onSuccess: res => {
+        filterId !== null && filterId !== route?.params?.id
+          ? saveFilterById(filterId)
+          : saveFilterById(res.data.data.id);
+        setFilterId(res.data.data.id);
+      },
+      onError: ({errors}) => {
+        setError(errors?.message);
+      },
+    });
+
+  const {mutate: saveFilterById} = useAuthMutation({
+    mutationFn: Api.favorites.toggleFilter,
+    onSuccess: res => {
+      setIsFilterFavorite(res.data.result);
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
+
+  const onAddOrToggleFavoriteFilter = () => {
+    if (
+      !!(
+        filterId !== null ||
+        (route?.params?.id &&
+          route?.params?.id !== null &&
+          filterId === route?.params?.id)
+      )
+    ) {
+      saveFilterById(filterId);
+    } else {
+      addFavoriteFilter({...filters, q: searchQuery});
+    }
+  };
+
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
   };
 
-  useEffect(() => {
-    if (!items[activeTab]) {
-      setIsLoading(true);
-      mutate({type: activeTab});
-    }
-  }, [activeTab]);
+  const refreshItems = () => {
+    mutate({
+      ...filters,
+      type: activeTab,
+      location: filters?.location?.id,
+      category: filters?.category?.id,
+      q: searchQuery,
+    });
+  };
 
-  const memoizedItems = useMemo(
-    () => items[activeTab] || [],
-    [items, activeTab],
-  );
+  useEffect(() => {
+    setFilters(route?.params?.filters);
+    route?.params?.filters?.type && setActiveTab(route?.params?.filters?.type);
+  }, [route?.params?.filters]);
+
+  useEffect(() => {
+    refreshItems();
+  }, [filters, activeTab]);
+
+  useEffect(() => {
+    setFilters(prev => ({...prev, q: searchQuery}));
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setIsCategoriesOpen(false);
+  }, [filters.category]);
 
   return (
     <>
@@ -80,8 +161,17 @@ const SearchTab = () => {
               placeholder="Пошук..."
               endAdornment={
                 <View style={styles.endAdornments}>
-                  <AppIcon name="favorite_menu" size={20} />
-
+                  <Pressable onPress={onAddOrToggleFavoriteFilter}>
+                    <AppIcon
+                      name={
+                        isFilterFavorite
+                          ? 'favorite_bold_menu'
+                          : 'favorite_menu'
+                      }
+                      color={isFilterFavorite ? 'red' : 'black'}
+                      size={20}
+                    />
+                  </Pressable>
                   <TouchableOpacity
                     style={[
                       styles.filterBtn,
@@ -93,57 +183,110 @@ const SearchTab = () => {
                       Фільтр
                     </Text>
 
-                    <AppIcon size={10} name="filter" />
+                    <AppIcon size={10} name={'filter'} />
                   </TouchableOpacity>
                 </View>
               }
             />
 
-            <View style={styles.categories}>
-              <SelectedFilterItem text="Луцьк" />
-              <SelectedFilterItem
-                filterMode
-                text="Виберіть категорію"
-                onPress={() => setIsCategoriesOpen(true)}
-              />
-            </View>
+            <ScrollView style={styles.categories} horizontal>
+              {filters?.category?.name ? (
+                <SelectedFilterItem
+                  text={filters?.category?.name}
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, category: null}))
+                  }
+                />
+              ) : (
+                <SelectedFilterItem
+                  filterMode
+                  text="Виберіть категорію"
+                  onPress={() => setIsCategoriesOpen(true)}
+                />
+              )}
+              {filters?.location?.name ? (
+                <SelectedFilterItem
+                  text={filters?.location?.name}
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, location: null}))
+                  }
+                />
+              ) : null}
+              {filters?.action_at_from ? (
+                <SelectedFilterItem
+                  text={`3 ${DateFormatter.formatLocalizedDate(
+                    new Date(filters?.action_at_from),
+                  )}`}
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, action_at_from: null}))
+                  }
+                />
+              ) : null}
+              {filters?.action_at_to && (
+                <SelectedFilterItem
+                  text={`По ${DateFormatter.formatLocalizedDate(
+                    new Date(filters?.action_at_to),
+                  )}`}
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, action_at_to: null}))
+                  }
+                />
+              )}
+              {filters?.last && (
+                <SelectedFilterItem
+                  text={`${
+                    filters?.last === STATIC_DATE_TYPE.MONTH
+                      ? 'За останній місяць'
+                      : 'За останній тиждень'
+                  }`}
+                  removeItem={() => setFilters(prev => ({...prev, last: null}))}
+                />
+              )}
+              {filters?.withBody ? (
+                <SelectedFilterItem
+                  text="З описом"
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, withBody: null}))
+                  }
+                />
+              ) : null}
+              {filters?.withPhoto ? (
+                <SelectedFilterItem
+                  text="З фото"
+                  removeItem={() =>
+                    setFilters(prev => ({...prev, withPhoto: null}))
+                  }
+                />
+              ) : null}
+            </ScrollView>
           </View>
         }>
-        {isLoading ? (
-          <ActivityIndicator
-            size="large"
-            color={themes[colorScheme].primary}
-            style={{marginTop: 100}}
-          />
-        ) : (
-          <>
-            {activeTab === TABS.I_LOOKING_FOR && (
-              <ItemsContainer
-                items={memoizedItems}
-                style={{padding: 20}}
-                containerStyle={{paddingBottom: insets.bottom}}
-              />
-            )}
-            {activeTab === TABS.I_FIND && (
-              <ItemsContainer
-                items={memoizedItems}
-                style={{padding: 20}}
-                containerStyle={{paddingBottom: insets.bottom}}
-              />
-            )}
-          </>
-        )}
+        <View style={{backgroundColor: '#fff', minHeight: 550}}>
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              color={themes[colorScheme].primary}
+              style={{marginTop: 100}}
+            />
+          ) : (
+            <ItemsContainer
+              items={items[activeTab]}
+              style={{padding: 20}}
+              containerStyle={{paddingBottom: insets.bottom}}
+            />
+          )}
+        </View>
       </TabsSwitch>
 
-      <Modal
-        title="Категорії"
-        visible={isCategoriesOpen}
+      <CategoriesModal
         onClose={() => setIsCategoriesOpen(false)}
-        openFrom="right">
-        <CategoriesList />
-      </Modal>
+        visible={isCategoriesOpen}
+        setCategory={category => setFilters(prev => ({...prev, category}))}
+      />
 
       <FilterModal
+        setFilters={setFilters}
+        filters={filters}
         visible={isFilterModalVisible}
         onClose={() => setIsFilterModalVisible(false)}
       />
@@ -173,8 +316,8 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   categories: {
-    marginTop: 14,
     flexDirection: 'row',
+    marginTop: 14,
     gap: 10,
   },
   tabsSwitchersContainer: {

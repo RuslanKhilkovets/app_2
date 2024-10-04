@@ -3,7 +3,7 @@ import ILocation from '@/types/ILocation';
 import IPhoto from '@/types/IPhoto';
 
 export default interface IPostItem {
-  id: string;
+  id: string | null;
   name: string;
   location: ILocation;
   photos: IPhoto[];

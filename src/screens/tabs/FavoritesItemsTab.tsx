@@ -16,11 +16,24 @@ import {Api} from '@/api';
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
   const [wantedPosts, setWantedPosts] = useState<IItem[]>([]);
+  const [wantedFilters, setWantedFilters] = useState<any[]>([]);
   const [foundedPosts, setFoundedPosts] = useState<IItem[]>([]);
+  const [foundedFilters, setFoundedFilters] = useState<any[]>([]);
   const [error, setError] = useState('');
 
   const insets = useSafeAreaInsets();
 
+  const {isLoading: isFiltersLoading, mutate: filtersMutate} = useAuthMutation({
+    mutationFn: Api.favorites.getFilters,
+    onSuccess: res => {
+      activeTab === TABS.I_LOOKING_FOR
+        ? setWantedFilters(res.data.data)
+        : setFoundedFilters(res.data.data);
+    },
+    onError: ({errors}) => {
+      setError(errors?.message);
+    },
+  });
   const {isLoading: isPostsLoading, mutate: postsMutate} = useAuthMutation({
     mutationFn: Api.favorites.getAll,
     onSuccess: res => {
@@ -35,6 +48,7 @@ const FavoritesItemsTab = () => {
 
   useEffect(() => {
     postsMutate({type: activeTab});
+    filtersMutate({type: activeTab});
   }, [activeTab]);
 
   return (
@@ -48,32 +62,60 @@ const FavoritesItemsTab = () => {
         <ScrollView style={styles.content}>
           {activeTab === TABS.I_LOOKING_FOR ? (
             <>
-              {/* <FavoriteBlock title="Пошуки">
-                <FlatList
-                  scrollEnabled={false}
-                  data={posts}
-                  keyExtractor={item => item.id.toString()}
-                  renderItem={({item}) => <SearchItem data={item} />}
-                />
-              </FavoriteBlock> */}
+              {wantedFilters?.length > 0 && (
+                <FavoriteBlock title="Пошуки">
+                  <FlatList
+                    scrollEnabled={false}
+                    data={wantedFilters}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({item}) => <SearchItem data={item} />}
+                  />
+                </FavoriteBlock>
+              )}
 
-              <FavoriteBlock title="Публікації">
-                <ItemsContainer
-                  items={wantedPosts}
-                  style={{paddingTop: 20}}
-                  containerStyle={{paddingBottom: insets.bottom}}
-                />
-              </FavoriteBlock>
+              {wantedPosts?.length > 0 && (
+                <FavoriteBlock title="Публікації">
+                  <ItemsContainer
+                    items={wantedPosts}
+                    style={{paddingTop: 20}}
+                    containerStyle={{paddingBottom: insets.bottom}}
+                  />
+                </FavoriteBlock>
+              )}
+              {((wantedFilters?.length === 0 &&
+                wantedPosts?.length === 0 &&
+                isFiltersLoading) ||
+                isPostsLoading) && (
+                <FavoriteBlock title="Немає збережених фільтрів"></FavoriteBlock>
+              )}
             </>
           ) : (
             <>
-              <FavoriteBlock title="Публікації">
-                <ItemsContainer
-                  items={foundedPosts}
-                  style={{paddingTop: 20}}
-                  containerStyle={{paddingBottom: insets.bottom}}
-                />
-              </FavoriteBlock>
+              {foundedFilters?.length > 0 && (
+                <FavoriteBlock title="Пошуки">
+                  <FlatList
+                    scrollEnabled={false}
+                    data={foundedFilters}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({item}) => <SearchItem data={item.value} />}
+                  />
+                </FavoriteBlock>
+              )}
+              {foundedPosts?.length > 0 && (
+                <FavoriteBlock title="Публікації">
+                  <ItemsContainer
+                    items={foundedPosts}
+                    style={{paddingTop: 20}}
+                    containerStyle={{paddingBottom: insets.bottom}}
+                  />
+                </FavoriteBlock>
+              )}
+              {((foundedFilters?.length === 0 &&
+                foundedPosts?.length === 0 &&
+                isFiltersLoading) ||
+                isPostsLoading) && (
+                <FavoriteBlock title="Немає збережених фільтрів"></FavoriteBlock>
+              )}
             </>
           )}
         </ScrollView>

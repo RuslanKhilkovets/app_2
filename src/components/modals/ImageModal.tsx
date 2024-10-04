@@ -24,8 +24,6 @@ const ImageModal = ({
   id,
   active,
 }: IImageModalProps) => {
-  console.log(active);
-
   return (
     <Modal
       visible={visible}

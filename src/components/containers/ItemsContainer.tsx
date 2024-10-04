@@ -1,4 +1,4 @@
-import {FlatList, ScrollView, StyleSheet, View, ViewStyle} from 'react-native';
+import {FlatList, StyleSheet, Text, ViewStyle} from 'react-native';
 import React from 'react';
 
 import {IItem} from '@/types';
@@ -15,7 +15,7 @@ const ItemsContainer = ({
   style,
   containerStyle,
 }: IItemsContainerProps) => {
-  return (
+  return items?.length !== 0 ? (
     <FlatList
       scrollEnabled={false}
       data={items}
@@ -24,8 +24,10 @@ const ItemsContainer = ({
       numColumns={2}
       columnWrapperStyle={styles.columnWrapper}
       contentContainerStyle={[style]}
-      style={[containerStyle, {backgroundColor: '#fff'}]}
+      style={[containerStyle, {backgroundColor: '#fff', minHeight: 550}]}
     />
+  ) : (
+    <Text style={styles.noDataText}>Дані відсутні</Text>
   );
 };
 
@@ -35,5 +37,16 @@ const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: 'space-between',
     gap: 16,
+  },
+  noData: {
+    minHeight: 560,
+  },
+  noDataText: {
+    marginTop: 50,
+    width: '100%',
+    textAlign: 'center',
+    fontFamily: 'Raleway-Medium',
+    fontSize: 24,
+    color: '#999',
   },
 });

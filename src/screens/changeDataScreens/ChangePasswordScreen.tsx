@@ -31,7 +31,6 @@ const ChangePasswordScreen = () => {
   const {isLoading, mutate} = useAuthMutation({
     mutationFn: Api.profile.updatePassword,
     onSuccess: res => {
-      console.log('success');
       reset();
     },
     onError: ({errors}) => {

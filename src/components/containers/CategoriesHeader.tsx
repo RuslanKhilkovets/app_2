@@ -8,8 +8,8 @@ import {ILocation} from '@/types';
 interface ICategotiesHeaderProps {
   searchQuery: string;
   setSearchQuery: (state: string) => void;
-  location: ILocation;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
+  location: ILocation | null;
+  setLocation: React.Dispatch<React.SetStateAction<ILocation | null>>;
 }
 
 const CategoriesHeader = ({

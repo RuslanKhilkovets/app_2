@@ -41,8 +41,6 @@ const Navigation = () => {
       setIsAuth(!!accessToken);
       dispatch(setUser(user));
 
-      console.log(user);
-
       // Simulate loading for 5 seconds
       setTimeout(() => {
         setLoading(false);

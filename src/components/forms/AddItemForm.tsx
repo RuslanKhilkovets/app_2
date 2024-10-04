@@ -45,8 +45,6 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
 
-  console.log(formData.imgUris);
-
   const insets = useSafeAreaInsets();
 
   const {user_id} = useSelector(state => state)?.user;
@@ -113,7 +111,6 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       user_id,
       photos: formData.imgUris,
     };
-    console.log(formData.imgUris);
 
     mutate(data);
   };

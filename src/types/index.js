@@ -14,3 +14,4 @@ export {default as TRouteNames} from './TRouteNames';
 export {default as IRoute} from './IRoute';
 export {default as IPhoto} from './IPhoto';
 export {default as IPostItem} from './IPostItem';
+export {default as IFilters} from './IFilters';

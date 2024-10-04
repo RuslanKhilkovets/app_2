@@ -27,7 +27,7 @@ class DateFormatter {
     date: Date | undefined,
     withYear: boolean = false,
   ): string | null {
-    if (!date) return null;
+    if (!date || !(date instanceof Date)) return null;
 
     return date.toLocaleDateString('uk-UA', {
       day: 'numeric',

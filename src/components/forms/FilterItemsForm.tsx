@@ -17,51 +17,38 @@ import {
   CategoriesModal,
   LocationModal,
 } from '@/components';
-import {ICategory, ILocation} from '@/types';
+import {ICategory, IFilters, ILocation} from '@/types';
 import TABS from '@/constants/Tabs';
-import {useAuthMutation} from '@/hooks';
-import {Api} from '@/api';
-
-enum FILTER_TYPE {
-  WITH_DESCRIPTION = 'withBody',
-  WITH_PIC = 'withPhoto',
-}
-
-enum STATIC_DATE_TYPE {
-  WEEK = 'week',
-  MONTH = 'month',
-}
+import STATIC_DATE_TYPE from '@/constants/StaticDateType';
+import FILTER_TYPE from '@/constants/FilterType';
 
 interface IFilterItemsFormProps {
   type: TABS;
+  filters: IFilters;
+  setFilters: React.Dispatch<React.SetStateAction<IFilters | undefined>>;
+  onFormClose: () => void;
 }
 
-const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
+const FilterItemsForm = ({
+  type,
+  filters,
+  setFilters,
+  onFormClose,
+}: IFilterItemsFormProps) => {
   const [selectedValues, setSelectedValues] = useState<FILTER_TYPE[]>([]);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
-  const [category, setCategory] = useState<ICategory | null>(null);
-  const [staticDateType, setStaticDateType] = useState<STATIC_DATE_TYPE | null>(
-    null,
+  const [startDate, setStartDate] = useState<Date | null>(
+    filters.action_at_from,
   );
-  const [location, setLocation] = useState<ILocation | null>({
-    name: 'Невідомо',
-  });
-  const [error, setError] = useState('');
+  const [endDate, setEndDate] = useState<Date | null>(filters.action_at_to);
+  const [category, setCategory] = useState<ICategory | null>(filters?.category);
+  const [staticDateType, setStaticDateType] = useState<
+    STATIC_DATE_TYPE | null | undefined
+  >(filters?.last);
+  const [location, setLocation] = useState<ILocation | null>(null);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-
-  const {isLoading, mutate} = useAuthMutation({
-    mutationFn: Api.favorites.createFilter,
-    onSuccess: res => {
-      console.log(res);
-    },
-    onError: ({errors}) => {
-      setError(errors?.message);
-    },
-  });
 
   const handleChooseStaticDate = (type: STATIC_DATE_TYPE | null) => {
     setStartDate(undefined);
@@ -91,12 +78,15 @@ const FilterItemsForm = ({type}: IFilterItemsFormProps) => {
       action_at_from: startDate || null,
       action_at_to: endDate || null,
       last: staticDateType || null,
-      category: category?.id,
+      category: category,
       withPhoto: +selectedValues.includes(FILTER_TYPE.WITH_PIC),
       withBody: +selectedValues.includes(FILTER_TYPE.WITH_DESCRIPTION),
+      location: location,
     };
 
-    mutate(params);
+    setFilters(params);
+
+    onFormClose();
   };
 
   useEffect(() => {

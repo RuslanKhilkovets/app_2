@@ -10,18 +10,28 @@ import {ITEM_STATUS} from '@/constants';
 import {IPhoto} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
+import {useNavigation} from '@react-navigation/native';
 
 interface IPostItemProps {
   item: IPostItem;
   isOpen: boolean;
   onMenuToggle: () => void;
   resetMenu: () => void;
+  setPosts: React.Dispatch<React.SetStateAction<IPostItem[]>>;
 }
 
-const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
+const PostItem = ({
+  item,
+  isOpen,
+  onMenuToggle,
+  resetMenu,
+  setPosts,
+}: IPostItemProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const mainPhoto = item.photos.find((photo: IPhoto) => photo.is_main);
   const [error, setError] = useState('');
+
+  const {navigate} = useNavigation();
 
   const formattedDate =
     typeof item.action_at === 'string'
@@ -30,11 +40,14 @@ const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
 
   const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
     mutationFn: Api.myPosts.delete,
-    onSuccess: res => {},
+    onSuccess: res => {
+      setPosts(prev => prev.filter(post => post.id !== item.id));
+    },
     onError: ({errors}) => {
       setError(errors?.message);
     },
   });
+
   const {isLoading: isRestoreLoading, mutate: mutateRestore} = useAuthMutation({
     mutationFn: Api.myPosts.restore,
     onSuccess: res => {},
@@ -50,12 +63,18 @@ const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
   const onRestore = () => {
     mutateRestore(item.id);
   };
+
+  const navToItemScreen = () => {
+    navigate('Item', {id: item.id});
+    resetMenu();
+  };
+
   return (
     <>
       <TouchableOpacity
         style={styles.container}
         activeOpacity={0.7}
-        onPress={resetMenu}>
+        onPress={navToItemScreen}>
         <View style={{flexDirection: 'row', gap: 15}}>
           <View
             style={[
@@ -65,7 +84,7 @@ const PostItem = ({item, isOpen, onMenuToggle, resetMenu}: IPostItemProps) => {
                 : styles.imgContainer_active,
             ]}>
             {item.photos && mainPhoto ? (
-              <Image source={{uri: mainPhoto.uri}} style={styles.img} />
+              <Image source={{uri: mainPhoto.url}} style={styles.img} />
             ) : item.status === ITEM_STATUS.INACTIVE ? (
               <Image source={InactiveItem} style={styles.img} />
             ) : (
@@ -132,6 +151,7 @@ const styles = StyleSheet.create({
   },
   imgContainer: {
     borderRadius: 5,
+    overflow: 'hidden',
   },
   imgContainer_active: {
     backgroundColor: '#fdeae9',
