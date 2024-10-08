@@ -7,9 +7,9 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useRoute} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 
 import {
   AppIcon,
@@ -34,10 +34,10 @@ const SearchTab = () => {
   const initialFilters: IFilters = route.params?.filters || {
     action_at_from: null,
     action_at_to: null,
-    category: route.params?.category,
-    location: route.params?.location,
+    category: null,
+    location: null,
     last: undefined,
-    type: TABS.I_LOOKING_FOR,
+    type: undefined,
     withPhoto: undefined,
     withBody: undefined,
   };
@@ -58,7 +58,13 @@ const SearchTab = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [filterId, setFilterId] = useState(route?.params?.id || null);
 
-  const [filters, setFilters] = useState<IFilters>(initialFilters);
+  const [filters, setFilters] = useState<IFilters>({
+    ...initialFilters,
+    category: route?.params?.category,
+    location: route?.params?.location,
+  });
+
+  console.log(route?.params?.filters);
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
@@ -130,15 +136,13 @@ const SearchTab = () => {
       q: searchQuery,
     });
   };
-
-  useEffect(() => {
-    setFilters(route?.params?.filters);
-    route?.params?.filters?.type && setActiveTab(route?.params?.filters?.type);
-  }, [route?.params?.filters]);
-
   useEffect(() => {
     refreshItems();
   }, [filters, activeTab]);
+
+  useEffect(() => {
+    setFilters(prev => ({...prev, type: activeTab}));
+  }, [activeTab]);
 
   useEffect(() => {
     setFilters(prev => ({...prev, q: searchQuery}));
@@ -147,6 +151,15 @@ const SearchTab = () => {
   useEffect(() => {
     setIsCategoriesOpen(false);
   }, [filters.category]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshItems();
+      route?.params?.filters && setFilters(route.params.filters);
+      !!route?.params?.filters?.type &&
+        setActiveTab(route?.params?.filters?.type);
+    }, [route?.params?.filters]),
+  );
 
   return (
     <>

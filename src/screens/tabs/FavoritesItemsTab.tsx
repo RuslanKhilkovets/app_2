@@ -97,7 +97,7 @@ const FavoritesItemsTab = () => {
                     scrollEnabled={false}
                     data={foundedFilters}
                     keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => <SearchItem data={item.value} />}
+                    renderItem={({item}) => <SearchItem data={item} />}
                   />
                 </FavoriteBlock>
               )}

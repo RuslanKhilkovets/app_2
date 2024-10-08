@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -15,13 +15,13 @@ import {IAddItemFormData, IModalProps} from '@/types';
 import {Button} from '@/components';
 import {selectImage, takePhoto} from '@/helpers';
 import {Api} from '@/api';
+import {useAuthMutation} from '@/hooks';
 
 interface IPicImageDialogProps extends IModalProps {
   setUris: React.Dispatch<React.SetStateAction<IAddItemFormData>>;
 }
 
 const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
-  const [isLoading, setIsLoading] = useState(false);
   const slideAnim = useRef(new Animated.Value(300)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -46,29 +46,35 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
     visible ? animateModal(0) : animateModal(300, onClose);
   }, [visible]);
 
+  const {isLoading: isUploadLoading, mutate: uploadImageMutate} =
+    useAuthMutation({
+      mutationFn: Api.media.upload,
+      onSuccess: res => {
+        setUris(prev => {
+          const newImgUris = [...prev.imgUris];
+          newImgUris.push({
+            id: res.data.data.id,
+            uri: res.data.data.url,
+            is_main: prev.imgUris.length === 0,
+            delete: false,
+          });
+
+          return {
+            ...prev,
+            imgUris: newImgUris,
+          };
+        });
+      },
+      onError: ({errors}) => {},
+    });
+  console.log('isUploadLoading хуй', isUploadLoading);
+
   const handleSelectImage = async () => {
     try {
       const selectedImage = await selectImage();
 
       if (selectedImage) {
-        setIsLoading(true);
-        await Api.media.upload(selectedImage).then(res => {
-          setUris(prev => {
-            const newImgUris = [...prev.imgUris];
-            newImgUris.push({
-              id: res.data.data.id,
-              uri: res.data.data.url,
-              is_main: prev.imgUris.length === 0,
-              delete: false,
-            });
-
-            return {
-              ...prev,
-              imgUris: newImgUris,
-            };
-          });
-        });
-        setIsLoading(false);
+        uploadImageMutate(selectedImage);
       }
     } catch (error) {
       console.log('Error selecting image:', error);
@@ -100,15 +106,15 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
       onClose();
     } catch (error) {
       console.log('Error taking photo:', error);
-    } finally {
-      onClose();
     }
   };
+
+  console.log(isUploadLoading);
 
   return (
     <Modal transparent visible={visible} onRequestClose={onClose}>
       <Animated.View style={[styles.overlay, {opacity: opacityAnim}]}>
-        {isLoading ? (
+        {isUploadLoading ? (
           <ActivityIndicator style={{flex: 1}} size={'large'} />
         ) : (
           <Animated.View

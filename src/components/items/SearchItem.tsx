@@ -13,6 +13,7 @@ import {ICategory, ILocation} from '@/types';
 import {FILTER_TYPE, StaticDateType} from '@/constants';
 import {useNavigation} from '@react-navigation/native';
 import {DateFormatter} from '@/helpers';
+import STATIC_DATE_TYPE from '@/constants/StaticDateType';
 
 interface ISearchItemProps {
   data: {
@@ -27,6 +28,7 @@ interface ISearchItemProps {
       location?: ILocation | null;
       withPhoto: FILTER_TYPE;
       withBody: FILTER_TYPE;
+      last: STATIC_DATE_TYPE;
     };
   };
 }
@@ -36,21 +38,23 @@ const SearchItem = ({data}: ISearchItemProps) => {
   const renderFilters = () => {
     let filtersStr = '';
 
-    if (data.value.category) {
+    if (data.value?.category) {
       filtersStr += `Категорія: ${data?.value?.category?.name} / `;
     }
-    if (data.value.action_at_from && data.value.action_at_to) {
+    if (data.value?.action_at_from && data.value?.action_at_to) {
       filtersStr += `Період: з ${DateFormatter.formatLocalizedDate(
         new Date(data.value.action_at_from),
-      )} по ${DateFormatter.formatLocalizedDate(new Date(data.value.action_at_to))} /`;
+      )} по ${DateFormatter.formatLocalizedDate(
+        new Date(data.value.action_at_to),
+      )} /`;
     }
-    if (data.value.location) {
+    if (data.value?.location) {
       filtersStr += `Локація: ${data?.value?.location?.name} / `;
     }
-    if (data.value.withPhoto) {
+    if (data.value?.withPhoto) {
       filtersStr += `З фото / `;
     }
-    if (data.value.withBody) {
+    if (data.value?.withBody) {
       filtersStr += `З описом / `;
     }
     filtersStr += `Тип пошуку: ${
@@ -63,6 +67,8 @@ const SearchItem = ({data}: ISearchItemProps) => {
 
     return filtersStr;
   };
+
+  console.log(data);
 
   return (
     <TouchableOpacity
@@ -78,8 +84,8 @@ const SearchItem = ({data}: ISearchItemProps) => {
       <View style={styles.mainContent}>
         <AppIcon name="edit" />
         <View style={styles.textContainer}>
-          {data.value.q !== null && (
-            <Text style={styles.name}>{data.value.q}</Text>
+          {data?.value?.q !== null && (
+            <Text style={styles.name}>{data?.value?.q || ''}</Text>
           )}
           <Text style={styles.filters}>{renderFilters()}</Text>
         </View>

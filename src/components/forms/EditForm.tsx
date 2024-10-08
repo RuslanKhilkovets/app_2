@@ -21,7 +21,6 @@ import {IAddItemFormData, ICategory, ILocation} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
-import {DateFormatter} from '@/helpers';
 import {ITEM_STATUS} from '@/constants';
 
 interface IItemFormProps {
@@ -32,13 +31,16 @@ interface IItemFormProps {
 const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     ...item,
-    imgUris: [],
+    imgUris: item.photos,
   });
+  console.log(formData);
+
   const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
+  const [pickedImages, setPickedImages] = useState([]);
   const [isArchieved, setIsArchieved] = useState(
     item?.status === ITEM_STATUS.ACTIVE,
   );
@@ -65,7 +67,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const setActiveImage = (uri: string) => {
     setFormData(prev => ({
       ...prev,
-      imgUris: prev.imgUris.map(image => ({
+      photos: prev.photos.map(image => ({
         ...image,
         is_main: image.uri === uri,
       })),
@@ -85,7 +87,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
     setFormData((prev: IAddItemFormData) => {
       return {
         ...prev,
-        imgUris: prev.imgUris.filter(item => item.id !== id),
+        photos: prev.photos.filter(item => item.id !== id),
       };
     });
   };
@@ -126,15 +128,14 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const handleFormSubmit = () => {
     const payload = {
       type: formData.type,
-      is_remuneration: +formData.forRemuneration,
+      is_remuneration: +formData.is_remuneration,
       status: 'archived',
       name: formData.name,
       phone: formData.phone,
       body: formData.description,
-      action_at: DateFormatter.formatDateTime(formData.date),
       category_id: formData.category?.id,
       location_id: formData.location.id,
-      photos: [], // TODO: add photos (formData.imgUris)
+      photos: formData.imgUris,
     };
     mutate({postId: formData.id, payload});
   };
@@ -191,12 +192,12 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
 
           <FlatList
             scrollEnabled={false}
-            data={formData.imgUris}
+            data={formData.photos}
             renderItem={({item}) => (
               <View style={{width: '25%', paddingHorizontal: 10}}>
                 <Thumbnail
                   id={item.id}
-                  uri={item.uri}
+                  uri={item.url}
                   active={item.is_main}
                   setActiveImage={setActiveImage}
                   onDelete={onDeleteImage}
