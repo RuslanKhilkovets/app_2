@@ -57,10 +57,6 @@ const SearchItem = ({data}: ISearchItemProps) => {
     if (data.value?.withBody) {
       filtersStr += `З описом / `;
     }
-    filtersStr += `Тип пошуку: ${
-      data?.value?.type === TABS.I_FIND ? 'Знайшов / ' : 'Загубив / '
-    }`;
-
     filtersStr += `За останній:  ${
       data?.value?.last === StaticDateType.MONTH ? 'місяць' : 'тиждень'
     }`;
