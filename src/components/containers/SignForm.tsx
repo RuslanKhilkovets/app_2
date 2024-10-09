@@ -31,14 +31,15 @@ const SignForm = () => {
     const previousRoute = state?.routes[state?.index - 1];
     return previousRoute?.name !== 'Tabs';
   };
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop: insets.top}]}>
-        {canGoBack() && (
+        {/* {canGoBack() && (
           <View style={{position: 'absolute', left: 0, top: insets.top}}>
             <GoBack />
           </View>
-        )}
+        )} */}
         <View style={styles.headerActions}>
           <TouchableOpacity onPress={() => handleFormSwitch(SignTypes.SIGN_IN)}>
             <Text

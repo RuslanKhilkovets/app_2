@@ -38,8 +38,7 @@ const SignInForm = () => {
     await login(access_token, user);
 
     reset();
-
-    navigation.navigate('Tabs');
+    navigation.navigate('Main');
   };
 
   const onLoginError = ({errors}: any) => {

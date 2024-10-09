@@ -48,8 +48,6 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
   const {mutate: uploadImageMutate} = useAuthMutation({
     mutationFn: Api.media.upload,
     onSuccess: res => {
-      console.log(res);
-
       setUris(prev => {
         const newImgUris = [...prev.imgUris];
         newImgUris.push({
@@ -73,12 +71,10 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
   const handleSelectImage = async () => {
     try {
       const selectedImage = await selectImage();
-      console.log(selectedImage);
 
-      // if (selectedImage) {
-      //   await uploadImageMutate(selectedImage);
-      // }
-      await uploadImageMutate(selectedImage);
+      if (selectedImage) {
+        await uploadImageMutate(selectedImage);
+      }
     } catch (error) {
       console.log('Error selecting image:', error);
     } finally {

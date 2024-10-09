@@ -64,8 +64,6 @@ const SearchTab = () => {
     location: route?.params?.location,
   });
 
-  console.log(route?.params?.filters);
-
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
 

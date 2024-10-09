@@ -146,7 +146,7 @@ const ItemScreen = () => {
           </View>
           <View style={styles.block}>
             <Text style={styles.item_title}>
-              {data.published_at !== null ||
+              {data.published_at !== null &&
                 `Опубліковано ${data.published_at}`}
             </Text>
             <View

@@ -1,4 +1,4 @@
-import {FlatList, View} from 'react-native';
+import {FlatList, Platform, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -33,7 +33,6 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
     ...item,
     imgUris: item.photos,
   });
-  console.log(formData);
 
   const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -172,7 +171,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
                 ? 'Де знайдено, опис знахідки'
                 : 'Опис'
             }
-            value={formData?.description}
+            value={formData?.body}
             onChangeText={value => handleInputChange('description', value)}
           />
 
@@ -258,7 +257,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
             />
           </View>
         </View>
-        <View style={{gap: 14}}>
+        <View style={{gap: 14, marginBottom: Platform.OS === 'ios' ? 0 : 50}}>
           <Button onPress={handleFormSubmit}>Зберегти</Button>
           <Button
             type="bordered"

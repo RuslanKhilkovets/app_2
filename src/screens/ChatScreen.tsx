@@ -21,25 +21,38 @@ import {ITEM_STATUS} from '@/constants';
 import SendIcon from '@icons/send.svg';
 import {IPicture} from '@/types';
 import {selectImage} from '@/helpers';
+import {useAuthMutation} from '@/hooks';
+import {Api} from '@/api';
 
 const ChatScreen = () => {
   const [newMessage, setNewMessage] = useState('');
-  const [imgUris, setImgUris] = useState<IPicture[]>([]);
+  const [images, setImages] = useState<IPicture[]>([]);
 
   const insets = useSafeAreaInsets();
 
+  const {mutate: uploadImageMutate} = useAuthMutation({
+    mutationFn: Api.media.upload,
+    onSuccess: res => {
+      setImages(prev => [
+        ...prev,
+        {
+          id: res.data.data.id,
+          uri: res.data.data.url,
+          is_main: prev.length === 0,
+          delete: false,
+        },
+      ]);
+    },
+    onError: ({errors}) => {
+      console.log(errors);
+    },
+  });
   const handleSelectImage = async () => {
     try {
-      const photoUri = await selectImage();
+      const photo = await selectImage();
 
-      if (photoUri) {
-        setImgUris(prev => [
-          ...prev,
-          {
-            uri: photoUri,
-            active: false,
-          },
-        ]);
+      if (photo !== null) {
+        await uploadImageMutate(photo);
       }
     } catch (error) {
       console.log('Error taking photo:', error);
@@ -47,7 +60,7 @@ const ChatScreen = () => {
   };
 
   const onDeleteImage = (uri: string) => {
-    setImgUris(prev => prev.filter(item => item.uri !== uri));
+    setImages(prev => prev.filter(item => item.uri !== uri));
   };
 
   const onChange = (text: string) => {
@@ -55,7 +68,7 @@ const ChatScreen = () => {
   };
 
   const sentMessage = () => {
-    setImgUris([]);
+    setImages([]);
     setNewMessage('');
   };
 
@@ -93,15 +106,16 @@ const ChatScreen = () => {
 
         <View
           style={[styles.messageInputContainer, {marginBottom: insets.bottom}]}>
-          {imgUris.length !== 0 && (
+          {images.length !== 0 && (
             <FlatList
               scrollEnabled={false}
-              data={imgUris}
+              data={images}
               renderItem={({item}) => (
                 <View style={{width: '25%', paddingHorizontal: 10}}>
                   <Thumbnail
+                    id={item.id}
                     uri={item.uri}
-                    active={item.active}
+                    active={item.is_main}
                     setActiveImage={() => {}}
                     onDelete={onDeleteImage}
                     style={{width: '100%', aspectRatio: 1}}
@@ -131,7 +145,7 @@ const ChatScreen = () => {
                   <AppIcon name="file" />
                 </TouchableOpacity>
 
-                {(newMessage || imgUris.length !== 0) && (
+                {(newMessage || images.length !== 0) && (
                   <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={sentMessage}
@@ -181,6 +195,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     fontFamily: 'Raleway-Regular',
+    color: '#000',
   },
   object: {
     paddingHorizontal: 20,
@@ -195,5 +210,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontFamily: 'Raleway-Regular',
+    color: '#000',
   },
 });

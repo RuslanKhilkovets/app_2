@@ -77,6 +77,7 @@ const Input: React.FC<IInputProps> = ({
         ]}>
         {mask ? (
           <TextInputMask
+            placeholderTextColor={themes[colorScheme].dark}
             type={'custom'}
             options={{
               mask,
@@ -101,6 +102,7 @@ const Input: React.FC<IInputProps> = ({
           />
         ) : (
           <TextInput
+            placeholderTextColor={themes[colorScheme].dark}
             ref={ref}
             textAlignVertical="top"
             value={value}
@@ -166,6 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontFamily: 'Raleway-Regular',
+    color: '#000',
   },
   activeInput: {
     borderColor: '#000',

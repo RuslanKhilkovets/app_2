@@ -24,7 +24,7 @@ const ItemsContainer = ({
       numColumns={2}
       columnWrapperStyle={styles.columnWrapper}
       contentContainerStyle={[style]}
-      style={[containerStyle, {backgroundColor: '#fff', minHeight: 550}]}
+      style={[containerStyle, {backgroundColor: '#fff', minHeight: 580}]}
     />
   ) : (
     <Text style={styles.noDataText}>Дані відсутні</Text>

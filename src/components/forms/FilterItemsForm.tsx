@@ -185,7 +185,7 @@ const FilterItemsForm = ({
               date={startDate}
               isOpen={openStartDatePicker}
               onClose={() => setOpenStartDatePicker(false)}
-              onChange={date => setStartDate(date || undefined)}
+              onChange={date => setStartDate(date || null)}
             />
 
             <Text style={styles.selectDateText}>до</Text>
@@ -197,7 +197,7 @@ const FilterItemsForm = ({
               minDate={startDate || undefined}
               isOpen={openEndDatePicker}
               onClose={() => setOpenEndDatePicker(false)}
-              onChange={date => setEndDate(date || undefined)}
+              onChange={date => setEndDate(date || null)}
             />
           </View>
         </FilterItem>
@@ -272,5 +272,6 @@ const styles = StyleSheet.create({
   selectDateText: {
     fontSize: 15,
     fontFamily: 'Raleway-Regular',
+    color: '#000',
   },
 });

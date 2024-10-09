@@ -24,8 +24,6 @@ const EditModal = ({visible, onClose, item}: IEditModalProps) => {
       ? themes[colorScheme].purple
       : themes[colorScheme].primary;
 
-  console.log(item);
-
   return (
     <Modal
       visible={visible}

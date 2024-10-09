@@ -64,8 +64,6 @@ const SearchItem = ({data}: ISearchItemProps) => {
     return filtersStr;
   };
 
-  console.log(data);
-
   return (
     <TouchableOpacity
       activeOpacity={0.7}

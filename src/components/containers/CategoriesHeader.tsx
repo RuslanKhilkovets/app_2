@@ -48,13 +48,6 @@ const CategoriesHeader = ({
         value={searchQuery}
         onChangeText={(text: string) => setSearchQuery(text)}
         placeholder="Пошук"
-        inputStyle={{
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: 4},
-          shadowOpacity: 0.1,
-          shadowRadius: 10,
-          elevation: 5,
-        }}
       />
 
       <LocationModal
@@ -94,9 +87,11 @@ const styles = StyleSheet.create({
   locationText: {
     fontFamily: 'Raleway-Regular',
     fontSize: 15,
+    color: '#000',
   },
   activeLocationText: {
     fontFamily: 'Raleway-SemiBold',
     fontSize: 22,
+    color: '#000',
   },
 });
