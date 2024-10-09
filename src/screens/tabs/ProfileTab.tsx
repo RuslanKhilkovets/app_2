@@ -9,24 +9,39 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import SInfo from 'react-native-sensitive-info';
 
 import HatIcon from '@icons/hat.svg';
 import EditIcon from '@icons/edit.svg';
 import NoProfilePic from '@images/no_profile_pic.png';
-import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
+import {
+  Button,
+  EditButton,
+  FilterItem,
+  ExitDialog,
+  PicImageDialog,
+} from '@/components';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 import {IProfileData} from '@/types';
 import {formatPhone} from '@/helpers';
+import {setUser} from '@/store/user';
 
 const ProfileTab = () => {
   const userData = useSelector(state => state)?.user;
+
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [personalData, setPersonalData] = useState<IProfileData>(userData);
+  const [personalData, setPersonalData] = useState<IProfileData>({
+    ...userData,
+    imgUris: [],
+  });
+  const [picImgOpen, setPicImgOpen] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
@@ -41,6 +56,27 @@ const ProfileTab = () => {
     },
   });
 
+  const {mutate: updatePic, isLoading: isUpdatePicLoading} = useAuthMutation({
+    mutationFn: Api.profile.getInfo,
+    onSuccess: async res => {
+      const user = {...userData, photo: profilePic};
+      await SInfo.setItem('user', JSON.stringify(user), {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
+
+      dispatch(setUser(user));
+    },
+    onError: ({errors}) => {
+      console.log(errors);
+    },
+  });
+
+  const setImage = newPic => {
+    setProfilePic(newPic);
+    updatePic(newPic);
+  };
+
   useEffect(() => {
     mutate();
   }, []);
@@ -54,11 +90,18 @@ const ProfileTab = () => {
       <View style={[styles.topFigure, {top: -550 + insets.top}]}></View>
       <View style={[styles.profilePicContainer, {paddingTop: insets.top + 60}]}>
         <View style={{height: 138, width: 138, position: 'relative'}}>
-          <Image source={NoProfilePic} />
+          <Image
+            source={!!profilePic?.url ? {uri: profilePic.url} : NoProfilePic}
+            style={styles.profilePic}
+            resizeMode="cover"
+          />
 
           <View style={styles.hatIcon}>{<HatIcon />}</View>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.editBtn}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.editBtn}
+            onPress={() => setPicImgOpen(true)}>
             <EditIcon />
           </TouchableOpacity>
         </View>
@@ -95,7 +138,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Локація">
           <EditButton
-            title={personalData?.location.name || 'Невідома локація'}
+            title={personalData?.location?.name || 'Невідома локація'}
             onPress={() => {
               navigation.navigate('ChangeLocation');
             }}
@@ -157,6 +200,11 @@ const ProfileTab = () => {
         isOpen={isExitModalOpen}
         onClose={() => setIsExitModalOpen(false)}
       />
+      <PicImageDialog
+        visible={picImgOpen}
+        onClose={() => setPicImgOpen(false)}
+        setImage={setImage}
+      />
     </View>
   );
 };
@@ -167,6 +215,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  profilePic: {
+    height: 138,
+    width: 138,
+    borderRadius: 69,
   },
   profilePicContainer: {
     position: 'relative',

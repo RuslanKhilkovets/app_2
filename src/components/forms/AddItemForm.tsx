@@ -115,6 +115,16 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     mutate(data);
   };
 
+  const setImage = newImage => {
+    setFormData(prev => ({
+      ...prev,
+      imgUris: [
+        ...prev.imgUris,
+        {...newImage, is_main: prev.imgUris.length === 0},
+      ],
+    }));
+  };
+
   useEffect(() => {
     setCategoryModalOpen(false);
   }, [formData.category]);
@@ -158,7 +168,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
           <PicImageDialog
             visible={picImgOpen}
             onClose={() => setPicImgOpen(false)}
-            setUris={setFormData}
+            setImage={setImage}
           />
 
           <FlatList
@@ -168,7 +178,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
               <View style={{width: '25%', paddingHorizontal: 10}}>
                 <Thumbnail
                   id={item.id}
-                  uri={item.uri}
+                  uri={item.url}
                   active={item.is_main}
                   setActiveImage={setActiveImage}
                   onDelete={onDeleteImage}

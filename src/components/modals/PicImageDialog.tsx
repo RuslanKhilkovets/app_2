@@ -10,17 +10,17 @@ import {
 
 import PicIcon from '@icons/pic.svg';
 import CameraIcon from '@icons/camera.svg';
-import {IAddItemFormData, IModalProps} from '@/types';
+import {IModalProps} from '@/types';
 import {Button} from '@/components';
 import {selectImage, takePhoto} from '@/helpers';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 
 interface IPicImageDialogProps extends IModalProps {
-  setUris: React.Dispatch<React.SetStateAction<IAddItemFormData>>;
+  setImage: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
+const PicImageDialog = ({visible, onClose, setImage}: IPicImageDialogProps) => {
   const slideAnim = useRef(new Animated.Value(300)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -48,20 +48,7 @@ const PicImageDialog = ({visible, onClose, setUris}: IPicImageDialogProps) => {
   const {mutate: uploadImageMutate} = useAuthMutation({
     mutationFn: Api.media.upload,
     onSuccess: res => {
-      setUris(prev => {
-        const newImgUris = [...prev.imgUris];
-        newImgUris.push({
-          id: res.data.data.id,
-          uri: res.data.data.url,
-          is_main: prev.imgUris.length === 0,
-          delete: false,
-        });
-
-        return {
-          ...prev,
-          imgUris: newImgUris,
-        };
-      });
+      setImage({...res.data.data});
     },
     onError: ({errors}) => {
       console.log(errors);
@@ -153,5 +140,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Raleway-Regular',
     fontSize: 15,
+    color: '#000',
   },
 });

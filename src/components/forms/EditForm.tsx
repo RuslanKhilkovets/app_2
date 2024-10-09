@@ -35,8 +35,6 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
     action_at: new Date(DateFormatter.convertToIso8601(item.action_at)),
   });
 
-  console.log(formData);
-
   const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -141,6 +139,13 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
     mutate({postId: formData.id, payload});
   };
 
+  const setImage = newImage => {
+    setFormData(prev => ({
+      ...prev,
+      photos: [...prev.photos, newImage],
+    }));
+  };
+
   useEffect(() => {
     setCategoryModalOpen(false);
   }, [formData.category]);
@@ -188,7 +193,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
           <PicImageDialog
             visible={picImgOpen}
             onClose={() => setPicImgOpen(false)}
-            setUris={setFormData}
+            setImage={setImage}
           />
 
           <FlatList

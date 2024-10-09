@@ -1,4 +1,5 @@
 import ILocation from '@/types/ILocation';
+import IPhoto from '@/types/IPhoto';
 
 export default interface IProfileData {
   id: string;
@@ -10,6 +11,6 @@ export default interface IProfileData {
   is_online: boolean;
   is_verified: boolean;
   location: ILocation;
-  photo: null;
+  imgUris: IPhoto[] | null;
   added: null;
 }
