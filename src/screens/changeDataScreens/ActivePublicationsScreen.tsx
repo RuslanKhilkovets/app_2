@@ -43,7 +43,12 @@ const ActivePublicationsScreen = () => {
 
   return (
     <Screen title="Активні публікації" backColor="#fff">
-      <Pressable style={{flex: 1}} onPress={handleMenuClose}>
+      <Pressable
+        style={{
+          flex: 1,
+          overflow: 'visible',
+        }}
+        onPress={handleMenuClose}>
         <FlatList
           data={posts}
           renderItem={({item}) => (
@@ -57,7 +62,12 @@ const ActivePublicationsScreen = () => {
           )}
           style={{overflow: 'visible', marginTop: 25}}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{gap: 15}}
+          contentContainerStyle={{
+            gap: 15,
+            overflow: 'visible',
+            paddingBottom: 50,
+            paddingTop: 10,
+          }}
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
           }

@@ -50,6 +50,7 @@ const FavoritesItemsTab = () => {
     postsMutate({type: activeTab});
     filtersMutate({type: activeTab});
   }, [activeTab]);
+  console.log(wantedFilters);
 
   return (
     <View style={styles.container}>

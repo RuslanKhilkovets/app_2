@@ -22,6 +22,7 @@ import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
 import {ITEM_STATUS} from '@/constants';
+import {DateFormatter} from '@/helpers';
 
 interface IItemFormProps {
   onFormClose: () => void;
@@ -31,15 +32,16 @@ interface IItemFormProps {
 const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     ...item,
-    imgUris: item.photos,
+    action_at: new Date(DateFormatter.convertToIso8601(item.action_at)),
   });
+
+  console.log(formData);
 
   const [error, setError] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
-  const [pickedImages, setPickedImages] = useState([]);
   const [isArchieved, setIsArchieved] = useState(
     item?.status === ITEM_STATUS.ACTIVE,
   );
@@ -134,7 +136,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
       body: formData.description,
       category_id: formData.category?.id,
       location_id: formData.location.id,
-      photos: formData.imgUris,
+      photos: formData.photos,
     };
     mutate({postId: formData.id, payload});
   };
@@ -149,7 +151,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
 
   useEffect(() => {
     setDateOpen(false);
-  }, [formData.date]);
+  }, [formData.action_at]);
 
   return (
     <View style={[{padding: 20, paddingBottom: insets.bottom + 60}]}>
@@ -231,7 +233,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
             }>
             <DatePicker
               setOpen={() => setDateOpen(true)}
-              date={formData.date}
+              date={formData.action_at}
               maxDate={new Date()}
               isOpen={dateOpen}
               onClose={() => setDateOpen(false)}

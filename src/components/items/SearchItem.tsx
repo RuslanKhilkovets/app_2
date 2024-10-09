@@ -57,10 +57,11 @@ const SearchItem = ({data}: ISearchItemProps) => {
     if (data.value?.withBody) {
       filtersStr += `З описом / `;
     }
-    filtersStr += `За останній:  ${
-      data?.value?.last === StaticDateType.MONTH ? 'місяць' : 'тиждень'
-    }`;
-
+    if (data.value?.last) {
+      filtersStr += `За останній:  ${
+        data?.value?.last === StaticDateType.MONTH ? 'місяць' : 'тиждень'
+      }`;
+    }
     return filtersStr;
   };
 

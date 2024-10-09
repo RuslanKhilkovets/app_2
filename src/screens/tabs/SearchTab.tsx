@@ -42,9 +42,7 @@ const SearchTab = () => {
     withBody: undefined,
   };
 
-  const [isFilterFavorite, setIsFilterFavorite] = useState(
-    route?.params?.is_favorite,
-  );
+  const [isFilterFavorite, setIsFilterFavorite] = useState(false);
 
   const [activeTab, setActiveTab] = useState(
     route.params?.filters?.type || TABS.I_LOOKING_FOR,
@@ -126,6 +124,7 @@ const SearchTab = () => {
   };
 
   const refreshItems = () => {
+    setIsLoading(true);
     mutate({
       ...filters,
       type: activeTab,
@@ -134,6 +133,7 @@ const SearchTab = () => {
       q: searchQuery,
     });
   };
+
   useEffect(() => {
     refreshItems();
   }, [filters, activeTab]);
@@ -157,6 +157,18 @@ const SearchTab = () => {
       !!route?.params?.filters?.type &&
         setActiveTab(route?.params?.filters?.type);
     }, [route?.params?.filters]),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (JSON.stringify(filters) !== JSON.stringify(route?.params?.filters)) {
+        setIsFilterFavorite(false);
+        setFilterId(null);
+      } else {
+        setIsFilterFavorite(true);
+        setFilterId(route?.params?.id);
+      }
+    }, [filters, route?.params?.filters]),
   );
 
   return (

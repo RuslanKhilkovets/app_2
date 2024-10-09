@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
 
 import HatIcon from '@icons/hat.svg';
 import EditIcon from '@icons/edit.svg';
@@ -17,9 +18,8 @@ import {Button, EditButton, FilterItem, ExitDialog} from '@/components';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
-import {ILocation, IProfileData} from '@/types';
+import {IProfileData} from '@/types';
 import {formatPhone} from '@/helpers';
-import {useSelector} from 'react-redux';
 
 const ProfileTab = () => {
   const userData = useSelector(state => state)?.user;
@@ -137,7 +137,7 @@ const ProfileTab = () => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingBottom: insets.bottom + 30,
+            paddingBottom: insets.bottom + 50,
             flex: 1,
           }}>
           <TouchableOpacity

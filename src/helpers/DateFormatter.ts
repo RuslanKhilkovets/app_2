@@ -35,6 +35,19 @@ class DateFormatter {
       ...(withYear && {year: 'numeric'}),
     });
   }
+  /**
+   *
+   * @param dateString - The date string
+   * @returns An ISO8601 date string representing
+   */
+  static convertToIso8601(
+    dateString: string | null | undefined,
+  ): string | null {
+    if (!dateString) return null;
+
+    const date = new Date(dateString);
+    return date.toISOString();
+  }
 }
 
 export default DateFormatter;
