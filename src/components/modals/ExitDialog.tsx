@@ -52,5 +52,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Raleway-Regular',
     fontSize: 15,
     marginBottom: 5,
+    color: '#000',
   },
 });

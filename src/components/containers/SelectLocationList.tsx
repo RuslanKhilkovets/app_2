@@ -6,6 +6,7 @@ import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 import {ILocation} from '@/types';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {showMessage} from '@/helpers';
 
 interface ISelectLocationListProps {
   location: ILocation | null;
@@ -21,7 +22,6 @@ const SelectLocationList = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [locationsList, setLocationsList] = useState<ILocation[]>([]);
-  const [error, setError] = useState('');
 
   const insets = useSafeAreaInsets();
 
@@ -35,7 +35,7 @@ const SelectLocationList = ({
       setLocationsList(res.data.data);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors.message);
     },
   });
 

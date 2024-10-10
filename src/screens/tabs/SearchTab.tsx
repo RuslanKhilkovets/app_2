@@ -10,9 +10,11 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 import {
   AppIcon,
+  Button,
   CategoriesModal,
   FilterModal,
   Input,
@@ -25,7 +27,7 @@ import {ICategory, IFilters, IItem, ILocation} from '@/types';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
-import {DateFormatter} from '@/helpers';
+import {DateFormatter, showMessage} from '@/helpers';
 import STATIC_DATE_TYPE from '@/constants/StaticDateType';
 
 const SearchTab = () => {
@@ -100,18 +102,16 @@ const SearchTab = () => {
       setIsFilterFavorite(res.data.result);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors?.message);
     },
   });
 
   const onAddOrToggleFavoriteFilter = () => {
     if (
-      !!(
-        filterId !== null ||
-        (route?.params?.id &&
-          route?.params?.id !== null &&
-          filterId === route?.params?.id)
-      )
+      filterId !== null ||
+      (route?.params?.id &&
+        route?.params?.id !== null &&
+        filterId === route?.params?.id)
     ) {
       saveFilterById(filterId);
     } else {
@@ -170,6 +170,22 @@ const SearchTab = () => {
       }
     }, [filters, route?.params?.filters]),
   );
+  const showToast = () => {
+    Toast.show({
+      swipeable: true,
+      text1Style: {
+        fontWeight: 'bold',
+        fontSize: 16,
+      },
+      text2Style: {
+        fontWeight: 'bold',
+        fontSize: 14,
+      },
+      type: 'error',
+      text1: 'Сталася помилка',
+      text2: 'This is some something 👋',
+    });
+  };
 
   return (
     <>

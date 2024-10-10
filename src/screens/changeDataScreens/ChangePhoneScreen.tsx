@@ -3,11 +3,13 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
+import SInfo from 'react-native-sensitive-info';
 
 import {Api} from '@/api';
 import {useAuthMutation, useGoBack} from '@/hooks';
 import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
 import {setUser} from '@/store/user';
+import {showMessage} from '@/helpers';
 
 const ChangePhoneScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -46,11 +48,12 @@ const ChangePhoneScreen = () => {
     mutationFn: Api.profile.update,
     onSuccess: () => {
       goToNextStep();
+      showMessage('success', res.data.message);
     },
     onError: ({errors}) => {
       setErrors(prev => ({
         ...prev,
-        phone: errors.message,
+        phone: errors?.message,
       }));
     },
   });
@@ -58,14 +61,23 @@ const ChangePhoneScreen = () => {
   const {isLoading: isCheckCodeLoading, mutate: checkCodeMutate} =
     useAuthMutation({
       mutationFn: Api.auth.checkCode,
-      onSuccess: () => {
+      onSuccess: async res => {
         dispatch(setUser({...user, phone}));
+        showMessage('success', 'Номер телефону успішно змінено!');
+
+        await SInfo.setItem('user', JSON.stringify(res.data.data), {
+          sharedPreferencesName: 'mySharedPrefs',
+          keychainService: 'myKeychain',
+        }).then(() => {
+          dispatch(setUser(res.data.data));
+        });
+
         goBack();
       },
       onError: ({errors}) => {
         setErrors(prev => ({
           ...prev,
-          code: errors.message,
+          code: errors?.message,
         }));
       },
     });

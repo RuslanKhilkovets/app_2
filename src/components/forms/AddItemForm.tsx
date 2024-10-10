@@ -21,7 +21,7 @@ import {IAddItemFormData, ICategory, ILocation} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
-import {DateFormatter} from '@/helpers';
+import {DateFormatter, showMessage} from '@/helpers';
 import {useSelector} from 'react-redux';
 
 interface IItemFormProps {
@@ -39,7 +39,12 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     category: null,
     location: {name: 'Невідомо'},
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    name: '',
+    body: '',
+    category: '',
+    location: '',
+  });
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
@@ -53,9 +58,13 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     mutationFn: Api.myPosts.add,
     onSuccess: res => {
       onFormClose();
+      showMessage(
+        'success',
+        `${type === TABS.I_FIND ? 'Знахідку ' : 'Згубу '} успішно додано!`,
+      );
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      setError(prev => ({...prev, errors}));
     },
   });
 
@@ -75,12 +84,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       })),
     }));
   };
+
   const {isLoading: isDeleteLoading, mutate: mutateDelete} = useAuthMutation({
     mutationFn: Api.media.delete,
-    onSuccess: res => {},
-    onError: ({errors}) => {
-      setError(errors?.message);
-    },
   });
 
   const deleteVisualImage = (id: string) => {
@@ -98,6 +104,25 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   };
 
   const handleFormSubmit = () => {
+    const errors: Record<string, string> = {};
+
+    if (!formData.name) {
+      errors.name = 'Введіть назву';
+    }
+    if (!formData.description) {
+      errors.body = 'Введіть опис';
+    }
+    if (!formData.category?.id) {
+      errors.category = 'Виберіть категорію';
+    }
+    if (!formData.location?.id) {
+      errors.location = 'Виберіть локацію';
+    }
+    if (Object.keys(errors).length > 0) {
+      setError(prev => ({...prev, ...errors}));
+      return;
+    }
+
     const data = {
       type,
       is_remuneration: +formData.forRemuneration,
@@ -146,6 +171,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             value={formData.name}
             onChangeText={value => handleInputChange('name', value)}
             style={{marginBottom: 20}}
+            error={!formData.name && error.name}
           />
           <Input
             multiline
@@ -155,6 +181,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             }
             value={formData.description}
             onChangeText={value => handleInputChange('description', value)}
+            error={!formData.description && error.body}
           />
 
           <Button
@@ -199,12 +226,14 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             <EditButton
               title={formData.category?.name || 'Вибрати категорію'}
               onPress={() => setCategoryModalOpen(true)}
+              error={!formData.category?.id && error.category}
             />
           </FilterItem>
           <FilterItem title="Локація">
             <EditButton
               title={formData.location.name || 'Локація'}
               onPress={() => setLocationModalOpen(true)}
+              error={!formData.location?.id && error.location}
             />
           </FilterItem>
           <FilterItem

@@ -5,7 +5,7 @@ import {AppIcon, EditModal, ItemStatus} from '@/components';
 import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
 import {IPostItem} from '@/types';
-import {DateFormatter} from '@/helpers';
+import {DateFormatter, showMessage} from '@/helpers';
 import {ITEM_STATUS} from '@/constants';
 import {IPhoto} from '@/types';
 import {useAuthMutation} from '@/hooks';
@@ -29,7 +29,6 @@ const PostItem = ({
 }: IPostItemProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const mainPhoto = item.photos.find((photo: IPhoto) => photo.is_main);
-  const [error, setError] = useState('');
 
   const {navigate} = useNavigation();
 
@@ -42,17 +41,20 @@ const PostItem = ({
     mutationFn: Api.myPosts.delete,
     onSuccess: res => {
       setPosts(prev => prev.filter(post => post.id !== item.id));
+      showMessage('success', res.data.message);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors.message);
     },
   });
 
   const {isLoading: isRestoreLoading, mutate: mutateRestore} = useAuthMutation({
     mutationFn: Api.myPosts.restore,
-    onSuccess: res => {},
+    onSuccess: res => {
+      showMessage('success', res.data.message);
+    },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors.message);
     },
   });
 
@@ -116,7 +118,10 @@ const PostItem = ({
         <View style={styles.menuContent}>
           <TouchableOpacity
             style={styles.menuBtn}
-            onPress={() => setIsEditModalOpen(true)}>
+            onPress={() => {
+              setIsEditModalOpen(true);
+              onMenuToggle();
+            }}>
             <Text style={styles.menuBtnText}>Редагувати</Text>
           </TouchableOpacity>
 
@@ -133,6 +138,9 @@ const PostItem = ({
         visible={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         item={item}
+        onItemDelete={() =>
+          setPosts(prev => prev.filter(post => post.id !== item.id))
+        }
       />
     </>
   );

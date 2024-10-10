@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
+import SInfo from 'react-native-sensitive-info';
 
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -8,6 +9,7 @@ import {Api} from '@/api';
 import {useAuthMutation, useGoBack} from '@/hooks';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '@/store/user';
+import {showMessage} from '@/helpers';
 
 const ChangeEmailScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -61,8 +63,15 @@ const ChangeEmailScreen = () => {
   const {isLoding: isCheckCodeLoading, mutate: checkCodeMutate} =
     useAuthMutation({
       mutationFn: Api.profile.updateEmail,
-      onSuccess: () => {
+      onSuccess: async res => {
         dispatch(setUser({...user, email}));
+        await SInfo.setItem('user', JSON.stringify(res.data.data), {
+          sharedPreferencesName: 'mySharedPrefs',
+          keychainService: 'myKeychain',
+        }).then(() => {
+          dispatch(setUser(res.data.data));
+        });
+        showMessage('success', 'E-mail успішно змінено!');
         goBack();
       },
       onError: ({errors}) => {

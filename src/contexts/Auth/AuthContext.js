@@ -54,7 +54,7 @@ export const AuthProvider = ({children}) => {
     });
   };
 
-  const logout = async token => {
+  const logout = async () => {
     await Api.auth.logout();
 
     await SInfo.deleteItem('accessToken', {
@@ -72,7 +72,14 @@ export const AuthProvider = ({children}) => {
 
   return (
     <AuthContext.Provider
-      value={{accessToken, login, logout, getToken, isTokenChecked}}>
+      value={{
+        accessToken,
+        setAccessToken,
+        login,
+        logout,
+        getToken,
+        isTokenChecked,
+      }}>
       {children}
     </AuthContext.Provider>
   );

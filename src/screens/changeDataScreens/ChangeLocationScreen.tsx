@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import SInfo from 'react-native-sensitive-info';
 
 import {Screen, SelectLocationList} from '@/components';
 import {ILocation} from '@/types';
@@ -6,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useAuthMutation, useGoBack} from '@/hooks';
 import {Api} from '@/api';
 import {setUser} from '@/store/user';
+import {showMessage} from '@/helpers';
 
 const ChangeLocationScreen = () => {
   const user = useSelector(state => state)?.user;
@@ -17,9 +19,17 @@ const ChangeLocationScreen = () => {
 
   const {isLoading, mutate} = useAuthMutation({
     mutationFn: Api.profile.update,
-    onSuccess: res => {
+    onSuccess: async res => {
+      await SInfo.setItem('user', JSON.stringify(res.data.data), {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      }).then(() => {
+        dispatch(setUser(res.data.data));
+      });
+
+      showMessage('success', res.data.message);
+
       goBack();
-      dispatch(setUser({...user, location}));
     },
     onError: ({errors}) => {
       setError(errors?.message);
@@ -27,9 +37,9 @@ const ChangeLocationScreen = () => {
   });
 
   useEffect(() => {
-    user.location !== null &&
-      user.location !== location &&
-      mutate({location_id: user.location.id});
+    if (location !== null && user.location !== location) {
+      mutate({location_id: location.id});
+    }
   }, [location]);
 
   return (

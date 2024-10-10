@@ -5,3 +5,4 @@ export {default as takePhoto} from './takePhoto';
 export {default as delCache} from './delCache';
 export {default as selectImage} from './selectImage';
 export {default as handleAuthSuccess} from './handleAuthSuccess';
+export {default as showMessage} from './showMessage';

@@ -6,6 +6,7 @@ import {CategoriesItem} from '@/components';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 import {ICategory} from '@/types';
+import {showMessage} from '@/helpers';
 
 interface ICategoriesListProps {
   setCategory:
@@ -15,7 +16,6 @@ interface ICategoriesListProps {
 }
 
 const CategoriesList = ({setCategory, searchQuery}: ICategoriesListProps) => {
-  const [error, setError] = useState('');
   const [categories, setCategories] = useState<ICategory[]>([]);
 
   const {isLoading, mutate} = useAuthMutation({
@@ -24,7 +24,7 @@ const CategoriesList = ({setCategory, searchQuery}: ICategoriesListProps) => {
       setCategories(res.data.data);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors.message);
     },
   });
 

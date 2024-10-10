@@ -1,6 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import Toast from 'react-native-toast-message';
 
 import {Navigation} from '@/navigation';
 import {ThemeProvider} from '@/contexts/Theme/ThemeContext';
@@ -35,6 +36,7 @@ function App(): React.JSX.Element {
         <ThemeProvider>
           <AuthProvider>
             <Navigation />
+            <Toast />
           </AuthProvider>
         </ThemeProvider>
       </Provider>

@@ -7,6 +7,7 @@ import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {changePasswordSchema} from '@/validations';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
+import {showMessage} from '@/helpers';
 
 const ChangePasswordScreen = () => {
   const [serverErrors, setServerErrors] = useState({
@@ -32,6 +33,7 @@ const ChangePasswordScreen = () => {
     mutationFn: Api.profile.updatePassword,
     onSuccess: res => {
       reset();
+      showMessage('success', res.data.message);
     },
     onError: ({errors}) => {
       setServerErrors(errors);

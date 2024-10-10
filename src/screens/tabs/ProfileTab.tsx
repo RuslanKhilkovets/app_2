@@ -25,18 +25,18 @@ import {
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
-import {IProfileData} from '@/types';
 import {formatPhone} from '@/helpers';
 import {setUser} from '@/store/user';
 
 const ProfileTab = () => {
   const userData = useSelector(state => state)?.user;
 
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [personalData, setPersonalData] = useState<IProfileData>({
     ...userData,
     imgUris: [],
   });
+
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
 
@@ -45,16 +45,6 @@ const ProfileTab = () => {
 
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
-
-  const {mutate, isLoading} = useAuthMutation({
-    mutationFn: Api.profile.getInfo,
-    onSuccess: res => {
-      setPersonalData(res.data.data);
-    },
-    onError: ({errors}) => {
-      console.log(errors);
-    },
-  });
 
   const {mutate: updatePic, isLoading: isUpdatePicLoading} = useAuthMutation({
     mutationFn: Api.profile.getInfo,
@@ -76,10 +66,6 @@ const ProfileTab = () => {
     setProfilePic(newPic);
     updatePic(newPic);
   };
-
-  useEffect(() => {
-    mutate();
-  }, []);
 
   useEffect(() => {
     setPersonalData(userData);

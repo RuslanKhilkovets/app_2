@@ -22,14 +22,15 @@ import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
 import TABS from '@/constants/Tabs';
 import {ITEM_STATUS} from '@/constants';
-import {DateFormatter} from '@/helpers';
+import {DateFormatter, showMessage} from '@/helpers';
 
 interface IItemFormProps {
   onFormClose: () => void;
+  onItemDelete: () => void;
   item: IAddItemFormData;
 }
 
-const EditForm = ({item, onFormClose}: IItemFormProps) => {
+const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
   const [formData, setFormData] = useState<IAddItemFormData>({
     ...item,
     action_at: new Date(DateFormatter.convertToIso8601(item.action_at)),
@@ -49,6 +50,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   const {isLoading, mutate} = useAuthMutation({
     mutationFn: Api.myPosts.edit,
     onSuccess: res => {
+      showMessage('success', 'Дані оновлені успішно!');
       onFormClose();
     },
     onError: ({errors}) => {
@@ -114,6 +116,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
     mutationFn: Api.myPosts.delete,
     onSuccess: res => {
       onFormClose();
+      showMessage('success', 'Запис успішно видалено!');
     },
     onError: ({errors}) => {
       setError(errors?.message);
@@ -121,6 +124,7 @@ const EditForm = ({item, onFormClose}: IItemFormProps) => {
   });
 
   const onDelete = () => {
+    onItemDelete();
     mutateDelete(formData.id);
   };
 

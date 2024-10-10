@@ -8,11 +8,10 @@ import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IEditModalProps extends IModalProps {
   item: IAddItemFormData;
+  onItemDelete: () => void;
 }
 
-const EditModal = ({visible, onClose, item}: IEditModalProps) => {
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
-
+const EditModal = ({visible, onClose, item, onItemDelete}: IEditModalProps) => {
   const {themes, colorScheme} = useTheme();
 
   const backgroundColor =
@@ -49,7 +48,11 @@ const EditModal = ({visible, onClose, item}: IEditModalProps) => {
             style={[styles.tabSwitcherLine, {backgroundColor: underlineColor}]}
           />
         </View>
-        <EditForm item={item} onFormClose={onClose} />
+        <EditForm
+          item={item}
+          onFormClose={onClose}
+          onItemDelete={onItemDelete}
+        />
       </View>
     </Modal>
   );
