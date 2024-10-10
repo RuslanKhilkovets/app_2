@@ -27,6 +27,7 @@ import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 import {formatPhone} from '@/helpers';
 import {setUser} from '@/store/user';
+import {IProfileData} from '@/types';
 
 const ProfileTab = () => {
   const userData = useSelector(state => state)?.user;
@@ -47,7 +48,7 @@ const ProfileTab = () => {
   const {themes, colorScheme} = useTheme();
 
   const {mutate: updatePic, isLoading: isUpdatePicLoading} = useAuthMutation({
-    mutationFn: Api.profile.getInfo,
+    mutationFn: Api.profile.update,
     onSuccess: async res => {
       const user = {...userData, photo: profilePic};
       await SInfo.setItem('user', JSON.stringify(user), {
@@ -69,6 +70,7 @@ const ProfileTab = () => {
 
   useEffect(() => {
     setPersonalData(userData);
+    setProfilePic(userData.photo);
   }, [userData]);
 
   return (
