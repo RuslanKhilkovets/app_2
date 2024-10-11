@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Animated, Easing} from 'react-native';
+import {StyleSheet, Text, View, Animated, Easing, Platform} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 
@@ -34,7 +34,16 @@ const Logo = ({animated}: ILogoProps) => {
 
   return (
     <Animated.View style={[styles.container, {opacity: fadeAnim}]}>
-      <Text style={[styles.text, {color: themes[colorScheme].dark}]}>
+      <Text
+        style={[
+          styles.text,
+          {
+            color:
+              colorScheme === 'light'
+                ? themes[colorScheme].dark
+                : themes[colorScheme].light,
+          },
+        ]}>
         єЗнахідка!
       </Text>
       <View style={styles.circle}></View>

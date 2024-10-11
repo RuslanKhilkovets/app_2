@@ -48,7 +48,6 @@ const SearchTab = () => {
     route.params?.filters?.type || TABS.I_LOOKING_FOR,
   );
 
-  const [error, setError] = useState('');
   const [items, setItems] = useState<{[key: TABS]: IItem[]}>({});
   const [searchQuery, setSearchQuery] = useState(initialFilters.q || '');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
@@ -75,7 +74,7 @@ const SearchTab = () => {
       setIsLoading(false);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors.message);
       setIsLoading(false);
     },
   });

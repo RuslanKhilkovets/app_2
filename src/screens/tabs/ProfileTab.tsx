@@ -65,7 +65,7 @@ const ProfileTab = () => {
 
   const setImage = newPic => {
     setProfilePic(newPic);
-    updatePic(newPic);
+    updatePic({photo: newPic});
   };
 
   useEffect(() => {
