@@ -10,11 +10,9 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect, useRoute} from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 
 import {
   AppIcon,
-  Button,
   CategoriesModal,
   FilterModal,
   Input,
@@ -152,7 +150,6 @@ const SearchTab = () => {
 
   useFocusEffect(
     useCallback(() => {
-      refreshItems();
       route?.params?.filters && setFilters(route.params.filters);
       !!route?.params?.filters?.type &&
         setActiveTab(route?.params?.filters?.type);
@@ -161,6 +158,8 @@ const SearchTab = () => {
 
   useFocusEffect(
     useCallback(() => {
+      refreshItems();
+
       if (JSON.stringify(filters) !== JSON.stringify(route?.params?.filters)) {
         setIsFilterFavorite(false);
         setFilterId(null);
@@ -170,22 +169,6 @@ const SearchTab = () => {
       }
     }, [filters, route?.params?.filters]),
   );
-  const showToast = () => {
-    Toast.show({
-      swipeable: true,
-      text1Style: {
-        fontWeight: 'bold',
-        fontSize: 16,
-      },
-      text2Style: {
-        fontWeight: 'bold',
-        fontSize: 14,
-      },
-      type: 'error',
-      text1: 'Сталася помилка',
-      text2: 'This is some something 👋',
-    });
-  };
 
   return (
     <>

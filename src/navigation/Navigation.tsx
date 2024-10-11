@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {StatusBar, View} from 'react-native';
@@ -9,12 +9,14 @@ import {privateRoutes, publicRoutes} from '@/navigation';
 import {IRoute} from '@/types';
 import {Logo} from '@/components';
 import {setUser} from '@/store/user';
+import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
+  const {accessToken} = useContext(AuthContext);
   const dispatch = useDispatch();
 
   const getToken = async () => {
@@ -49,6 +51,12 @@ const Navigation = () => {
 
     fetchToken();
   }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      setIsAuth(!!accessToken);
+    }
+  }, [accessToken]);
 
   if (loading) {
     return (

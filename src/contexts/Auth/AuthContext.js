@@ -70,6 +70,15 @@ export const AuthProvider = ({children}) => {
     await delCache('progress');
   };
 
+  useEffect(() => {
+    (async () => {
+      await SInfo.setItem('accessToken', accessToken, {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      });
+    })();
+  }, [accessToken]);
+
   return (
     <AuthContext.Provider
       value={{
