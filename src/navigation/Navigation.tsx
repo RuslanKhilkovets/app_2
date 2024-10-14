@@ -32,20 +32,26 @@ const Navigation = () => {
       sharedPreferencesName: 'mySharedPrefs',
       keychainService: 'myKeychain',
     });
-    return JSON.parse(user);
+    return user && JSON.parse(user);
   };
 
   useEffect(() => {
     const fetchToken = async () => {
-      const accessToken = await getToken();
-      const user = await getUser();
+      try {
+        const accessToken = await getToken();
+        const user = await getUser();
 
-      setIsAuth(!!accessToken);
-      dispatch(setUser(user));
-
-      // Simulate loading for 5 seconds
-      setLoading(false);
+        setIsAuth(!!accessToken);
+        dispatch(setUser(user));
+      } catch (error) {
+        console.log('Error fetching token', error);
+      }
     };
+
+    // Simulate loading for 5 seconds
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
 
     fetchToken();
   }, []);

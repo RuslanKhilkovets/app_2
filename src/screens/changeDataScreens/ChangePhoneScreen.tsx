@@ -22,7 +22,7 @@ const ChangePhoneScreen = () => {
     code?: string;
   }>({});
 
-  const user = useSelector(state => state)?.user;
+  const user = useSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const carouselRef = useRef<any>();

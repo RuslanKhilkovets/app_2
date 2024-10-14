@@ -52,7 +52,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
 
   const insets = useSafeAreaInsets();
 
-  const {user_id} = useSelector(state => state)?.user;
+  const {user_id} = useSelector(state => state.user) || {};
 
   const {isLoading, mutate} = useAuthMutation({
     mutationFn: Api.myPosts.add,

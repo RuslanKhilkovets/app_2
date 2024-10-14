@@ -30,10 +30,10 @@ import {setUser} from '@/store/user';
 import {IProfileData} from '@/types';
 
 const ProfileTab = () => {
-  const userData = useSelector(state => state)?.user;
+  const user = useSelector(state => state.user) || {};
 
   const [personalData, setPersonalData] = useState<IProfileData>({
-    ...userData,
+    ...user,
     imgUris: [],
   });
 
@@ -50,7 +50,7 @@ const ProfileTab = () => {
   const {mutate: updatePic, isLoading: isUpdatePicLoading} = useAuthMutation({
     mutationFn: Api.profile.update,
     onSuccess: async res => {
-      const user = {...userData, photo: profilePic};
+      const user = {...user, photo: profilePic};
       await SInfo.setItem('user', JSON.stringify(user), {
         sharedPreferencesName: 'mySharedPrefs',
         keychainService: 'myKeychain',
@@ -69,9 +69,9 @@ const ProfileTab = () => {
   };
 
   useEffect(() => {
-    setPersonalData(userData);
-    setProfilePic(userData.photo);
-  }, [userData]);
+    setPersonalData(user);
+    setProfilePic(user.photo);
+  }, [user]);
 
   return (
     <View style={[styles.container]}>

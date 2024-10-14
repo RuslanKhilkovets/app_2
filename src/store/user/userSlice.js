@@ -5,7 +5,6 @@ const userInitialState = {
   email: '',
   name: '',
   phone: '',
-  photo: '',
   location: {},
   photo: null,
 };

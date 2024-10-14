@@ -26,7 +26,7 @@ const ChangeEmailScreen = () => {
   const screenWidth = Dimensions.get('window').width;
   const insets = useSafeAreaInsets();
 
-  const user = useSelector(state => state)?.user;
+  const user = useSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const goBack = useGoBack();

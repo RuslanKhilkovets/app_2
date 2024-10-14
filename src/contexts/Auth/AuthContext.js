@@ -40,18 +40,20 @@ export const AuthProvider = ({children}) => {
 
   const login = async (token, userData) => {
     // Зберігаємо токен доступу в захищеному місці збереження
-    await SInfo.setItem('accessToken', token, {
-      sharedPreferencesName: 'mySharedPrefs',
-      keychainService: 'myKeychain',
-    }).then(() => {
-      setAccessToken(token);
-    });
-    await SInfo.setItem('user', JSON.stringify(userData), {
-      sharedPreferencesName: 'mySharedPrefs',
-      keychainService: 'myKeychain',
-    }).then(() => {
-      dispatch(setUser(userData));
-    });
+    token &&
+      (await SInfo.setItem('accessToken', token, {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      }).then(() => {
+        setAccessToken(token);
+      }));
+    userData &&
+      (await SInfo.setItem('user', JSON.stringify(userData), {
+        sharedPreferencesName: 'mySharedPrefs',
+        keychainService: 'myKeychain',
+      }).then(() => {
+        dispatch(setUser(userData));
+      }));
   };
 
   const logout = async () => {
@@ -71,12 +73,13 @@ export const AuthProvider = ({children}) => {
   };
 
   useEffect(() => {
-    (async () => {
-      await SInfo.setItem('accessToken', accessToken, {
-        sharedPreferencesName: 'mySharedPrefs',
-        keychainService: 'myKeychain',
-      });
-    })();
+    accessToken &&
+      (async () => {
+        await SInfo.setItem('accessToken', accessToken, {
+          sharedPreferencesName: 'mySharedPrefs',
+          keychainService: 'myKeychain',
+        });
+      })();
   }, [accessToken]);
 
   return (

@@ -10,7 +10,7 @@ import {setUser} from '@/store/user';
 import {showMessage} from '@/helpers';
 
 const ChangeLocationScreen = () => {
-  const user = useSelector(state => state)?.user;
+  const user = useSelector(state => state.user) || {};
   const [location, setLocation] = useState<ILocation | null>(user.location);
   const [error, setError] = useState('');
 

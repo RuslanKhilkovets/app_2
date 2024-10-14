@@ -14,7 +14,7 @@ const ChangeNameScreen = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
-  const user = useSelector(state => state)?.user;
+  const user = useSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const insets = useSafeAreaInsets();
