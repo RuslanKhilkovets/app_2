@@ -44,9 +44,7 @@ const Navigation = () => {
       dispatch(setUser(user));
 
       // Simulate loading for 5 seconds
-      setTimeout(() => {
-        setLoading(false);
-      }, 5000);
+      setLoading(false);
     };
 
     fetchToken();
