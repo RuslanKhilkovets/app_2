@@ -126,7 +126,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Локація">
           <EditButton
-            title={personalData?.location?.name || 'Невідома локація'}
+            title={personalData?.location?.name || 'Не визначено'}
             onPress={() => {
               navigation.navigate('ChangeLocation');
             }}
@@ -135,7 +135,7 @@ const ProfileTab = () => {
 
         <FilterItem title="Телефон">
           <EditButton
-            title={formatPhone(String(personalData?.phone))}
+            title={formatPhone(String(personalData?.phone)) && 'Не визначено'}
             onPress={() => {
               navigation.navigate('ChangePhone');
             }}

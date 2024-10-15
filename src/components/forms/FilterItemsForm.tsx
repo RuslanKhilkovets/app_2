@@ -203,7 +203,7 @@ const FilterItemsForm = ({
         </FilterItem>
         <FilterItem title="Локація">
           <EditButton
-            title={location?.name || 'Unknown'}
+            title={location?.name || 'Не визначено'}
             onPress={() => setLocationModalOpen(true)}
           />
         </FilterItem>

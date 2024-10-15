@@ -100,7 +100,7 @@ const PostItem = ({
             <ItemStatus status={item.status} />
 
             <Text style={styles.bottomText}>
-              {item?.location?.name || 'Unknown location'}
+              {item?.location?.name || 'Не визначено'}
             </Text>
 
             <Text style={styles.bottomText}>{formattedDate}</Text>

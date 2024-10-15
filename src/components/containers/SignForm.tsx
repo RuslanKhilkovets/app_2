@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StyleSheet, Text, View, TouchableOpacity, Animated} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -6,8 +6,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
 import {SignTypes} from '@/constants';
 import {useSocialSignIn} from '@/hooks';
+import {AuthContext} from '@/contexts/Auth/AuthContext';
 
 const SignForm = () => {
+  const {accessToken} = useContext(AuthContext);
   const route = useRoute();
   const navigation = useNavigation();
   const {action: initialAction} = route.params || {};
@@ -33,6 +35,12 @@ const SignForm = () => {
     const previousRoute = state?.routes[state?.index - 1];
     return previousRoute?.name !== 'Tabs';
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      navigation.navigate('Tabs');
+    }
+  }, [accessToken]);
 
   return (
     <View style={styles.container}>
