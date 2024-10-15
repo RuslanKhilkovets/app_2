@@ -5,6 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {SignInForm, SignUpForm, SignWithServices, GoBack} from '@/components';
 import {SignTypes} from '@/constants';
+import {useSocialSignIn} from '@/hooks';
 
 const SignForm = () => {
   const route = useRoute();
@@ -12,6 +13,7 @@ const SignForm = () => {
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
+  const {googleMutation, facebookMutation} = useSocialSignIn();
   const insets = useSafeAreaInsets();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -64,7 +66,11 @@ const SignForm = () => {
       </View>
 
       <Animated.View style={[styles.formContainer, {opacity: fadeAnim}]}>
-        <SignWithServices type={action} />
+        <SignWithServices
+          type={action}
+          googleLogin={googleMutation.mutate}
+          facebookLogin={facebookMutation.mutate}
+        />
         {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
       </Animated.View>
     </View>

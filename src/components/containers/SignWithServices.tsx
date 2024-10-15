@@ -8,9 +8,15 @@ import FacebookLogo from '../../../assets/images/Facebook.svg';
 
 interface ISignWithServicesProps {
   type: SignTypes;
+  googleLogin: () => void;
+  facebookLogin: () => void;
 }
 
-const SignWithServices = ({type}: ISignWithServicesProps) => {
+const SignWithServices = ({
+  type,
+  googleLogin,
+  facebookLogin,
+}: ISignWithServicesProps) => {
   return (
     <View
       style={[
@@ -21,11 +27,17 @@ const SignWithServices = ({type}: ISignWithServicesProps) => {
       ]}>
       <Text style={styles.title}>Увійти за допомогою:</Text>
 
-      <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        activeOpacity={0.7}
+        onPress={googleLogin}>
         <GoogleLogo />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        activeOpacity={0.7}
+        onPress={facebookLogin}>
         <FacebookLogo />
       </TouchableOpacity>
     </View>

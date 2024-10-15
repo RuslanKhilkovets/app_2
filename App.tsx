@@ -1,5 +1,6 @@
 import React from 'react';
 import {Provider} from 'react-redux';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
@@ -7,6 +8,14 @@ import {Navigation} from '@/navigation';
 import {ThemeProvider} from '@/contexts/Theme/ThemeContext';
 import {AuthProvider} from '@/contexts/Auth/AuthContext';
 import store from './src/store';
+
+GoogleSignin.configure({
+  iosClientId:
+    '1005466156456-iq8n5e8iudb8qoju2cdsv77bepjia7lr.apps.googleusercontent.com',
+  webClientId:
+    '1005466156456-gq1fj521qisjcl161pj673kfle3l1thg.apps.googleusercontent.com',
+  offlineAccess: true,
+});
 
 if (__DEV__) {
   require('./ReactotronConfig');
