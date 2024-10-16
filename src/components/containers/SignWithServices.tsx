@@ -9,7 +9,7 @@ import FacebookLogo from '../../../assets/images/Facebook.svg';
 interface ISignWithServicesProps {
   type: SignTypes;
   googleLogin: () => void;
-  facebookLogin: () => void;
+  facebookLogin?: () => void;
 }
 
 const SignWithServices = ({

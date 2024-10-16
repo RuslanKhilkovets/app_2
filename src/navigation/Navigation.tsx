@@ -61,6 +61,7 @@ const Navigation = () => {
       setIsAuth(!!accessToken);
     }
   }, [accessToken]);
+  console.log(accessToken);
 
   if (loading) {
     return (

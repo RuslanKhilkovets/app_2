@@ -1,6 +1,5 @@
 import {useContext} from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
 import {AuthContext} from '@/contexts/Auth/AuthContext';
 import useAuthMutation from '@/hooks/useAuthMutation';
@@ -20,9 +19,23 @@ export const useSocialSignIn = () => {
   });
 
   const googleSignIn = async () => {
-    await GoogleSignin.hasPlayServices();
-    await GoogleSignin.signIn();
-    return GoogleSignin.getTokens();
+    try {
+      // Check if Google Play services are available
+      await GoogleSignin.hasPlayServices();
+
+      // Sign in the user
+      await GoogleSignin.signIn();
+
+      // Get the tokens, ensuring you await it
+      const tokens = await GoogleSignin.getTokens(); // Add await here
+
+      console.log('tokens', tokens); // This should log the tokens object
+
+      // Return the tokens object
+      return tokens;
+    } catch (e) {
+      console.log('Google Sign-In error:', e);
+    }
   };
 
   const googleMutation = useAuthMutation({
@@ -39,8 +52,8 @@ export const useSocialSignIn = () => {
   });
 
   const facebookSignIn = async () => {
-    await LoginManager.logInWithPermissions(['public_profile']);
-    return AccessToken.getCurrentAccessToken();
+    // await LoginManager.logInWithPermissions(['public_profile']);
+    // return AccessToken.getCurrentAccessToken();
   };
 
   const facebookMutation = useAuthMutation({

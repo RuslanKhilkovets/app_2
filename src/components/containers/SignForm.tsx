@@ -15,7 +15,7 @@ const SignForm = () => {
   const {action: initialAction} = route.params || {};
   const [action, setAction] = useState(initialAction || SignTypes.SIGN_IN);
 
-  const {googleMutation, facebookMutation} = useSocialSignIn();
+  const {googleMutation} = useSocialSignIn();
   const insets = useSafeAreaInsets();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -77,7 +77,7 @@ const SignForm = () => {
         <SignWithServices
           type={action}
           googleLogin={googleMutation.mutate}
-          facebookLogin={facebookMutation.mutate}
+          facebookLogin={undefined}
         />
         {action === SignTypes.SIGN_IN ? <SignInForm /> : <SignUpForm />}
       </Animated.View>
