@@ -22,7 +22,7 @@ import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {IItem, IUser} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
-import {DateFormatter} from '@/helpers';
+import {DateFormatter, formatNumberToPhone} from '@/helpers';
 
 type RouteParamsList = {
   MyRouteName: {
@@ -157,14 +157,14 @@ const ItemScreen = () => {
                 marginTop: 10,
               }}>
               <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
                 <Text
                   style={[styles.title, {color: themes[colorScheme].dark}]}
                   ellipsizeMode="tail"
                   numberOfLines={1}>
                   {data?.name}
                 </Text>
-                <ItemStatus status={1} />
+                <ItemStatus status={data?.type} />
               </View>
               <TouchableOpacity
                 onPress={handleAddToFavourites}
@@ -213,6 +213,24 @@ const ItemScreen = () => {
                 )}
               </Text>
             </View>
+            {data?.is_remuneration ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: 10,
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
+                <AppIcon name="gift" color="#ff4a4a" />
+                <Text
+                  style={[
+                    styles.text,
+                    {marginTop: 0, color: themes[colorScheme].dark},
+                  ]}>
+                  За винагороду
+                </Text>
+              </View>
+            ) : null}
           </View>
           <View
             style={{
@@ -243,7 +261,7 @@ const ItemScreen = () => {
                   </Button>
                 ) : (
                   <Button type="secondary" onPress={handlePhonePress}>
-                    {data?.user?.phone}
+                    {formatNumberToPhone(String(data?.user?.phone))}
                   </Button>
                 )}
               </TouchableOpacity>
@@ -325,11 +343,12 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     borderBottomWidth: 1,
     borderBottomColor: '#e7e3e3',
+    gap: 5,
   },
   title: {
     fontFamily: 'Raleway-SemiBold',
     fontSize: 22,
-    width: 230,
+    width: 240,
   },
   item_title: {
     color: '#AFAFAF',

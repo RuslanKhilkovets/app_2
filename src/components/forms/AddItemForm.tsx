@@ -1,4 +1,4 @@
-import {FlatList, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -38,12 +38,15 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     phone: '',
     category: null,
     location: {name: 'Невідомо'},
+    date: '',
   });
   const [error, setError] = useState({
     name: '',
     body: '',
     category: '',
     location: '',
+    phone: '',
+    date: '',
   });
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -118,11 +121,21 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     if (!formData.location?.id) {
       errors.location = 'Виберіть локацію';
     }
+    if (formData.phone.length < 23) {
+      errors.phone = 'Занадто короткий номер телефону';
+    }
+    if (!formData.date) {
+      errors.date = `Вкажіть дату ${
+        type === TABS.I_FIND ? 'знахідки' : 'згуби'
+      } `;
+    }
+
     if (Object.keys(errors).length > 0) {
       setError(prev => ({...prev, ...errors}));
       return;
     }
 
+    return;
     const data = {
       type,
       is_remuneration: +formData.forRemuneration,
@@ -139,6 +152,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
 
     mutate(data);
   };
+  console.log(error.date);
 
   const setImage = newImage => {
     setFormData(prev => ({
@@ -245,13 +259,18 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
               isOpen={dateOpen}
               onClose={() => setDateOpen(false)}
               onChange={date => handleInputChange('date', date)}
+              error={error.date}
             />
+            {!!error.date && !formData.date && (
+              <Text style={[styles.errorText]}>{error.date}</Text>
+            )}
           </FilterItem>
           <FilterItem title="Телефон для зв’язку">
             <PhoneInput
               placeholder="___ ___ __ __"
               value={formData.phone}
               onChange={value => handleInputChange('phone', value)}
+              error={error.phone}
             />
           </FilterItem>
 
@@ -293,3 +312,10 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
 };
 
 export default AddItemForm;
+
+const styles = StyleSheet.create({
+  errorText: {
+    color: '#ff0000',
+    marginVertical: 5,
+  },
+});

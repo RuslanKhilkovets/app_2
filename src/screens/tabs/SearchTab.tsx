@@ -30,7 +30,10 @@ import STATIC_DATE_TYPE from '@/constants/StaticDateType';
 
 const SearchTab = () => {
   const route = useRoute();
+  const insets = useSafeAreaInsets();
+  const {themes, colorScheme} = useTheme();
 
+  // Initialize filters from route parameters or set default values
   const initialFilters: IFilters = route.params?.filters || {
     action_at_from: null,
     action_at_to: null,
@@ -42,12 +45,11 @@ const SearchTab = () => {
     withBody: undefined,
   };
 
+  // State variables
   const [isFilterFavorite, setIsFilterFavorite] = useState(false);
-
   const [activeTab, setActiveTab] = useState(
     route.params?.filters?.type || TABS.I_LOOKING_FOR,
   );
-
   const [items, setItems] = useState<{[key: TABS]: IItem[]}>({});
   const [searchQuery, setSearchQuery] = useState(initialFilters.q || '');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
@@ -60,9 +62,6 @@ const SearchTab = () => {
     category: route?.params?.category,
     location: route?.params?.location,
   });
-
-  const insets = useSafeAreaInsets();
-  const {themes, colorScheme} = useTheme();
 
   const {mutate} = useAuthMutation({
     mutationFn: Api.posts.getAll,
@@ -89,7 +88,7 @@ const SearchTab = () => {
         setFilterId(res.data.data.id);
       },
       onError: ({errors}) => {
-        setError(errors?.message);
+        showMessage('error', errors?.message);
       },
     });
 
@@ -106,9 +105,7 @@ const SearchTab = () => {
   const onAddOrToggleFavoriteFilter = () => {
     if (
       filterId !== null ||
-      (route?.params?.id &&
-        route?.params?.id !== null &&
-        filterId === route?.params?.id)
+      (route?.params?.id && filterId === route?.params?.id)
     ) {
       saveFilterById(filterId);
     } else {
@@ -149,9 +146,10 @@ const SearchTab = () => {
 
   useFocusEffect(
     useCallback(() => {
-      route?.params?.filters && setFilters(route.params.filters);
-      !!route?.params?.filters?.type &&
+      if (route?.params?.filters) {
+        setFilters(route.params.filters);
         setActiveTab(route?.params?.filters?.type);
+      }
     }, [route?.params?.filters]),
   );
 
@@ -203,7 +201,6 @@ const SearchTab = () => {
                     <Text style={{color: themes[colorScheme].dark}}>
                       Фільтр
                     </Text>
-
                     <AppIcon size={10} name={'filter'} />
                   </TouchableOpacity>
                 </View>
@@ -318,9 +315,6 @@ const SearchTab = () => {
 export default SearchTab;
 
 const styles = StyleSheet.create({
-  header: {
-    padding: 16,
-  },
   endAdornments: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -337,35 +331,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   categories: {
-    flexDirection: 'row',
-    marginTop: 14,
-    gap: 10,
-  },
-  tabsSwitchersContainer: {
-    position: 'relative',
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  tabsSwitcher: {
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  tabContent: {
-    padding: 16,
-    flex: 1,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
-  },
-  tabsSwitcherText: {
-    fontSize: 15,
-  },
-  tabSwitcherLine: {
-    position: 'absolute',
-    bottom: -10,
-    width: '50%',
-    height: 3,
+    marginVertical: 10,
   },
 });

@@ -36,7 +36,7 @@ const CategoriesHeader = ({
           style={styles.changeLocationBtn}
           onPress={() => setIsLocationModalOpen(true)}>
           <Text style={styles.activeLocationText}>
-            {location?.name || defaultLocation}
+            {location?.name || 'Виберіть локацію'}
           </Text>
 
           <AppIcon name="arrow" size={15} />

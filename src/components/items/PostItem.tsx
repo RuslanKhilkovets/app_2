@@ -97,7 +97,7 @@ const PostItem = ({
           <View style={{gap: 6}}>
             <Text style={styles.title}>{item.name}</Text>
 
-            <ItemStatus status={item.status} />
+            <ItemStatus status={item.type} />
 
             <Text style={styles.bottomText}>
               {item?.location?.name || 'Не визначено'}
