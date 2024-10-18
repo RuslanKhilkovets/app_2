@@ -1,4 +1,3 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 
 import {globals} from '@/constants';
@@ -28,10 +27,9 @@ const PhoneInput = ({
       error={error}
       mask={globals.PHONE_MASK}
       maxLength={globals.PHONE_MASK.length}
+      keyboardType="numeric"
     />
   );
 };
 
 export default PhoneInput;
-
-const styles = StyleSheet.create({});

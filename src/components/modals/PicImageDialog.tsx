@@ -1,9 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Animated,
   Easing,
 } from 'react-native';
@@ -84,29 +85,35 @@ const PicImageDialog = ({visible, onClose, setImage}: IPicImageDialogProps) => {
 
   return (
     <Modal transparent visible={visible} onRequestClose={onClose}>
-      <Animated.View style={[styles.overlay, {opacity: opacityAnim}]}>
-        <Animated.View
-          style={[styles.content, {transform: [{translateY: slideAnim}]}]}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.btn}
-            onPress={handleTakePhoto}>
-            <CameraIcon />
-            <Text style={styles.text}>Зробити фото</Text>
-          </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={() => animateModal(300, onClose)}>
+        <Animated.View style={[styles.overlay, {opacity: opacityAnim}]}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <Animated.View
+              style={[styles.content, {transform: [{translateY: slideAnim}]}]}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.btn}
+                onPress={handleTakePhoto}>
+                <CameraIcon />
+                <Text style={styles.text}>Зробити фото</Text>
+              </TouchableOpacity>
 
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.btn}
-            onPress={handleSelectImage}>
-            <PicIcon />
-            <Text style={styles.text}>Вибрати фото</Text>
-          </TouchableOpacity>
-          <Button onPress={() => animateModal(300, onClose)} type="secondary">
-            Закрити
-          </Button>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.btn}
+                onPress={handleSelectImage}>
+                <PicIcon />
+                <Text style={styles.text}>Вибрати фото</Text>
+              </TouchableOpacity>
+              <Button
+                onPress={() => animateModal(300, onClose)}
+                type="secondary">
+                Закрити
+              </Button>
+            </Animated.View>
+          </TouchableWithoutFeedback>
         </Animated.View>
-      </Animated.View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

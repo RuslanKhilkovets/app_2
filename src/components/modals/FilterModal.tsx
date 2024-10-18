@@ -8,7 +8,7 @@ import {useTabAnimation} from '@/hooks';
 
 interface IFilterModalProps extends IModalProps {
   filters?: IFilters;
-  setFilters: React.Dispatch<React.SetStateAction<IFilters | undefined>>;
+  setFilters: React.Dispatch<React.SetStateAction<IFilters>>;
 }
 
 const FilterModal = ({

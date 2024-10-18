@@ -61,12 +61,14 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: 'Raleway-Semibold',
     fontSize: 15,
+    color: '#000',
   },
   gmail: {
     marginTop: 14,
     fontFamily: 'Raleway-Medium',
     fontSize: 15,
     textDecorationLine: 'underline',
+    color: '#000',
   },
   img: {
     width: 220,
@@ -79,5 +81,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Raleway-Regular',
     color: '#757575',
     fontSize: 15,
+    marginBottom: 30,
   },
 });

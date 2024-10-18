@@ -1,7 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
-import {defaultLocation} from '@/constants/globals';
 import {AppIcon, Input, LocationModal} from '@/components';
 import {ILocation} from '@/types';
 

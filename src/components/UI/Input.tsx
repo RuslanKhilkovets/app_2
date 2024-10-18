@@ -33,6 +33,12 @@ interface IInputProps {
   numberOfLines?: number;
   multiline?: boolean;
   ref?: React.LegacyRef<TextInput>;
+  keyboardType?:
+    | 'default'
+    | 'email-address'
+    | 'numeric'
+    | 'phone-pad'
+    | 'decimal-pad';
 }
 
 const Input: React.FC<IInputProps> = ({
@@ -54,6 +60,7 @@ const Input: React.FC<IInputProps> = ({
   numberOfLines = 1,
   multiline = false,
   ref,
+  keyboardType,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(secureTextEntry);
@@ -92,6 +99,7 @@ const Input: React.FC<IInputProps> = ({
             multiline={multiline}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            keyboardType={keyboardType}
             style={[
               styles.input,
               inputStyle,
@@ -115,6 +123,7 @@ const Input: React.FC<IInputProps> = ({
             multiline={multiline}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            keyboardType={keyboardType}
             style={[
               styles.input,
               inputStyle,

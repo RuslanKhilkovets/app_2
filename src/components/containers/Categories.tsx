@@ -3,7 +3,6 @@ import {useNavigation} from '@react-navigation/native';
 
 import {CategoriesHeader, CategoriesList} from '@/components';
 import {ICategory, ILocation} from '@/types';
-import {defaultLocation} from '@/constants/globals';
 
 const Categories = () => {
   const [searchQuery, setSearchQuery] = useState('');

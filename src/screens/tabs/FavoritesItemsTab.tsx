@@ -12,6 +12,7 @@ import {
 import {IItem} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
+import {showMessage} from '@/helpers';
 
 const FavoritesItemsTab = () => {
   const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
@@ -19,7 +20,6 @@ const FavoritesItemsTab = () => {
   const [wantedFilters, setWantedFilters] = useState<any[]>([]);
   const [foundedPosts, setFoundedPosts] = useState<IItem[]>([]);
   const [foundedFilters, setFoundedFilters] = useState<any[]>([]);
-  const [error, setError] = useState('');
 
   const insets = useSafeAreaInsets();
 
@@ -31,7 +31,7 @@ const FavoritesItemsTab = () => {
         : setFoundedFilters(res.data.data);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors?.message);
     },
   });
   const {isLoading: isPostsLoading, mutate: postsMutate} = useAuthMutation({
@@ -42,7 +42,7 @@ const FavoritesItemsTab = () => {
         : setFoundedPosts(res.data.data);
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors?.message);
     },
   });
 

@@ -8,8 +8,6 @@ PODS:
   - boost (1.83.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - FBAEMKit (17.3.0):
-    - FBSDKCoreKit_Basics (= 17.3.0)
   - FBLazyVector (0.73.10)
   - FBReactNativeSpec (0.73.10):
     - RCT-Folly (= 2022.05.16.00)
@@ -18,18 +16,6 @@ PODS:
     - React-Core (= 0.73.10)
     - React-jsi (= 0.73.10)
     - ReactCommon/turbomodule/core (= 0.73.10)
-  - FBSDKCoreKit (17.3.0):
-    - FBAEMKit (= 17.3.0)
-    - FBSDKCoreKit_Basics (= 17.3.0)
-  - FBSDKCoreKit_Basics (17.3.0)
-  - FBSDKGamingServicesKit (17.3.0):
-    - FBSDKCoreKit (= 17.3.0)
-    - FBSDKCoreKit_Basics (= 17.3.0)
-    - FBSDKShareKit (= 17.3.0)
-  - FBSDKLoginKit (17.3.0):
-    - FBSDKCoreKit (= 17.3.0)
-  - FBSDKShareKit (17.3.0):
-    - FBSDKCoreKit (= 17.3.0)
   - Flipper (0.201.0):
     - Flipper-Folly (~> 2.6)
   - Flipper-Boost-iOSX (1.76.0.1.11)
@@ -972,21 +958,6 @@ PODS:
   - React-Mapbuffer (0.73.10):
     - glog
     - React-debug
-  - react-native-fbsdk-next (13.1.3):
-    - React-Core
-    - react-native-fbsdk-next/Core (= 13.1.3)
-    - react-native-fbsdk-next/Login (= 13.1.3)
-    - react-native-fbsdk-next/Share (= 13.1.3)
-  - react-native-fbsdk-next/Core (13.1.3):
-    - FBSDKCoreKit (~> 17.3)
-    - React-Core
-  - react-native-fbsdk-next/Login (13.1.3):
-    - FBSDKLoginKit (~> 17.3)
-    - React-Core
-  - react-native-fbsdk-next/Share (13.1.3):
-    - FBSDKGamingServicesKit (~> 17.3)
-    - FBSDKShareKit (~> 17.3)
-    - React-Core
   - react-native-image-picker (7.1.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1164,7 +1135,7 @@ PODS:
     - React-perflogger (= 0.73.10)
   - ReactNativeGetLocation (5.0.0):
     - React-Core
-  - RNCAsyncStorage (2.0.0):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
@@ -1174,7 +1145,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNGoogleSignin (9.0.2):
+  - RNGoogleSignin (9.1.0):
     - GoogleSignIn (~> 6.2)
     - React-Core
   - RNPermissions (4.1.5):
@@ -1259,7 +1230,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
-  - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sensitive-info (from `../node_modules/react-native-sensitive-info`)
@@ -1299,12 +1269,6 @@ SPEC REPOS:
   trunk:
     - AppAuth
     - CocoaAsyncSocket
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKGamingServicesKit
-    - FBSDKLoginKit
-    - FBSDKShareKit
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -1377,8 +1341,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
-  react-native-fbsdk-next:
-    :path: "../node_modules/react-native-fbsdk-next"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
@@ -1453,14 +1415,8 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
-  FBAEMKit: 92f488a9c97208e2f6f01655750944d213fbc0b0
   FBLazyVector: c039b29a5b130f817a6b07dd7bc33830a969ab27
   FBReactNativeSpec: 0368d296aba294bab9067f575175422a4754db27
-  FBSDKCoreKit: 1be47a742ccdddf8dd85272c3953534214dc0f30
-  FBSDKCoreKit_Basics: fcafe75f7deeed1146d04ea51b45a69731e63c16
-  FBSDKGamingServicesKit: c9cb7317649310a4211796166c255122b7513480
-  FBSDKLoginKit: ad0d6485feace32d65f407f6a288c4dfa8ec559c
-  FBSDKShareKit: e96f20fc2f6f68d25ae310a0f64f147f25ef66a4
   Flipper: c7a0093234c4bdd456e363f2f19b2e4b27652d44
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
   Flipper-DoubleConversion: 2dc99b02f658daf147069aad9dbd29d8feb06d30
@@ -1498,7 +1454,6 @@ SPEC CHECKSUMS:
   React-jsinspector: 71e5fb28b810fa199987e600ec8a6e17abee373e
   React-logger: 82babb1e3fad0e04750981f24e6c38f644a0bf7c
   React-Mapbuffer: 758750eb32350b01dd9c350010aecc46842047bd
-  react-native-fbsdk-next: 0326e3f3892b3f1cb66bfb884f289e2bb818ee89
   react-native-image-picker: d3db110a3ded6e48c93aef7e8e51afdde8b16ed0
   react-native-safe-area-context: 851c62c48dce80ccaa5637b6aa5991a1bc36eca9
   react-native-sensitive-info: 400c6e3d27945e15c8cddb5b4b92233c85ee06f8
@@ -1523,11 +1478,11 @@ SPEC CHECKSUMS:
   React-utils: c3a9bede4e9aa5c0a8184958cd4c09ff461fd60f
   ReactCommon: 92194c3d756b82bff5b75450544b2863b4df0d5f
   ReactNativeGetLocation: 7e019e0a10ccc3fe082cd9b02b28899512c1b2a5
-  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
   RNGestureHandler: bb81850add626ddd265294323310fec6e861c96b
-  RNGoogleSignin: 22e468a9474dbcb8618d8847205ad4f0b2575d13
+  RNGoogleSignin: c15bdaa7e8a9e190b6169d9c96a4e8380a740f22
   RNPermissions: 294531ede5a64d1528463e88fffef05675842042
   RNReanimated: a98c639fc19c83510d510cc4d952ca6960e9c22e
   RNScreens: 29418ceffb585b8f0ebd363de304288c3dce8323

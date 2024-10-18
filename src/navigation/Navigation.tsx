@@ -61,11 +61,16 @@ const Navigation = () => {
       setIsAuth(!!accessToken);
     }
   }, [accessToken]);
-  console.log(accessToken);
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}>
         <Logo animated />
       </View>
     );

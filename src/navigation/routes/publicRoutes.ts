@@ -6,6 +6,7 @@ import {
   SignFormsScreen,
   StartScreen,
   StartSliderScreen,
+  MainScreen,
 } from '@/screens';
 import {IRoute} from '@/types';
 
@@ -34,6 +35,10 @@ export const publicRoutes: IRoute[] = [
   {
     name: 'Tabs',
     component: TabsNavigation,
+  },
+  {
+    name: 'Main',
+    component: MainScreen,
   },
 ];
 

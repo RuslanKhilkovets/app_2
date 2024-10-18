@@ -38,7 +38,7 @@ const SignForm = () => {
 
   useEffect(() => {
     if (accessToken) {
-      navigation.navigate('Tabs');
+      navigation.navigate('Main');
     }
   }, [accessToken]);
 

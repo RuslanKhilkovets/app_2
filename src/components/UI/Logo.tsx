@@ -38,10 +38,7 @@ const Logo = ({animated}: ILogoProps) => {
         style={[
           styles.text,
           {
-            color:
-              colorScheme === 'light'
-                ? themes[colorScheme].dark
-                : themes[colorScheme].light,
+            color: '#000',
           },
         ]}>
         єЗнахідка!

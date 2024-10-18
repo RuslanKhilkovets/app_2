@@ -299,7 +299,9 @@ const SearchTab = () => {
       <CategoriesModal
         onClose={() => setIsCategoriesOpen(false)}
         visible={isCategoriesOpen}
-        setCategory={category => setFilters(prev => ({...prev, category}))}
+        setCategory={(category: ICategory) =>
+          setFilters(prev => ({...prev, category}))
+        }
       />
 
       <FilterModal
