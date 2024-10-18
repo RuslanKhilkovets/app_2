@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Raleway-SemiBold',
     fontSize: 22,
-    width: 240,
+    width: 220,
   },
   item_title: {
     color: '#AFAFAF',
