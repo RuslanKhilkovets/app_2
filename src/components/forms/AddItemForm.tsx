@@ -122,7 +122,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     if (!formData.location?.id) {
       errors.location = 'Виберіть локацію';
     }
-    if (formData.phone.length < 23) {
+    console.log(formData.phone.length);
+
+    if (formData.phone.length < 18) {
       errors.phone = 'Занадто короткий номер телефону';
     }
     if (!formData.date) {
@@ -136,7 +138,6 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       return;
     }
 
-    return;
     const data = {
       type,
       is_remuneration: +formData.forRemuneration,
@@ -146,7 +147,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       body: formData.description,
       action_at: DateFormatter.formatDateTime(formData.date),
       category_id: formData.category?.id,
-      location_id: formData.location.id,
+      location_id: formData?.location?.id || null,
       user_id,
       photos: formData.imgUris,
     };
@@ -250,7 +251,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
           </FilterItem>
           <FilterItem title="Локація">
             <EditButton
-              title={formData.location.name || 'Локація'}
+              title={formData.location?.name || 'Локація'}
               onPress={() => setLocationModalOpen(true)}
               error={!formData.location?.id && error.location}
             />
@@ -306,7 +307,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       />
 
       <LocationModal
-        setLocation={(location: ILocation) =>
+        setLocation={(location: ILocation | null) =>
           handleInputChange('location', location)
         }
         location={formData.location}

@@ -6,7 +6,7 @@ export default interface IAddItemFormData {
   name: string;
   description: string;
   imgUris: IPicture[];
-  date?: Date | string;
+  date?: Date;
   action_at?: string | null | Date;
   phone: string;
   forRemuneration: boolean;
