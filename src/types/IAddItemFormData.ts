@@ -1,8 +1,8 @@
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {ICategory, ILocation, IPicture} from '@/types';
 
 export default interface IAddItemFormData {
-  type?: TABS;
+  type?: ContentType;
   name: string;
   description: string;
   imgUris: IPicture[];
@@ -11,5 +11,6 @@ export default interface IAddItemFormData {
   phone: string;
   forRemuneration: boolean;
   category: ICategory | null;
-  location: ILocation;
+  location: ILocation | null;
+  status?: string;
 }

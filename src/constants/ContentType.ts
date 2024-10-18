@@ -1,6 +1,6 @@
-enum TABS {
+enum ContentType {
   I_LOOKING_FOR = 'wanted',
   I_FIND = 'founded',
 }
 
-export default TABS;
+export default ContentType;

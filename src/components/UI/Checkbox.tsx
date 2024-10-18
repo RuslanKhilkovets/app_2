@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 interface ICheckBoxProps {
@@ -14,7 +14,6 @@ const CheckBox: React.FC<ICheckBoxProps> = ({
   onValueChange,
   checked,
 }) => {
-  
   const handlePress = () => {
     onValueChange(value);
   };

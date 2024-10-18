@@ -9,8 +9,6 @@ interface ILogoProps {
 const Logo = ({animated}: ILogoProps) => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  const {themes, colorScheme} = useTheme();
-
   useEffect(() => {
     if (animated) {
       Animated.loop(

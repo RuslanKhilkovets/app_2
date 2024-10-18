@@ -24,7 +24,7 @@ class DateFormatter {
    * @returns A localized date string.
    */
   static formatLocalizedDate(
-    date: Date | undefined,
+    date: Date | undefined | null,
     withYear: boolean = false,
   ): string | null {
     if (!date || !(date instanceof Date)) return null;

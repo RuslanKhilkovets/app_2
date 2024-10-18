@@ -1,4 +1,4 @@
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 
 export default interface IItem {
   id: string | number;
@@ -7,7 +7,7 @@ export default interface IItem {
   is_remuneration: 1 | 0;
   is_favorite: boolean;
   phone?: string | null;
-  type: TABS;
+  type: ContentType;
   status: string;
   published_at: Date;
   action_at?: Date | null;

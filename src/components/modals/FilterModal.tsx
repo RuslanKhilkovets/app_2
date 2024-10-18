@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 
 import {Modal, TabsSwitch, FilterItemsForm} from '@/components';
 import {IFilters, IModalProps} from '@/types';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {useTabAnimation} from '@/hooks';
 
 interface IFilterModalProps extends IModalProps {
-  filters?: IFilters;
+  filters: IFilters;
   setFilters: React.Dispatch<React.SetStateAction<IFilters>>;
 }
 
@@ -17,7 +17,7 @@ const FilterModal = ({
   filters,
   setFilters,
 }: IFilterModalProps) => {
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [activeTab, setActiveTab] = useState(ContentType.I_LOOKING_FOR);
 
   const {underlinePosition} = useTabAnimation(activeTab);
   const backgroundColor = underlinePosition.interpolate({

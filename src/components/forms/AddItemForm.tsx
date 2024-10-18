@@ -18,15 +18,14 @@ import {
   Thumbnail,
 } from '@/components';
 import {IAddItemFormData, ICategory, ILocation} from '@/types';
-import {useAuthMutation} from '@/hooks';
+import {useAuthMutation, useTypedSelector} from '@/hooks';
 import {Api} from '@/api';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {DateFormatter, showMessage} from '@/helpers';
-import {useSelector} from 'react-redux';
 
 interface IItemFormProps {
   onFormClose: () => void;
-  type: TABS;
+  type: ContentType;
 }
 
 const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
@@ -37,7 +36,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     forRemuneration: false,
     phone: '',
     category: null,
-    location: {name: 'Невідомо'},
+    location: null as import('@/types').ILocation | null,
     date: '',
   });
   const [error, setError] = useState({
@@ -55,7 +54,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
 
   const insets = useSafeAreaInsets();
 
-  const {user_id} = useSelector(state => state.user) || {};
+  const {user_id} = useTypedSelector(state => state.user) || {};
 
   const {isLoading, mutate} = useAuthMutation({
     mutationFn: Api.myPosts.add,
@@ -63,7 +62,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       onFormClose();
       showMessage(
         'success',
-        `${type === TABS.I_FIND ? 'Знахідку ' : 'Згубу '} успішно додано!`,
+        `${
+          type === ContentType.I_FIND ? 'Знахідку ' : 'Згубу '
+        } успішно додано!`,
       );
     },
     onError: ({errors}) => {
@@ -126,7 +127,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
     }
     if (!formData.date) {
       errors.date = `Вкажіть дату ${
-        type === TABS.I_FIND ? 'знахідки' : 'згуби'
+        type === ContentType.I_FIND ? 'знахідки' : 'згуби'
       } `;
     }
 
@@ -181,7 +182,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
       <KeyboardScroll>
         <View>
           <Input
-            placeholder={type === TABS.I_FIND ? 'Що знайшли' : 'Що згубили'}
+            placeholder={
+              type === ContentType.I_FIND ? 'Що знайшли' : 'Що згубили'
+            }
             value={formData.name}
             onChangeText={value => handleInputChange('name', value)}
             style={{marginBottom: 20}}
@@ -191,7 +194,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             multiline
             numberOfLines={5}
             placeholder={
-              type === TABS.I_FIND ? 'Де знайдено, опис знахідки' : 'Опис'
+              type === ContentType.I_FIND
+                ? 'Де знайдено, опис знахідки'
+                : 'Опис'
             }
             value={formData.description}
             onChangeText={value => handleInputChange('description', value)}
@@ -251,7 +256,9 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
             />
           </FilterItem>
           <FilterItem
-            title={type === TABS.I_FIND ? 'Дата знахідки' : 'Дата згуби'}>
+            title={
+              type === ContentType.I_FIND ? 'Дата знахідки' : 'Дата згуби'
+            }>
             <DatePicker
               setOpen={() => setDateOpen(true)}
               date={formData.date}

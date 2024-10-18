@@ -6,8 +6,8 @@ import SInfo from 'react-native-sensitive-info';
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Api} from '@/api';
-import {useAuthMutation, useGoBack} from '@/hooks';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAuthMutation, useGoBack, useTypedSelector} from '@/hooks';
+import {useDispatch} from 'react-redux';
 import {setUser} from '@/store/user';
 import {showMessage} from '@/helpers';
 
@@ -26,7 +26,7 @@ const ChangeEmailScreen = () => {
   const screenWidth = Dimensions.get('window').width;
   const insets = useSafeAreaInsets();
 
-  const user = useSelector(state => state.user) || {};
+  const user = useTypedSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const goBack = useGoBack();
@@ -60,7 +60,7 @@ const ChangeEmailScreen = () => {
     },
   });
 
-  const {isLoding: isCheckCodeLoading, mutate: checkCodeMutate} =
+  const {isLoading: isCheckCodeLoading, mutate: checkCodeMutate} =
     useAuthMutation({
       mutationFn: Api.profile.updateEmail,
       onSuccess: async res => {

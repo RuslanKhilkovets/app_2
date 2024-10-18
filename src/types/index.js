@@ -15,3 +15,4 @@ export {default as IRoute} from './IRoute';
 export {default as IPhoto} from './IPhoto';
 export {default as IPostItem} from './IPostItem';
 export {default as IFilters} from './IFilters';
+export {default as IEditFormData} from './IEditFormData';

@@ -17,7 +17,7 @@ const About = () => {
   };
 
   return (
-    <Screen title="Про додаток" backColor="#fff" bgColor="#fff">
+    <Screen title="Про додаток" backColor="#fff">
       <View style={styles.container}>
         <View style={{alignItems: 'center'}}>
           <Logo />

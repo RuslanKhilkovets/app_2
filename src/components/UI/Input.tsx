@@ -51,7 +51,7 @@ const Input: React.FC<IInputProps> = ({
   label,
   labelStyle,
   error,
-  disabled,
+  disabled = false,
   mask,
   maskOptions,
   maxLength,
@@ -79,7 +79,7 @@ const Input: React.FC<IInputProps> = ({
           styles.inputContainer,
           !!error && styles.error,
           isFocused && styles.activeInput,
-          disabled && styles['disabled'],
+          disabled && styles.disabled,
           multiline && {height: numberOfLines * 25},
         ]}>
         {mask ? (
@@ -190,8 +190,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   disabled: {
+    backgroundColor: '#f0f0f0',
+    borderColor: '#e0e0e0',
+  },
+  disabledInput: {
     color: '#757575',
-    userSelect: 'none',
   },
   endAdornment: {
     marginLeft: 5,

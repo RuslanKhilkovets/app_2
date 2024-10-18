@@ -2,7 +2,7 @@ import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {
   FavoriteBlock,
   ItemsContainer,
@@ -15,7 +15,7 @@ import {Api} from '@/api';
 import {showMessage} from '@/helpers';
 
 const FavoritesItemsTab = () => {
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [activeTab, setActiveTab] = useState(ContentType.I_LOOKING_FOR);
   const [wantedPosts, setWantedPosts] = useState<IItem[]>([]);
   const [wantedFilters, setWantedFilters] = useState<any[]>([]);
   const [foundedPosts, setFoundedPosts] = useState<IItem[]>([]);
@@ -26,7 +26,7 @@ const FavoritesItemsTab = () => {
   const {isLoading: isFiltersLoading, mutate: filtersMutate} = useAuthMutation({
     mutationFn: Api.favorites.getFilters,
     onSuccess: res => {
-      activeTab === TABS.I_LOOKING_FOR
+      activeTab === ContentType.I_LOOKING_FOR
         ? setWantedFilters(res.data.data)
         : setFoundedFilters(res.data.data);
     },
@@ -37,7 +37,7 @@ const FavoritesItemsTab = () => {
   const {isLoading: isPostsLoading, mutate: postsMutate} = useAuthMutation({
     mutationFn: Api.favorites.getAll,
     onSuccess: res => {
-      activeTab === TABS.I_LOOKING_FOR
+      activeTab === ContentType.I_LOOKING_FOR
         ? setWantedPosts(res.data.data)
         : setFoundedPosts(res.data.data);
     },
@@ -61,7 +61,7 @@ const FavoritesItemsTab = () => {
           <Text style={[styles.title, {paddingTop: insets.top}]}>Вибране</Text>
         }>
         <ScrollView style={styles.content}>
-          {activeTab === TABS.I_LOOKING_FOR ? (
+          {activeTab === ContentType.I_LOOKING_FOR ? (
             <>
               {wantedFilters?.length > 0 && (
                 <FavoriteBlock title="Пошуки">

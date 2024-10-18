@@ -2,12 +2,12 @@ import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {MessageItem, TabsSwitch} from '@/components';
 import {IMessage} from '@/types';
 
 const ChatsTab = () => {
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [activeTab, setActiveTab] = useState(ContentType.I_LOOKING_FOR);
 
   const insets = useSafeAreaInsets();
 
@@ -46,7 +46,7 @@ const ChatsTab = () => {
           </Text>
         }>
         <ScrollView style={styles.content}>
-          {activeTab === TABS.I_LOOKING_FOR ? (
+          {activeTab === ContentType.I_LOOKING_FOR ? (
             <FlatList
               scrollEnabled={false}
               data={messages}

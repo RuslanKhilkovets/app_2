@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import SInfo from 'react-native-sensitive-info';
+import {useDispatch} from 'react-redux';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Button, Input, KeyboardScroll, Screen} from '@/components';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useAuthMutation, useGoBack} from '@/hooks';
+import {useAuthMutation, useGoBack, useTypedSelector} from '@/hooks';
 import {Api} from '@/api';
-import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '@/store/user';
 import {showMessage} from '@/helpers';
 
@@ -14,7 +14,7 @@ const ChangeNameScreen = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
-  const user = useSelector(state => state.user) || {};
+  const user = useTypedSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const insets = useSafeAreaInsets();
@@ -28,12 +28,14 @@ const ChangeNameScreen = () => {
     mutationFn: Api.profile.update,
     onSuccess: async res => {
       dispatch(setUser(res.data.data));
+
       await SInfo.setItem('user', JSON.stringify(res.data.data), {
         sharedPreferencesName: 'mySharedPrefs',
         keychainService: 'myKeychain',
       }).then(() => {
         dispatch(setUser(res.data.data));
       });
+      
       goBack();
       showMessage('success', res.data.message);
     },

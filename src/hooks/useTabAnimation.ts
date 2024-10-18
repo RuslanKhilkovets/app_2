@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
 
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 
 const useTabAnimation = (activeTab: string) => {
   const underlinePosition = useRef(new Animated.Value(0)).current;
@@ -9,7 +9,7 @@ const useTabAnimation = (activeTab: string) => {
 
   useEffect(() => {
     Animated.timing(underlinePosition, {
-      toValue: activeTab === TABS.I_LOOKING_FOR ? 0 : 1,
+      toValue: activeTab === ContentType.I_LOOKING_FOR ? 0 : 1,
       duration: 300,
       useNativeDriver: false,
     }).start();

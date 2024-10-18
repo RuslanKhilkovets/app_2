@@ -11,7 +11,9 @@ import {showMessage} from '@/helpers';
 interface ISelectLocationListProps {
   location: ILocation | null;
   style?: ViewStyle;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation | null>>;
+  setLocation:
+    | React.Dispatch<React.SetStateAction<ILocation | null>>
+    | ((location: ILocation | null) => void);
 }
 
 const SelectLocationList = ({

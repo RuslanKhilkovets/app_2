@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import SInfo from 'react-native-sensitive-info';
+import {useDispatch} from 'react-redux';
 
 import {Screen, SelectLocationList} from '@/components';
 import {ILocation} from '@/types';
-import {useDispatch, useSelector} from 'react-redux';
-import {useAuthMutation, useGoBack} from '@/hooks';
+import {useAuthMutation, useGoBack, useTypedSelector} from '@/hooks';
 import {Api} from '@/api';
 import {setUser} from '@/store/user';
 import {showMessage} from '@/helpers';
 
 const ChangeLocationScreen = () => {
-  const user = useSelector(state => state.user) || {};
+  const user = useTypedSelector(state => state.user) || {};
   const [location, setLocation] = useState<ILocation | null>(user.location);
-  const [error, setError] = useState('');
 
   const dispatch = useDispatch();
   const goBack = useGoBack();
@@ -32,7 +31,7 @@ const ChangeLocationScreen = () => {
       goBack();
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors?.message);
     },
   });
 

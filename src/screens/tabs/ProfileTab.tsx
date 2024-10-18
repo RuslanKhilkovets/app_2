@@ -9,7 +9,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import SInfo from 'react-native-sensitive-info';
 
 import HatIcon from '@icons/hat.svg';
@@ -24,13 +24,13 @@ import {
 } from '@/components';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {Api} from '@/api';
-import {useAuthMutation} from '@/hooks';
+import {useAuthMutation, useTypedSelector} from '@/hooks';
 import {formatPhone} from '@/helpers';
 import {setUser} from '@/store/user';
-import {IProfileData} from '@/types';
+import {IImage, IProfileData} from '@/types';
 
 const ProfileTab = () => {
-  const user = useSelector(state => state.user) || {};
+  const user = useTypedSelector(state => state.user) || {};
 
   const [personalData, setPersonalData] = useState<IProfileData>({
     ...user,
@@ -39,7 +39,7 @@ const ProfileTab = () => {
 
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [picImgOpen, setPicImgOpen] = useState(false);
-  const [profilePic, setProfilePic] = useState(null);
+  const [profilePic, setProfilePic] = useState<IImage | null>(null);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const ProfileTab = () => {
     },
   });
 
-  const setImage = newPic => {
+  const setImage = (newPic: IImage) => {
     setProfilePic(newPic);
     updatePic({photo: newPic});
   };

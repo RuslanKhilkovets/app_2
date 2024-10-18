@@ -1,6 +1,6 @@
 import Toast, {ToastType} from 'react-native-toast-message';
 
-export const showMessage = (type: ToastType | undefined, text) => {
+export const showMessage = (type: ToastType | undefined, text: string) => {
   Toast.show({
     swipeable: true,
     text1Style: {

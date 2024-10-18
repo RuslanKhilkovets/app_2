@@ -7,13 +7,13 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {useTabAnimation} from '@/hooks';
 
 interface ITabSwitchProps extends React.PropsWithChildren {
-  activeTab: TABS;
-  setActiveTab: (tab: TABS) => void;
+  activeTab: ContentType;
+  setActiveTab: (tab: ContentType) => void;
   header?: React.ReactNode;
   headerStyle?: ViewStyle;
 }
@@ -56,13 +56,13 @@ const TabsSwitch = ({
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.tabsSwitcher}
-          onPress={() => setActiveTab(TABS.I_LOOKING_FOR)}>
+          onPress={() => setActiveTab(ContentType.I_LOOKING_FOR)}>
           <Text
             style={[
               styles.tabsSwitcherText,
               {
                 fontFamily:
-                  activeTab === TABS.I_LOOKING_FOR
+                  activeTab === ContentType.I_LOOKING_FOR
                     ? 'Raleway-SemiBold'
                     : 'Raleway-Regular',
                 color: themes[colorScheme].dark,
@@ -75,13 +75,13 @@ const TabsSwitch = ({
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.tabsSwitcher}
-          onPress={() => setActiveTab(TABS.I_FIND)}>
+          onPress={() => setActiveTab(ContentType.I_FIND)}>
           <Text
             style={[
               styles.tabsSwitcherText,
               {
                 fontFamily:
-                  activeTab === TABS.I_FIND
+                  activeTab === ContentType.I_FIND
                     ? 'Raleway-SemiBold'
                     : 'Raleway-Regular',
                 color: themes[colorScheme].dark,

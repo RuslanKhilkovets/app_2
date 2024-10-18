@@ -1,6 +1,7 @@
 import {createIconSetFromFontello} from 'react-native-vector-icons';
-import fontelloConfig from '@/config/icons-config.json';
 import {IconProps} from 'react-native-vector-icons/Icon';
+
+import fontelloConfig from '@/config/icons-config.json';
 
 const Icon = createIconSetFromFontello(fontelloConfig);
 

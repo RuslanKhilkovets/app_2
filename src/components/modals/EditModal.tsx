@@ -1,13 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 
 import {Modal, EditForm} from '@/components';
-import {IAddItemFormData, IModalProps, IPostItem} from '@/types';
-import TABS from '@/constants/Tabs';
+import {IEditFormData, IModalProps} from '@/types';
+import ContentType from '@/constants/ContentType';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 
 interface IEditModalProps extends IModalProps {
-  item: IAddItemFormData;
+  item: IEditFormData;
   onItemDelete: () => void;
 }
 
@@ -15,11 +15,11 @@ const EditModal = ({visible, onClose, item, onItemDelete}: IEditModalProps) => {
   const {themes, colorScheme} = useTheme();
 
   const backgroundColor =
-    item['type'] === TABS.I_FIND
+    item['type'] === ContentType.I_FIND
       ? themes[colorScheme].purpleLight
       : themes[colorScheme].pinkLight;
   const underlineColor =
-    item['type'] === TABS.I_FIND
+    item['type'] === ContentType.I_FIND
       ? themes[colorScheme].purple
       : themes[colorScheme].primary;
 
@@ -40,7 +40,7 @@ const EditModal = ({visible, onClose, item, onItemDelete}: IEditModalProps) => {
                   color: themes[colorScheme].dark,
                 },
               ]}>
-              {item?.type === TABS.I_FIND ? 'Я знайшов' : 'Я шукаю'}
+              {item?.type === ContentType.I_FIND ? 'Я знайшов' : 'Я шукаю'}
             </Text>
           </View>
 

@@ -8,7 +8,7 @@ import {
 import React from 'react';
 
 import {AppIcon} from '@/components';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {ICategory, ILocation} from '@/types';
 import {FILTER_TYPE, StaticDateType} from '@/constants';
 import {useNavigation} from '@react-navigation/native';
@@ -21,7 +21,7 @@ interface ISearchItemProps {
     is_favorite: boolean;
     value: {
       q: string;
-      type: TABS;
+      type: ContentType;
       category?: ICategory | null;
       action_at_from?: string;
       action_at_to?: string;

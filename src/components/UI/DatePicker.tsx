@@ -7,7 +7,7 @@ import {DateFormatter, nullToDash} from '@/helpers';
 
 interface IDatePickerProps {
   isOpen: boolean;
-  date?: Date;
+  date?: Date | null;
   onChange: (date: Date | undefined) => void;
   onClose: () => void;
   setOpen: () => void;

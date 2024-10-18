@@ -17,23 +17,23 @@ import {
   PicImageDialog,
   Thumbnail,
 } from '@/components';
-import {IAddItemFormData, ICategory, ILocation} from '@/types';
+import {ICategory, IEditFormData, IImage, ILocation} from '@/types';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {ITEM_STATUS} from '@/constants';
-import {DateFormatter, showMessage} from '@/helpers';
+import {showMessage} from '@/helpers';
 
 interface IItemFormProps {
   onFormClose: () => void;
   onItemDelete: () => void;
-  item: IAddItemFormData;
+  item: IEditFormData;
 }
 
 const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
-  const [formData, setFormData] = useState<IAddItemFormData>({
+  const [formData, setFormData] = useState<IEditFormData>({
     ...item,
-    action_at: new Date(DateFormatter.convertToIso8601(item.action_at)),
+    action_at: item.action_at,
   });
 
   const [error, setError] = useState(false);
@@ -54,7 +54,7 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
       onFormClose();
     },
     onError: ({errors}) => {
-      setError(errors?.message);
+      showMessage('error', errors?.message);
     },
   });
 
@@ -65,12 +65,12 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
     }));
   };
 
-  const setActiveImage = (uri: string) => {
+  const setActiveImage = (url: string) => {
     setFormData(prev => ({
       ...prev,
       photos: prev.photos.map(image => ({
         ...image,
-        is_main: image.uri === uri,
+        is_main: image.url === url,
       })),
     }));
   };
@@ -85,7 +85,7 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
     });
 
   const deleteVisualImage = (id: string) => {
-    setFormData((prev: IAddItemFormData) => {
+    setFormData(prev => {
       return {
         ...prev,
         photos: prev.photos.filter(item => item.id !== id),
@@ -135,15 +135,15 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
       status: 'archived',
       name: formData.name,
       phone: formData.phone,
-      body: formData.description,
+      body: formData.body,
       category_id: formData.category?.id,
-      location_id: formData.location.id,
+      location_id: formData?.location?.id || null,
       photos: formData.photos,
     };
     mutate({postId: formData.id, payload});
   };
 
-  const setImage = newImage => {
+  const setImage = (newImage: IImage) => {
     setFormData(prev => ({
       ...prev,
       photos: [...prev.photos, newImage],
@@ -168,7 +168,9 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
         <View>
           <Input
             placeholder={
-              formData?.type === TABS.I_FIND ? 'Що знайшли' : 'Що згубили'
+              formData?.type === ContentType.I_FIND
+                ? 'Що знайшли'
+                : 'Що згубили'
             }
             value={formData.name}
             onChangeText={value => handleInputChange('name', value)}
@@ -178,12 +180,12 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
             multiline
             numberOfLines={5}
             placeholder={
-              formData?.type === TABS.I_FIND
+              formData?.type === ContentType.I_FIND
                 ? 'Де знайдено, опис знахідки'
                 : 'Опис'
             }
             value={formData?.body}
-            onChangeText={value => handleInputChange('description', value)}
+            onChangeText={value => handleInputChange('body', value)}
           />
 
           <Button
@@ -215,7 +217,7 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
                 />
               </View>
             )}
-            keyExtractor={item => item.uri}
+            keyExtractor={item => item.url}
             numColumns={4}
             contentContainerStyle={{
               marginTop: 20,
@@ -238,7 +240,9 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
           </FilterItem>
           <FilterItem
             title={
-              formData?.type === TABS.I_FIND ? 'Дата знахідки' : 'Дата згуби'
+              formData?.type === ContentType.I_FIND
+                ? 'Дата знахідки'
+                : 'Дата згуби'
             }>
             <DatePicker
               setOpen={() => setDateOpen(true)}
@@ -262,9 +266,9 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
               label="За винагороду"
               value={true}
               onValueChange={() =>
-                handleInputChange('forRemuneration', !formData.forRemuneration)
+                handleInputChange('is_remuneration', !formData.is_remuneration)
               }
-              checked={formData.forRemuneration}
+              checked={formData.is_remuneration}
             />
           </View>
         </View>
@@ -297,7 +301,7 @@ const EditForm = ({item, onFormClose, onItemDelete}: IItemFormProps) => {
       />
 
       <LocationModal
-        setLocation={(location: ILocation) =>
+        setLocation={(location: ILocation | null) =>
           handleInputChange('location', location)
         }
         location={formData.location}

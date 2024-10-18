@@ -5,7 +5,7 @@ const userInitialState = {
   email: '',
   name: '',
   phone: '',
-  location: {},
+  location: null as import('@/types').ILocation | null,
   photo: null,
 };
 

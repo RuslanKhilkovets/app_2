@@ -1,20 +1,21 @@
 import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 
 interface ItemStatusProps {
-  status: TABS;
+  status: ContentType;
 }
 
 const ItemStatus = ({status}: ItemStatusProps) => {
-  const statusText = status === TABS.I_LOOKING_FOR ? 'В пошуку' : 'Знайшов';
+  const statusText =
+    status === ContentType.I_LOOKING_FOR ? 'В пошуку' : 'Знайшов';
 
   return (
     <Text
       style={[
         styles.status,
-        status !== TABS.I_LOOKING_FOR ? styles.inactive : styles.active,
+        status !== ContentType.I_LOOKING_FOR ? styles.inactive : styles.active,
       ]}>
       {statusText}
     </Text>

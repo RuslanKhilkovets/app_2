@@ -20,18 +20,10 @@ export const useSocialSignIn = () => {
 
   const googleSignIn = async () => {
     try {
-      // Check if Google Play services are available
       await GoogleSignin.hasPlayServices();
-
-      // Sign in the user
       await GoogleSignin.signIn();
-
-      // Get the tokens, ensuring you await it
-      const tokens = await GoogleSignin.getTokens(); // Add await here
-
-      console.log('tokens', tokens); // This should log the tokens object
-
-      // Return the tokens object
+      const tokens = await GoogleSignin.getTokens();
+      
       return tokens;
     } catch (e) {
       console.log('Google Sign-In error:', e);
@@ -41,7 +33,7 @@ export const useSocialSignIn = () => {
   const googleMutation = useAuthMutation({
     mutationFn: googleSignIn,
     onError: err => console.log(err),
-    onSuccess: ({accessToken}) => {
+    onSuccess: ({accessToken}: {accessToken: string}) => {
       socialMutation.mutate({
         provider: 'google',
         payload: {
@@ -59,7 +51,7 @@ export const useSocialSignIn = () => {
   const facebookMutation = useAuthMutation({
     mutationFn: facebookSignIn,
     onError: err => console.log(err),
-    onSuccess: ({accessToken}) => {
+    onSuccess: ({accessToken}: {accessToken: string}) => {
       socialMutation.mutate({
         provider: 'facebook',
         payload: {

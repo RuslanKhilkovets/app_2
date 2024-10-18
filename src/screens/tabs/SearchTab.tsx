@@ -20,7 +20,7 @@ import {
   SelectedFilterItem,
   TabsSwitch,
 } from '@/components';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {ICategory, IFilters, IItem, ILocation} from '@/types';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {useAuthMutation} from '@/hooks';
@@ -47,10 +47,10 @@ const SearchTab = () => {
 
   // State variables
   const [isFilterFavorite, setIsFilterFavorite] = useState(false);
-  const [activeTab, setActiveTab] = useState(
-    route.params?.filters?.type || TABS.I_LOOKING_FOR,
+  const [activeTab, setActiveTab] = useState<ContentType>(
+    route.params?.filters?.type || ContentType.I_LOOKING_FOR,
   );
-  const [items, setItems] = useState<{[key: TABS]: IItem[]}>({});
+  const [items, setItems] = useState<{[key: ContentType]: IItem[]}>({});
   const [searchQuery, setSearchQuery] = useState(initialFilters.q || '');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);

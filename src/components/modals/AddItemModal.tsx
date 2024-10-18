@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 
 import {Modal, TabsSwitch, AddItemForm} from '@/components';
 import {IModalProps} from '@/types';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import {useTabAnimation} from '@/hooks';
 
 const AddItemModal = ({visible, onClose, openFrom}: IModalProps) => {
-  const [activeTab, setActiveTab] = useState(TABS.I_LOOKING_FOR);
+  const [activeTab, setActiveTab] = useState(ContentType.I_LOOKING_FOR);
 
   const {underlinePosition} = useTabAnimation(activeTab);
 

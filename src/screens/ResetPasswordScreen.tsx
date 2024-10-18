@@ -151,10 +151,11 @@ export default function ResetPasswordScreen() {
             onChangeText={text => setPassword_confirmation(text)}
             placeholder="Підтвердження паролю"
             error={
-              password !== password_confirmation &&
               password &&
-              password_confirmation &&
-              'Паролі не співпадають'
+              password !== password_confirmation &&
+              password_confirmation
+                ? 'Паролі не співпадають'
+                : undefined
             }
             secureTextEntry
           />

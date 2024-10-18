@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {AppIcon, EditModal, ItemStatus} from '@/components';
 import ActiveItem from '@images/item_active.png';
 import InactiveItem from '@images/item_inactive.png';
-import {IPostItem} from '@/types';
+import {IImage, IPostItem} from '@/types';
 import {DateFormatter, showMessage} from '@/helpers';
 import {ITEM_STATUS} from '@/constants';
 import {IPhoto} from '@/types';
@@ -28,7 +28,7 @@ const PostItem = ({
   setPosts,
 }: IPostItemProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const mainPhoto = item.photos.find((photo: IPhoto) => photo.is_main);
+  const mainPhoto = item.photos.find((photo: IImage) => photo.is_main);
 
   const {navigate} = useNavigation();
 

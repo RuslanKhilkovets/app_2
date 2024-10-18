@@ -2,11 +2,11 @@ import React, {useRef, useState} from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import SInfo from 'react-native-sensitive-info';
 
 import {Api} from '@/api';
-import {useAuthMutation, useGoBack} from '@/hooks';
+import {useAuthMutation, useGoBack, useTypedSelector} from '@/hooks';
 import {Button, Input, KeyboardScroll, PhoneInput, Screen} from '@/components';
 import {setUser} from '@/store/user';
 import {showMessage} from '@/helpers';
@@ -22,7 +22,7 @@ const ChangePhoneScreen = () => {
     code?: string;
   }>({});
 
-  const user = useSelector(state => state.user) || {};
+  const user = useTypedSelector(state => state.user) || {};
   const dispatch = useDispatch();
 
   const carouselRef = useRef<any>();
@@ -46,7 +46,7 @@ const ChangePhoneScreen = () => {
 
   const {mutate: phoneMutate, isLoading: isPhoneLoading} = useAuthMutation({
     mutationFn: Api.profile.update,
-    onSuccess: () => {
+    onSuccess: res => {
       goToNextStep();
       showMessage('success', res.data.message);
     },

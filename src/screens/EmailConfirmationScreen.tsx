@@ -1,12 +1,12 @@
 import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 
 import {Input, Button, Screen, KeyboardScroll} from '@/components';
 import {Api} from '@/api';
 import {useAuthMutation} from '@/hooks';
 import {AuthContext} from '@/contexts/Auth/AuthContext';
-import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 
 interface IRouteParams {
   user: {

@@ -18,14 +18,14 @@ import {
   LocationModal,
 } from '@/components';
 import {ICategory, IFilters, ILocation} from '@/types';
-import TABS from '@/constants/Tabs';
+import ContentType from '@/constants/ContentType';
 import STATIC_DATE_TYPE from '@/constants/StaticDateType';
 import FILTER_TYPE from '@/constants/FilterType';
 
 interface IFilterItemsFormProps {
-  type: TABS;
+  type: ContentType;
   filters: IFilters;
-  setFilters: React.Dispatch<React.SetStateAction<IFilters | undefined>>;
+  setFilters: React.Dispatch<React.SetStateAction<IFilters>>;
   onFormClose: () => void;
 }
 
@@ -51,8 +51,8 @@ const FilterItemsForm = ({
   const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
   const handleChooseStaticDate = (type: STATIC_DATE_TYPE | null) => {
-    setStartDate(undefined);
-    setEndDate(undefined);
+    setStartDate(null);
+    setEndDate(null);
 
     setStaticDateType(type);
   };
@@ -67,13 +67,14 @@ const FilterItemsForm = ({
 
   useEffect(() => {
     if (staticDateType !== null) {
-      setEndDate(undefined);
-      setEndDate(undefined);
+      setEndDate(null);
+      setEndDate(null);
     }
   }, [staticDateType]);
 
   const onFiltersApply = () => {
     const params = {
+      q: filters.q,
       type: type,
       action_at_from: startDate || null,
       action_at_to: endDate || null,

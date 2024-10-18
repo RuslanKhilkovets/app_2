@@ -17,7 +17,7 @@ import {
   KeyboardScroll,
   Thumbnail,
 } from '@/components';
-import {ITEM_STATUS} from '@/constants';
+import {ContentType, ITEM_STATUS} from '@/constants';
 import SendIcon from '@icons/send.svg';
 import {IPicture} from '@/types';
 import {selectImage} from '@/helpers';
@@ -99,7 +99,7 @@ const ChatScreen = () => {
           <Text style={styles.title}>Iphone 12</Text>
         </View>
 
-        <ItemStatus status={ITEM_STATUS.ACTIVE} />
+        <ItemStatus status={ContentType.I_FIND} />
       </View>
       <KeyboardScroll>
         <View style={{flex: 1, backgroundColor: '#f5f5f5'}}></View>

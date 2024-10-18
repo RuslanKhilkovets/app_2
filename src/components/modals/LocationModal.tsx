@@ -4,7 +4,9 @@ import {Modal, SelectLocationList} from '@/components';
 import {ILocation, IModalProps} from '@/types';
 
 interface ICategoriesModalProps extends IModalProps {
-  setLocation: Dispatch<SetStateAction<ILocation | null>>;
+  setLocation:
+    | Dispatch<SetStateAction<ILocation | null>>
+    | ((location: ILocation | null) => void);
   location: ILocation | null;
 }
 

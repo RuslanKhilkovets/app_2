@@ -5,7 +5,9 @@ import {ILocation} from '@/types';
 interface ISelectLocationItemProps {
   location: ILocation | null;
   borderColor?: string;
-  setLocation: React.Dispatch<React.SetStateAction<ILocation | null>>;
+  setLocation:
+    | React.Dispatch<React.SetStateAction<ILocation | null>>
+    | ((location: ILocation | null) => void);
 }
 
 const SelectLocationItem = ({
