@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 import {
   AppIcon,
@@ -21,7 +25,7 @@ import {
   TabsSwitch,
 } from '@/components';
 import ContentType from '@/constants/ContentType';
-import {ICategory, IFilters, IItem, ILocation} from '@/types';
+import {ICategory, IFilters, IItem} from '@/types';
 import {useTheme} from '@/contexts/Theme/ThemeContext';
 import {useAuthMutation} from '@/hooks';
 import {Api} from '@/api';
@@ -32,8 +36,8 @@ const SearchTab = () => {
   const route = useRoute();
   const insets = useSafeAreaInsets();
   const {themes, colorScheme} = useTheme();
+  const navigation = useNavigation();
 
-  // Initialize filters from route parameters or set default values
   const initialFilters: IFilters = route.params?.filters || {
     action_at_from: null,
     action_at_to: null,
@@ -45,7 +49,6 @@ const SearchTab = () => {
     withBody: undefined,
   };
 
-  // State variables
   const [isFilterFavorite, setIsFilterFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState<ContentType>(
     route.params?.filters?.type || ContentType.I_LOOKING_FOR,
@@ -127,6 +130,11 @@ const SearchTab = () => {
       q: searchQuery,
     });
   };
+  const resetRouteFilters = () => {
+    navigation.setParams({
+      filters: undefined,
+    });
+  };
 
   useEffect(() => {
     refreshItems();
@@ -165,6 +173,14 @@ const SearchTab = () => {
         setFilterId(route?.params?.id);
       }
     }, [filters, route?.params?.filters]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        resetRouteFilters();
+      };
+    }, [navigation]),
   );
 
   return (
