@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   ScrollView,
   Pressable,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -59,6 +61,15 @@ const SearchTab = () => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filterId, setFilterId] = useState(route?.params?.id || null);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {contentOffset} = event.nativeEvent;
+    const scrollY = contentOffset.y;
+
+    if (scrollY > 300) {
+      //Alert.alert('You scrolled past 100px!');
+    }
+  };
 
   const [filters, setFilters] = useState<IFilters>({
     ...initialFilters,
@@ -304,7 +315,9 @@ const SearchTab = () => {
             />
           ) : (
             <ItemsContainer
+              isScrollListen
               items={items[activeTab]}
+              onScroll={handleScroll}
               style={{padding: 20}}
               containerStyle={{paddingBottom: insets.bottom}}
             />

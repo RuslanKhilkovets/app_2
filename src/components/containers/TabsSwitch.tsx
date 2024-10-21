@@ -102,9 +102,9 @@ const TabsSwitch = ({
         />
       </Animated.View>
 
-      <Animated.ScrollView style={{opacity: contentOpacity, height: '100%'}}>
+      <Animated.View style={{opacity: contentOpacity, height: '100%'}}>
         {children}
-      </Animated.ScrollView>
+      </Animated.View>
     </>
   );
 };
