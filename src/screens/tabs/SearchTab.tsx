@@ -55,7 +55,14 @@ const SearchTab = () => {
   const [activeTab, setActiveTab] = useState<ContentType>(
     route.params?.filters?.type || ContentType.I_LOOKING_FOR,
   );
-  const [items, setItems] = useState<{[key: ContentType]: IItem[]}>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePages, setHasMorePages] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [items, setItems] = useState<Record<ContentType, IItem[]>>({
+    [ContentType.I_LOOKING_FOR]: [],
+    [ContentType.I_FIND]: [],
+  });
   const [searchQuery, setSearchQuery] = useState(initialFilters.q || '');
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -66,9 +73,24 @@ const SearchTab = () => {
     const {contentOffset} = event.nativeEvent;
     const scrollY = contentOffset.y;
 
-    if (scrollY > 300) {
-      //Alert.alert('You scrolled past 100px!');
+    if (scrollY >= lastScrollY + 500 && hasMorePages) {
+      console.log('new');
+
+      loadMoreItems(scrollY);
     }
+  };
+
+  const loadMoreItems = scrollY => {
+    paginationMutate({
+      ...filters,
+      type: activeTab,
+      location: filters?.location?.id,
+      category: filters?.category?.id,
+      q: searchQuery,
+      page: currentPage + 1,
+    });
+    setLastScrollY(scrollY);
+    setCurrentPage(currentPage + 1);
   };
 
   const [filters, setFilters] = useState<IFilters>({
@@ -80,15 +102,38 @@ const SearchTab = () => {
   const {mutate} = useAuthMutation({
     mutationFn: Api.posts.getAll,
     onSuccess: res => {
-      setItems(prev => ({
-        ...prev,
-        [activeTab]: res.data.data,
-      }));
+      res.data.data.length !== 0 &&
+        setItems(prev => ({
+          ...prev,
+          [activeTab]: res.data.data,
+        }));
       setIsLoading(false);
+      setRefreshing(false);
+      setHasMorePages(res.data.meta.current_page < res.data.meta.last_page);
     },
     onError: ({errors}) => {
       showMessage('error', errors.message);
       setIsLoading(false);
+      setRefreshing(false);
+    },
+  });
+
+  const {mutate: paginationMutate} = useAuthMutation({
+    mutationFn: Api.posts.getAll,
+    onSuccess: res => {
+      res.data.data.length !== 0 &&
+        setItems(prev => ({
+          ...prev,
+          [activeTab]: [...items[activeTab], ...res.data.data],
+        }));
+      setIsLoading(false);
+      setRefreshing(false);
+      setHasMorePages(res.data.meta.current_page < res.data.meta.last_page);
+    },
+    onError: ({errors}) => {
+      showMessage('error', errors.message);
+      setIsLoading(false);
+      setRefreshing(false);
     },
   });
 
@@ -130,7 +175,6 @@ const SearchTab = () => {
   const onSearchChange = (text: string) => {
     setSearchQuery(text);
   };
-
   const refreshItems = () => {
     setIsLoading(true);
     mutate({
@@ -153,6 +197,9 @@ const SearchTab = () => {
 
   useEffect(() => {
     setFilters(prev => ({...prev, type: activeTab}));
+    setCurrentPage(1);
+    setHasMorePages(true);
+    setLastScrollY(0);
   }, [activeTab]);
 
   useEffect(() => {
@@ -320,6 +367,13 @@ const SearchTab = () => {
               onScroll={handleScroll}
               style={{padding: 20}}
               containerStyle={{paddingBottom: insets.bottom}}
+              onRefresh={() => {
+                setCurrentPage(1);
+                setHasMorePages(true);
+                setLastScrollY(0);
+                refreshItems();
+              }}
+              refreshing={refreshing}
             />
           )}
         </View>

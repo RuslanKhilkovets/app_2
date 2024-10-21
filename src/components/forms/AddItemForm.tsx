@@ -179,7 +179,7 @@ const AddItemForm = ({type, onFormClose}: IItemFormProps) => {
   }, [formData.date]);
 
   return (
-    <View style={[{padding: 20, paddingBottom: insets.bottom + 60}]}>
+    <View style={[{margin: 20, paddingBottom: insets.bottom + 60}]}>
       <KeyboardScroll>
         <View>
           <Input

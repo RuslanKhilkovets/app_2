@@ -122,107 +122,105 @@ const FilterItemsForm = ({
 
   return (
     <View style={styles.tabContent}>
-      <ScrollView>
-        <FilterItem title="Категорія">
-          <EditButton
-            title={category?.name || 'Вибрати категорію'}
-            onPress={() => setCategoryModalOpen(true)}
-          />
-        </FilterItem>
-        <FilterItem title="Дата публікації">
-          <View style={{flexDirection: 'row', gap: 10}}>
-            <TouchableOpacity
-              activeOpacity={0.7}
+      <FilterItem title="Категорія">
+        <EditButton
+          title={category?.name || 'Вибрати категорію'}
+          onPress={() => setCategoryModalOpen(true)}
+        />
+      </FilterItem>
+      <FilterItem title="Дата публікації">
+        <View style={{flexDirection: 'row', gap: 10}}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dateButton,
+              staticDateType === STATIC_DATE_TYPE.WEEK && {
+                borderColor: '#000',
+              },
+            ]}
+            onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.WEEK)}>
+            <Text
               style={[
-                styles.dateButton,
+                styles.dateButtonText,
                 staticDateType === STATIC_DATE_TYPE.WEEK && {
-                  borderColor: '#000',
+                  fontFamily: 'Raleway-SemiBold',
                 },
-              ]}
-              onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.WEEK)}>
-              <Text
-                style={[
-                  styles.dateButtonText,
-                  staticDateType === STATIC_DATE_TYPE.WEEK && {
-                    fontFamily: 'Raleway-SemiBold',
-                  },
-                ]}>
-                За останній тиждень
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.7}
+              ]}>
+              За останній тиждень
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={[
+              styles.dateButton,
+              staticDateType === STATIC_DATE_TYPE.MONTH && {
+                borderColor: '#000',
+              },
+            ]}
+            onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.MONTH)}>
+            <Text
               style={[
-                styles.dateButton,
+                styles.dateButtonText,
                 staticDateType === STATIC_DATE_TYPE.MONTH && {
-                  borderColor: '#000',
+                  fontFamily: 'Raleway-SemiBold',
                 },
-              ]}
-              onPress={() => handleChooseStaticDate(STATIC_DATE_TYPE.MONTH)}>
-              <Text
-                style={[
-                  styles.dateButtonText,
-                  staticDateType === STATIC_DATE_TYPE.MONTH && {
-                    fontFamily: 'Raleway-SemiBold',
-                  },
-                ]}>
-                Останній місяць
-              </Text>
-            </TouchableOpacity>
-          </View>
+              ]}>
+              Останній місяць
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingVertical: 14,
-              gap: 16,
-              alignItems: 'center',
-            }}>
-            <Text style={styles.selectDateText}>З</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingVertical: 14,
+            gap: 16,
+            alignItems: 'center',
+          }}>
+          <Text style={styles.selectDateText}>З</Text>
 
-            <DatePicker
-              setOpen={() => setOpenStartDatePicker(true)}
-              maxDate={endDate || new Date()}
-              date={startDate}
-              isOpen={openStartDatePicker}
-              onClose={() => setOpenStartDatePicker(false)}
-              onChange={date => setStartDate(date || null)}
-            />
-
-            <Text style={styles.selectDateText}>до</Text>
-
-            <DatePicker
-              setOpen={() => setOpenEndDatePicker(true)}
-              date={endDate}
-              maxDate={new Date()}
-              minDate={startDate || undefined}
-              isOpen={openEndDatePicker}
-              onClose={() => setOpenEndDatePicker(false)}
-              onChange={date => setEndDate(date || null)}
-            />
-          </View>
-        </FilterItem>
-        <FilterItem title="Локація">
-          <EditButton
-            title={location?.name || 'Не визначено'}
-            onPress={() => setLocationModalOpen(true)}
+          <DatePicker
+            setOpen={() => setOpenStartDatePicker(true)}
+            maxDate={endDate || new Date()}
+            date={startDate}
+            isOpen={openStartDatePicker}
+            onClose={() => setOpenStartDatePicker(false)}
+            onChange={date => setStartDate(date || null)}
           />
-        </FilterItem>
-        <View style={{flexDirection: 'row', gap: 60, marginVertical: 30}}>
-          <Checkbox
-            label="З описом"
-            value={FILTER_TYPE.WITH_DESCRIPTION}
-            onValueChange={handleValueChange}
-            checked={selectedValues.includes(FILTER_TYPE.WITH_DESCRIPTION)}
-          />
-          <Checkbox
-            label="З фото"
-            value={FILTER_TYPE.WITH_PIC}
-            onValueChange={handleValueChange}
-            checked={selectedValues.includes(FILTER_TYPE.WITH_PIC)}
+
+          <Text style={styles.selectDateText}>до</Text>
+
+          <DatePicker
+            setOpen={() => setOpenEndDatePicker(true)}
+            date={endDate}
+            maxDate={new Date()}
+            minDate={startDate || undefined}
+            isOpen={openEndDatePicker}
+            onClose={() => setOpenEndDatePicker(false)}
+            onChange={date => setEndDate(date || null)}
           />
         </View>
-      </ScrollView>
+      </FilterItem>
+      <FilterItem title="Локація">
+        <EditButton
+          title={location?.name || 'Не визначено'}
+          onPress={() => setLocationModalOpen(true)}
+        />
+      </FilterItem>
+      <View style={{flexDirection: 'row', gap: 60, marginVertical: 30}}>
+        <Checkbox
+          label="З описом"
+          value={FILTER_TYPE.WITH_DESCRIPTION}
+          onValueChange={handleValueChange}
+          checked={selectedValues.includes(FILTER_TYPE.WITH_DESCRIPTION)}
+        />
+        <Checkbox
+          label="З фото"
+          value={FILTER_TYPE.WITH_PIC}
+          onValueChange={handleValueChange}
+          checked={selectedValues.includes(FILTER_TYPE.WITH_PIC)}
+        />
+      </View>
 
       <Button onPress={onFiltersApply}>Застосувати</Button>
 
@@ -251,7 +249,7 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
     backgroundColor: '#fff',
   },
   dateButton: {

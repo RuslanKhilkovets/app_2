@@ -17,6 +17,8 @@ interface IItemsContainerProps {
   containerStyle?: ViewStyle;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   isScrollListen?: boolean;
+  onRefresh?: () => void;
+  refreshing?: boolean;
 }
 
 const ItemsContainer = ({
@@ -25,8 +27,10 @@ const ItemsContainer = ({
   containerStyle,
   onScroll,
   isScrollListen = false,
+  onRefresh,
+  refreshing = false,
 }: IItemsContainerProps) => {
-  return items?.length !== 0 ? (
+  return (
     <FlatList
       scrollEnabled={true}
       data={items}
@@ -41,9 +45,10 @@ const ItemsContainer = ({
       style={[containerStyle, {backgroundColor: '#fff', minHeight: 580}]}
       onScroll={onScroll}
       scrollEventThrottle={16}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      ListEmptyComponent={<Text style={styles.noDataText}>Дані відсутні</Text>}
     />
-  ) : (
-    <Text style={styles.noDataText}>Дані відсутні</Text>
   );
 };
 
@@ -54,9 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     gap: 16,
-  },
-  noData: {
-    minHeight: 560,
   },
   noDataText: {
     marginTop: 50,
